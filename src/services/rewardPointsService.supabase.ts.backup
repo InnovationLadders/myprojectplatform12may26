@@ -1,0 +1,943 @@
+import { supabase } from '../lib/supabase';
+
+/**
+ * Student Points Interface
+ * Represents the complete points breakdown for a student
+ *
+ * Formula: Total Points = initiation_points + progress_points + chat_points + file_points + weighted_score_points
+ */
+export interface StudentPoints {
+  userId: string;
+  totalPoints: number;
+  initiationPoints: number;  // Points from approved/activated projects
+  progressPoints: number;     // Points from progress updates
+  chatPoints: number;         // Points from chat messages
+  filePoints: number;         // Points from file uploads
+  weightedScorePoints: number; // Points from weighted evaluation scores
+  lastUpdated: string;
+}
+
+/**
+ * Points History Interface
+ * Tracks all point transactions for audit trail
+ */
+export interface PointsHistory {
+  id?: string;
+  studentId: string;
+  activityType: 'project_activation' | 'progress_update' | 'chat_message' | 'file_upload' | 'weighted_score' | 'manual_adjustment';
+  pointsEarned: number;
+  projectId?: string | null;
+  description: string;
+  timestamp: string;
+  metadata?: Record<string, any> | null;
+}
+
+/**
+ * Achievement Configuration Interface
+ * Defines point thresholds and values for the rewards system
+ *
+ * Point Calculation Rules:
+ * - Approved Project Points: Fixed points when a project is approved/activated
+ * - Progress Points: Points per 1% increase in project progress
+ * - Chat Message Points: Fixed points per chat message sent
+ * - File Upload Points: Fixed points per file uploaded
+ * - Weighted Score Points: Points per unit of weighted score
+ */
+export interface AchievementConfig {
+  // Achievement thresholds
+  bronze: number;
+  silver: number;
+  gold: number;
+  platinum: number;
+  trophy: number;
+
+  // Point values for different activities
+  approvedProjectPoints: number;        // Points per approved project
+  progressPointsPerPercent: number;     // Points multiplier for total progress (sum of all project progress percentages)
+  chatMessagePoints: number;            // Points per chat message
+  fileUploadPoints: number;             // Points per file upload
+  weightedScorePointsPerUnit: number;   // Points multiplier for total weighted score (sum of all project weighted scores)
+}
+
+/**
+ * Student Achievement Interface
+ * Represents an achievement unlocked by a student
+ */
+export interface StudentAchievement {
+  id?: string;
+  studentId: string;
+  achievementType: 'bronze' | 'silver' | 'gold' | 'platinum' | 'trophy';
+  level: number;
+  earnedAt: string;
+  pointsAtUnlock: number;
+}
+
+/**
+ * Default configuration for the achievement system
+ */
+const DEFAULT_CONFIG: AchievementConfig = {
+  bronze: 100,
+  silver: 250,
+  gold: 500,
+  platinum: 750,
+  trophy: 1000,
+  approvedProjectPoints: 10,
+  progressPointsPerPercent: 1,
+  chatMessagePoints: 1,
+  fileUploadPoints: 5,
+  weightedScorePointsPerUnit: 10,
+};
+
+/**
+ * Get the achievement configuration
+ * Returns the current point values and achievement thresholds
+ */
+export const getAchievementConfig = async (): Promise<AchievementConfig> => {
+  try {
+    const { data, error } = await supabase
+      .from('points_config')
+      .select('*')
+      .eq('config_name', 'default')
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error fetching achievement config:', error);
+      return DEFAULT_CONFIG;
+    }
+
+    if (!data) {
+      // Create default config if it doesn't exist
+      const { error: insertError } = await supabase
+        .from('points_config')
+        .insert({
+          config_name: 'default',
+          approved_project_points: DEFAULT_CONFIG.approvedProjectPoints,
+          progress_points_per_percent: DEFAULT_CONFIG.progressPointsPerPercent,
+          chat_message_points: DEFAULT_CONFIG.chatMessagePoints,
+          file_upload_points: DEFAULT_CONFIG.fileUploadPoints,
+          weighted_score_points_per_unit: DEFAULT_CONFIG.weightedScorePointsPerUnit,
+          bronze_threshold: DEFAULT_CONFIG.bronze,
+          silver_threshold: DEFAULT_CONFIG.silver,
+          gold_threshold: DEFAULT_CONFIG.gold,
+          platinum_threshold: DEFAULT_CONFIG.platinum,
+          trophy_threshold: DEFAULT_CONFIG.trophy,
+          updated_at: new Date().toISOString(),
+        });
+
+      if (insertError) {
+        console.error('Error creating default config:', insertError);
+      }
+
+      return DEFAULT_CONFIG;
+    }
+
+    return {
+      bronze: data.bronze_threshold,
+      silver: data.silver_threshold,
+      gold: data.gold_threshold,
+      platinum: data.platinum_threshold,
+      trophy: data.trophy_threshold,
+      approvedProjectPoints: data.approved_project_points,
+      progressPointsPerPercent: data.progress_points_per_percent,
+      chatMessagePoints: data.chat_message_points,
+      fileUploadPoints: data.file_upload_points,
+      weightedScorePointsPerUnit: data.weighted_score_points_per_unit,
+    };
+  } catch (error) {
+    console.error('Error in getAchievementConfig:', error);
+    return DEFAULT_CONFIG;
+  }
+};
+
+/**
+ * Update the achievement configuration
+ * Only admins should be able to call this
+ */
+export const updateAchievementConfig = async (config: AchievementConfig): Promise<void> => {
+  try {
+    const { error } = await supabase
+      .from('points_config')
+      .update({
+        approved_project_points: config.approvedProjectPoints,
+        progress_points_per_percent: config.progressPointsPerPercent,
+        chat_message_points: config.chatMessagePoints,
+        file_upload_points: config.fileUploadPoints,
+        weighted_score_points_per_unit: config.weightedScorePointsPerUnit,
+        bronze_threshold: config.bronze,
+        silver_threshold: config.silver,
+        gold_threshold: config.gold,
+        platinum_threshold: config.platinum,
+        trophy_threshold: config.trophy,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('config_name', 'default');
+
+    if (error) {
+      console.error('Error updating achievement config:', error);
+      throw error;
+    }
+  } catch (error) {
+    console.error('Error in updateAchievementConfig:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get student points
+ * Creates a new record if one doesn't exist
+ */
+export const getStudentPoints = async (userId: string): Promise<StudentPoints> => {
+  try {
+    const { data, error } = await supabase
+      .from('student_points')
+      .select('*')
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error fetching student points:', error);
+      throw error;
+    }
+
+    if (!data) {
+      // Create new student points record
+      const newPoints: StudentPoints = {
+        userId,
+        totalPoints: 0,
+        initiationPoints: 0,
+        progressPoints: 0,
+        chatPoints: 0,
+        filePoints: 0,
+        weightedScorePoints: 0,
+        lastUpdated: new Date().toISOString(),
+      };
+
+      const { error: insertError } = await supabase
+        .from('student_points')
+        .insert({
+          user_id: userId,
+          total_points: 0,
+          initiation_points: 0,
+          progress_points: 0,
+          chat_points: 0,
+          file_points: 0,
+          weighted_score_points: 0,
+          last_updated: new Date().toISOString(),
+        });
+
+      if (insertError) {
+        console.error('Error creating student points:', insertError);
+        throw insertError;
+      }
+
+      return newPoints;
+    }
+
+    return {
+      userId: data.user_id,
+      totalPoints: data.total_points,
+      initiationPoints: data.initiation_points,
+      progressPoints: data.progress_points,
+      chatPoints: data.chat_points,
+      filePoints: data.file_points,
+      weightedScorePoints: data.weighted_score_points,
+      lastUpdated: data.last_updated,
+    };
+  } catch (error) {
+    console.error('Error in getStudentPoints:', error);
+    throw error;
+  }
+};
+
+/**
+ * Add points to a student's account
+ * Internal helper function
+ */
+const addPointsHistory = async (history: Omit<PointsHistory, 'id' | 'timestamp'>): Promise<void> => {
+  try {
+    const { error } = await supabase
+      .from('points_history')
+      .insert({
+        student_id: history.studentId,
+        activity_type: history.activityType,
+        points_earned: history.pointsEarned,
+        project_id: history.projectId || null,
+        description: history.description,
+        metadata: history.metadata || null,
+      });
+
+    if (error) {
+      console.error('Error adding points history:', error);
+    }
+  } catch (error) {
+    console.error('Error in addPointsHistory:', error);
+  }
+};
+
+/**
+ * Update student points
+ * Internal helper function to update a specific point category
+ */
+const updateStudentPoints = async (
+  userId: string,
+  pointsToAdd: number,
+  categoryField: 'initiation_points' | 'progress_points' | 'chat_points' | 'file_points' | 'weighted_score_points'
+): Promise<void> => {
+  try {
+    // Get current points
+    const currentPoints = await getStudentPoints(userId);
+
+    // Calculate new values
+    const newCategoryValue = currentPoints[categoryField.replace('_points', 'Points') as keyof StudentPoints] as number + pointsToAdd;
+    const newTotalPoints = currentPoints.totalPoints + pointsToAdd;
+
+    // Update the record
+    const updateData: any = {
+      total_points: newTotalPoints,
+      [categoryField]: newCategoryValue,
+      last_updated: new Date().toISOString(),
+    };
+
+    const { error } = await supabase
+      .from('student_points')
+      .update(updateData)
+      .eq('user_id', userId);
+
+    if (error) {
+      console.error('Error updating student points:', error);
+      throw error;
+    }
+
+    // Check and award achievements
+    await checkAndAwardAchievements(userId);
+  } catch (error) {
+    console.error('Error in updateStudentPoints:', error);
+    throw error;
+  }
+};
+
+/**
+ * Award points for project activation/approval
+ */
+export const awardProjectActivationPoints = async (
+  studentId: string,
+  projectId: string
+): Promise<void> => {
+  try {
+    const config = await getAchievementConfig();
+    const points = config.approvedProjectPoints;
+
+    await updateStudentPoints(studentId, points, 'initiation_points');
+
+    await addPointsHistory({
+      studentId,
+      activityType: 'project_activation',
+      pointsEarned: points,
+      projectId,
+      description: 'Project approved and activated',
+    });
+  } catch (error) {
+    console.error('Error awarding project activation points:', error);
+  }
+};
+
+/**
+ * Recalculate and update student points based on all their projects
+ * This is the main function that should be called after any project update
+ */
+export const recalculateStudentPoints = async (studentId: string): Promise<void> => {
+  try {
+    console.log('🔄 Recalculating points for student:', studentId);
+
+    // Get all projects for this student
+    const { data: projectStudents, error: projectError } = await supabase
+      .from('project_students')
+      .select('project_id')
+      .eq('student_id', studentId);
+
+    if (projectError) {
+      console.error('Error fetching student projects:', projectError);
+      return;
+    }
+
+    if (!projectStudents || projectStudents.length === 0) {
+      console.log('No projects found for student:', studentId);
+      return;
+    }
+
+    const projectIds = projectStudents.map(ps => ps.project_id);
+    console.log('Found projects:', projectIds.length);
+
+    // Get all projects data
+    const { data: projects, error: projectsError } = await supabase
+      .from('projects')
+      .select('id, progress')
+      .in('id', projectIds);
+
+    if (projectsError) {
+      console.error('Error fetching projects:', projectsError);
+      return;
+    }
+
+    // Calculate total progress across all projects
+    const totalProgress = projects?.reduce((sum, project) => sum + (project.progress || 0), 0) || 0;
+    console.log('Total progress across all projects:', totalProgress);
+
+    // Get all evaluations for these projects
+    const { data: evaluations, error: evalError } = await supabase
+      .from('project_evaluations')
+      .select('projectId, criteria')
+      .in('projectId', projectIds);
+
+    if (evalError) {
+      console.error('Error fetching evaluations:', evalError);
+    }
+
+    // Calculate total weighted score across all projects
+    let totalWeightedScore = 0;
+    if (evaluations && evaluations.length > 0) {
+      evaluations.forEach(evaluation => {
+        const criteria = evaluation.criteria as Array<{score: number, weight: number}>;
+        const weightedScore = criteria.reduce((sum, criterion) =>
+          sum + (criterion.score * criterion.weight), 0
+        );
+        totalWeightedScore += weightedScore;
+      });
+    }
+    console.log('Total weighted score across all projects:', totalWeightedScore.toFixed(2));
+
+    // Get config to calculate points
+    const config = await getAchievementConfig();
+
+    // Calculate points
+    const newProgressPoints = Math.floor(totalProgress * config.progressPointsPerPercent);
+    const newWeightedScorePoints = Math.floor(totalWeightedScore * config.weightedScorePointsPerUnit);
+
+    console.log('Calculated points - Progress:', newProgressPoints, 'Weighted Score:', newWeightedScorePoints);
+
+    // Get current points
+    const currentPoints = await getStudentPoints(studentId);
+
+    // Calculate what the total should be
+    const newTotal = currentPoints.initiationPoints + newProgressPoints +
+                     currentPoints.chatPoints + currentPoints.filePoints + newWeightedScorePoints;
+
+    console.log('Updating student points - New total:', newTotal);
+
+    // Update the database
+    const { error: updateError } = await supabase
+      .from('student_points')
+      .update({
+        total_points: newTotal,
+        progress_points: newProgressPoints,
+        weighted_score_points: newWeightedScorePoints,
+        last_updated: new Date().toISOString(),
+      })
+      .eq('user_id', studentId);
+
+    if (updateError) {
+      console.error('Error updating student points:', updateError);
+      throw updateError;
+    }
+
+    // Check and award achievements
+    await checkAndAwardAchievements(studentId);
+
+    console.log('✅ Points recalculated successfully');
+  } catch (error) {
+    console.error('Error recalculating student points:', error);
+    throw error;
+  }
+};
+
+/**
+ * Award points for progress updates
+ * This now triggers a full recalculation of all points
+ * @param progressIncrease - Not used anymore, kept for backward compatibility
+ */
+export const awardProgressPoints = async (
+  studentId: string,
+  projectId: string,
+  progressIncrease: number
+): Promise<void> => {
+  try {
+    console.log('📊 Progress update triggered for student:', studentId, 'project:', projectId);
+
+    // Add history entry for tracking
+    await addPointsHistory({
+      studentId,
+      activityType: 'progress_update',
+      pointsEarned: 0, // Will be calculated in recalculation
+      projectId,
+      description: `Progress update recorded`,
+      metadata: { progressIncrease },
+    });
+
+    // Recalculate all points for this student
+    await recalculateStudentPoints(studentId);
+  } catch (error) {
+    console.error('Error awarding progress points:', error);
+  }
+};
+
+/**
+ * Award points for chat messages
+ */
+export const awardChatMessagePoints = async (
+  studentId: string,
+  projectId: string
+): Promise<void> => {
+  try {
+    const config = await getAchievementConfig();
+    const points = config.chatMessagePoints;
+
+    await updateStudentPoints(studentId, points, 'chat_points');
+
+    await addPointsHistory({
+      studentId,
+      activityType: 'chat_message',
+      pointsEarned: points,
+      projectId,
+      description: 'Sent a chat message',
+    });
+  } catch (error) {
+    console.error('Error awarding chat message points:', error);
+  }
+};
+
+/**
+ * Award points for file uploads
+ */
+export const awardFileUploadPoints = async (
+  studentId: string,
+  projectId: string,
+  fileName: string
+): Promise<void> => {
+  try {
+    const config = await getAchievementConfig();
+    const points = config.fileUploadPoints;
+
+    await updateStudentPoints(studentId, points, 'file_points');
+
+    await addPointsHistory({
+      studentId,
+      activityType: 'file_upload',
+      pointsEarned: points,
+      projectId,
+      description: `Uploaded file: ${fileName}`,
+      metadata: { fileName },
+    });
+  } catch (error) {
+    console.error('Error awarding file upload points:', error);
+  }
+};
+
+/**
+ * Award points for weighted scores
+ * This now triggers a full recalculation of all points
+ * @param weightedScore - Not used anymore, kept for backward compatibility
+ * @param previousWeightedScore - Not used anymore, kept for backward compatibility
+ */
+export const awardWeightedScorePoints = async (
+  studentId: string,
+  projectId: string,
+  weightedScore: number,
+  previousWeightedScore: number = 0
+): Promise<void> => {
+  try {
+    console.log('⚖️ Weighted score update triggered for student:', studentId, 'project:', projectId);
+
+    // Add history entry for tracking
+    await addPointsHistory({
+      studentId,
+      activityType: 'weighted_score',
+      pointsEarned: 0, // Will be calculated in recalculation
+      projectId,
+      description: `Weighted score update recorded`,
+      metadata: { weightedScore, previousWeightedScore },
+    });
+
+    // Recalculate all points for this student
+    await recalculateStudentPoints(studentId);
+  } catch (error) {
+    console.error('Error awarding weighted score points:', error);
+  }
+};
+
+/**
+ * Calculate achievements based on total points
+ */
+export const calculateAchievements = (totalPoints: number, config: AchievementConfig) => {
+  const achievements = {
+    trophy: 0,
+    platinum: 0,
+    gold: 0,
+    silver: 0,
+    bronze: 0,
+  };
+
+  let remaining = totalPoints;
+
+  achievements.trophy = Math.floor(remaining / config.trophy);
+  remaining = remaining % config.trophy;
+
+  achievements.platinum = Math.floor(remaining / config.platinum);
+  remaining = remaining % config.platinum;
+
+  achievements.gold = Math.floor(remaining / config.gold);
+  remaining = remaining % config.gold;
+
+  achievements.silver = Math.floor(remaining / config.silver);
+  remaining = remaining % config.silver;
+
+  achievements.bronze = Math.floor(remaining / config.bronze);
+
+  return achievements;
+};
+
+/**
+ * Check and award new achievements
+ * Internal helper function
+ */
+const checkAndAwardAchievements = async (studentId: string): Promise<void> => {
+  try {
+    const points = await getStudentPoints(studentId);
+    const config = await getAchievementConfig();
+    const achievements = calculateAchievements(points.totalPoints, config);
+
+    // Get existing achievements
+    const { data: existingAchievements, error } = await supabase
+      .from('student_achievements')
+      .select('*')
+      .eq('student_id', studentId);
+
+    if (error) {
+      console.error('Error fetching existing achievements:', error);
+      return;
+    }
+
+    const existingCounts: Record<string, number> = {
+      trophy: 0,
+      platinum: 0,
+      gold: 0,
+      silver: 0,
+      bronze: 0,
+    };
+
+    existingAchievements?.forEach((achievement) => {
+      existingCounts[achievement.achievement_type]++;
+    });
+
+    // Award new achievements
+    const newAchievements: any[] = [];
+
+    for (const [type, count] of Object.entries(achievements)) {
+      const existingCount = existingCounts[type];
+      const newAchievementsCount = count - existingCount;
+
+      for (let i = 0; i < newAchievementsCount; i++) {
+        newAchievements.push({
+          student_id: studentId,
+          achievement_type: type,
+          level: existingCount + i + 1,
+          points_at_unlock: points.totalPoints,
+        });
+      }
+    }
+
+    if (newAchievements.length > 0) {
+      const { error: insertError } = await supabase
+        .from('student_achievements')
+        .insert(newAchievements);
+
+      if (insertError) {
+        console.error('Error inserting new achievements:', insertError);
+      }
+    }
+  } catch (error) {
+    console.error('Error checking and awarding achievements:', error);
+  }
+};
+
+/**
+ * Get student achievements
+ */
+export const getStudentAchievements = async (studentId: string): Promise<StudentAchievement[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('student_achievements')
+      .select('*')
+      .eq('student_id', studentId)
+      .order('earned_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching student achievements:', error);
+      return [];
+    }
+
+    return (data || []).map((achievement) => ({
+      id: achievement.id,
+      studentId: achievement.student_id,
+      achievementType: achievement.achievement_type as 'bronze' | 'silver' | 'gold' | 'platinum' | 'trophy',
+      level: achievement.level,
+      earnedAt: achievement.earned_at,
+      pointsAtUnlock: achievement.points_at_unlock,
+    }));
+  } catch (error) {
+    console.error('Error in getStudentAchievements:', error);
+    return [];
+  }
+};
+
+/**
+ * Get points history for a student
+ */
+export const getPointsHistory = async (
+  studentId: string,
+  limitCount: number = 20
+): Promise<PointsHistory[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('points_history')
+      .select('*')
+      .eq('student_id', studentId)
+      .order('timestamp', { ascending: false })
+      .limit(limitCount);
+
+    if (error) {
+      console.error('Error fetching points history:', error);
+      return [];
+    }
+
+    return (data || []).map((history) => ({
+      id: history.id,
+      studentId: history.student_id,
+      activityType: history.activity_type as PointsHistory['activityType'],
+      pointsEarned: history.points_earned,
+      projectId: history.project_id,
+      description: history.description,
+      timestamp: history.timestamp,
+      metadata: history.metadata,
+    }));
+  } catch (error) {
+    console.error('Error in getPointsHistory:', error);
+    return [];
+  }
+};
+
+/**
+ * Get top students by points
+ */
+export const getTopStudents = async (schoolId?: string, limitCount: number = 10): Promise<StudentPoints[]> => {
+  try {
+    let query = supabase
+      .from('student_points')
+      .select('*')
+      .order('total_points', { ascending: false })
+      .limit(limitCount);
+
+    const { data, error } = await query;
+
+    if (error) {
+      console.error('Error fetching top students:', error);
+      return [];
+    }
+
+    return (data || []).map((student) => ({
+      userId: student.user_id,
+      totalPoints: student.total_points,
+      initiationPoints: student.initiation_points,
+      progressPoints: student.progress_points,
+      chatPoints: student.chat_points,
+      filePoints: student.file_points,
+      weightedScorePoints: student.weighted_score_points,
+      lastUpdated: student.last_updated,
+    }));
+  } catch (error) {
+    console.error('Error in getTopStudents:', error);
+    return [];
+  }
+};
+
+/**
+ * Manually adjust points (admin function)
+ */
+export const manuallyAdjustPoints = async (
+  studentId: string,
+  pointsToAdd: number,
+  reason: string,
+  adminId: string
+): Promise<void> => {
+  try {
+    const currentPoints = await getStudentPoints(studentId);
+    const newTotal = Math.max(0, currentPoints.totalPoints + pointsToAdd);
+
+    const { error } = await supabase
+      .from('student_points')
+      .update({
+        total_points: newTotal,
+        last_updated: new Date().toISOString(),
+      })
+      .eq('user_id', studentId);
+
+    if (error) {
+      console.error('Error manually adjusting points:', error);
+      throw error;
+    }
+
+    await addPointsHistory({
+      studentId,
+      activityType: 'manual_adjustment',
+      pointsEarned: pointsToAdd,
+      description: `Manual adjustment by admin: ${reason}`,
+      metadata: { adminId, reason, manualAdjustment: true },
+    });
+
+    await checkAndAwardAchievements(studentId);
+  } catch (error) {
+    console.error('Error in manuallyAdjustPoints:', error);
+    throw error;
+  }
+};
+
+/**
+ * Reset student points (admin function)
+ */
+export const resetStudentPoints = async (studentId: string): Promise<void> => {
+  try {
+    // Reset points
+    const { error: pointsError } = await supabase
+      .from('student_points')
+      .update({
+        total_points: 0,
+        initiation_points: 0,
+        progress_points: 0,
+        chat_points: 0,
+        file_points: 0,
+        weighted_score_points: 0,
+        last_updated: new Date().toISOString(),
+      })
+      .eq('user_id', studentId);
+
+    if (pointsError) {
+      console.error('Error resetting student points:', pointsError);
+      throw pointsError;
+    }
+
+    // Delete achievements
+    const { error: achievementsError } = await supabase
+      .from('student_achievements')
+      .delete()
+      .eq('student_id', studentId);
+
+    if (achievementsError) {
+      console.error('Error deleting student achievements:', achievementsError);
+      throw achievementsError;
+    }
+  } catch (error) {
+    console.error('Error in resetStudentPoints:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get all students with points
+ */
+export const getAllStudentsWithPoints = async (): Promise<StudentPoints[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('student_points')
+      .select('*')
+      .order('total_points', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching all students with points:', error);
+      return [];
+    }
+
+    return (data || []).map((student) => ({
+      userId: student.user_id,
+      totalPoints: student.total_points,
+      initiationPoints: student.initiation_points,
+      progressPoints: student.progress_points,
+      chatPoints: student.chat_points,
+      filePoints: student.file_points,
+      weightedScorePoints: student.weighted_score_points,
+      lastUpdated: student.last_updated,
+    }));
+  } catch (error) {
+    console.error('Error in getAllStudentsWithPoints:', error);
+    return [];
+  }
+};
+
+export interface RecalculationResult {
+  totalStudents: number;
+  successful: number;
+  failed: number;
+  errors: Array<{ studentId: string; error: string }>;
+}
+
+/**
+ * Recalculate points for all students in the system
+ * This function processes all students and updates their points based on current project data
+ * Returns a summary of the recalculation operation
+ */
+export const recalculateAllStudentPoints = async (
+  onProgress?: (current: number, total: number, studentId: string) => void
+): Promise<RecalculationResult> => {
+  try {
+    console.log('🔄 Starting bulk recalculation for all students...');
+
+    // Get all students with points
+    const allStudents = await getAllStudentsWithPoints();
+    const totalStudents = allStudents.length;
+
+    console.log(`📊 Found ${totalStudents} students to process`);
+
+    const result: RecalculationResult = {
+      totalStudents,
+      successful: 0,
+      failed: 0,
+      errors: [],
+    };
+
+    // Process each student
+    for (let i = 0; i < allStudents.length; i++) {
+      const student = allStudents[i];
+
+      try {
+        // Call progress callback if provided
+        if (onProgress) {
+          onProgress(i + 1, totalStudents, student.userId);
+        }
+
+        console.log(`🔄 Processing student ${i + 1}/${totalStudents}: ${student.userId}`);
+
+        // Recalculate points for this student
+        await recalculateStudentPoints(student.userId);
+
+        result.successful++;
+        console.log(`✅ Successfully processed student: ${student.userId}`);
+
+      } catch (error) {
+        result.failed++;
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        result.errors.push({
+          studentId: student.userId,
+          error: errorMessage,
+        });
+        console.error(`❌ Failed to process student ${student.userId}:`, error);
+      }
+    }
+
+    console.log('✅ Bulk recalculation completed');
+    console.log(`📊 Summary: ${result.successful} successful, ${result.failed} failed out of ${result.totalStudents} total`);
+
+    return result;
+
+  } catch (error) {
+    console.error('❌ Error in bulk recalculation:', error);
+    throw error;
+  }
+};

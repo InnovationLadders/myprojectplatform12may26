@@ -1,0 +1,2094 @@
+{
+    "appName": "مشروعي",
+    "appTagline": "منصة المشاريع الطلابية",
+    "common": {
+        "user": "مستخدم",
+        "loading": "جاري التحميل...",
+        "sending": "جاري الإرسال...",
+        "error": "خطأ",
+        "save": "حفظ",
+        "cancel": "إلغاء",
+        "edit": "تعديل",
+        "delete": "حذف",
+        "view": "عرض",
+        "search": "بحث",
+        "filter": "تصفية",
+        "all": "الكل",
+        "active": "نشط",
+        "inactive": "غير نشط",
+        "pending": "قيد الانتظار",
+        "completed": "مكتمل",
+        "inProgress": "قيد التنفيذ",
+        "draft": "مسودة",
+        "archived": "مؤرشف",
+        "submit": "إرسال",
+        "back": "رجوع",
+        "next": "التالي",
+        "previous": "السابق",
+        "details": "التفاصيل",
+        "actions": "الإجراءات",
+        "status": "الحالة",
+        "date": "التاريخ",
+        "time": "الوقت",
+        "description": "الوصف",
+        "title": "العنوان",
+        "category": "الفئة",
+        "type": "النوع",
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "phone": "رقم الهاتف",
+        "address": "العنوان",
+        "password": "كلمة المرور",
+        "confirmPassword": "تأكيد كلمة المرور",
+        "role": "الدور",
+        "createdAt": "تاريخ الإنشاء",
+        "updatedAt": "تاريخ التحديث",
+        "noData": "لا توجد بيانات متاحة",
+        "noResults": "لم يتم العثور على نتائج",
+        "tryAgain": "حاول مرة أخرى",
+        "resetFilters": "إعادة تعيين الفلاتر",
+        "addNew": "إضافة جديد",
+        "create": "إنشاء",
+        "update": "تحديث",
+        "remove": "إزالة",
+        "close": "إغلاق",
+        "confirm": "تأكيد",
+        "success": "نجاح",
+        "warning": "تحذير",
+        "info": "معلومات",
+        "clearAll": "إلغاء الكل",
+        "progress": "التقدم",
+        "progressScore": "نسبة الإنجاز",
+        "totalScore": "الدرجة الكلية",
+        "weightedScore": "الدرجة الموزونة",
+        "addFile": "إضافة ملف",
+        "addFilesViaChat": "إضافة ملفات عبر المحادثة",
+        "addStudents": "إضافة طلاب",
+        "addTask": "إضافة مهمة",
+        "chat": "المحادثة",
+        "dates": "التواريخ",
+        "evaluation": "التقييم",
+        "files": "الملفات",
+        "implementationSteps": "خطوات التنفيذ",
+        "materials": "المواد",
+        "member": "عضو",
+        "noEvaluation": "لا يوجد تقييم",
+        "noFiles": "لا توجد ملفات",
+        "noFilesInProject": "لا توجد ملفات في هذا المشروع",
+        "noStudents": "لا يوجد طلاب",
+        "noStudentsInProject": "لا يوجد طلاب في هذا المشروع",
+        "objectives": "الأهداف",
+        "overview": "نظرة عامة",
+        "projectInfo": "معلومات المشروع",
+        "projectNotEvaluated": "لم يتم تقييم المشروع بعد",
+        "remaining": "المتبقي",
+        "tasks": "المهام",
+        "teacher": "المعلم",
+        "team": "الفريق",
+        "teamLeader": "قائد الفريق",
+        "subject": "الموضوع",
+        "difficulty": "مستوى الصعوبة",
+        "duration": "المدة",
+        "deadline": "الموعد النهائي",
+        "viewAll": "عرض الكل",
+        "tags": "الكلمات المفتاحية"
+    },
+    "roles": {
+        "student": "طالب",
+        "teacher": "معلم",
+        "school": "مؤسسة تعليمية",
+        "admin": "مدير",
+        "consultant": "مستشار"
+    },
+    "header": {
+        "searchProjects": "البحث في المشاريع...",
+        "profile": "الملف الشخصي",
+        "settings": "الإعدادات",
+        "logout": "تسجيل الخروج",
+        "notifications": "الإشعارات"
+    },
+    "sidebar": {
+        "home": "الرئيسية",
+        "dashboard": "لوحة المعلومات",
+        "projectIdeas": "أفكار المشاريع",
+        "projects": "إدارة المشاريع",
+        "store": "تجهيز المعامل",
+        "consultations": "الاستشارات",
+        "gallery": "معرض المشاريع",
+        "aiAssistant": "المساعد الذكي",
+        "resources": "المصادر التعليمية",
+        "intellectualProperty": "الملكية الفكرية",
+        "settings": "الإعدادات",
+        "students": "إدارة الطلاب",
+        "reports": "التقارير",
+        "studentRewards": "مكافآتي",
+        "consultantDashboard": "لوحة تحكم المستشار",
+        "consultationRequests": "طلبات الاستشارة",
+        "consultantSchedule": "جدول المواعيد",
+        "consultantProfile": "الملف الشخصي",
+        "reviews": "التقييمات",
+        "teachersAndStudents": "المعلمين والطلاب",
+        "adminDashboard": "لوحة تحكم المدير",
+        "manageRewards": "إدارة المكافآت",
+        "users": "المستخدمين",
+        "summerProgram": "البرنامج الصيفي",
+        "entrepreneurshipSubmissions": "ريادة الأعمال"
+    },
+    "auth": {
+        "login": "تسجيل الدخول",
+        "register": "إنشاء حساب",
+        "forgotPassword": {
+            "link": "نسيت كلمة المرور؟",
+            "title": "إعادة تعيين كلمة المرور",
+            "description": "أدخل بريدك الإلكتروني وسنرسل لك رابطاً لإعادة تعيين كلمة المرور",
+            "emailPlaceholder": "أدخل بريدك الإلكتروني",
+            "sendButton": "إرسال رابط إعادة التعيين",
+            "emailRequired": "البريد الإلكتروني مطلوب",
+            "invalidEmail": "البريد الإلكتروني غير صالح",
+            "successMessage": "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني. يرجى التحقق من صندوق الوارد الخاص بك.",
+            "sendError": "حدث خطأ أثناء إرسال البريد الإلكتروني. يرجى المحاولة مرة أخرى."
+        },
+        "noAccount": "ليس لديك حساب؟",
+        "haveAccount": "لديك حساب بالفعل؟",
+        "createAccount": "إنشاء حساب جديد",
+        "loginWithGoogle": "تسجيل الدخول باستخدام Google",
+        "loginWithApple": "تسجيل الدخول باستخدام Apple",
+        "or": "أو",
+        "enterEmail": "أدخل بريدك الإلكتروني",
+        "enterPassword": "أدخل كلمة المرور",
+        "confirmPassword": "تأكيد كلمة المرور",
+        "enterName": "أدخل اسمك الكامل",
+        "enterPhone": "أدخل رقم هاتفك",
+        "selectRole": "اختر دورك",
+        "selectSchool": "اختر المؤسسة تعليمية، ",
+        "enterGrade": "أدخل المرحلة الدراسية",
+        "enterSubject": "أدخل المادة/التخصص",
+        "passwordMismatch": "كلمات المرور غير متطابقة",
+        "passwordTooShort": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+        "invalidEmail": "يرجى إدخال بريد إلكتروني صالح",
+        "requiredField": "هذا الحقل مطلوب",
+        "loginError": "فشل تسجيل الدخول. يرجى التحقق من بيانات الاعتماد الخاصة بك.",
+        "registerError": "فشل التسجيل. يرجى المحاولة مرة أخرى.",
+        "networkError": "خطأ في اتصال الشبكة. يرجى التحقق من اتصال الإنترنت الخاص بك.",
+        "emailNotConfirmed": "يرجى تأكيد بريدك الإلكتروني قبل تسجيل الدخول.",
+        "tooManyRequests": "تم تجاوز عدد المحاولات المسموح. يرجى المحاولة مرة أخرى بعد قليل.",
+        "byLoggingIn": "بتسجيل الدخول، فإنك توافق على"
+    },
+    "pendingActivation": {
+        "title": "حسابك قيد المراجعة",
+        "description": {
+            "school": "شكراً لتسجيلك في منصة مشروعي. حساب مؤسستك التعليمية قيد المراجعة من قبل فريق الإدارة.",
+            "consultant": "شكراً لتسجيلك في منصة مشروعي. حساب المستشار الخاص بك قيد المراجعة من قبل فريق الإدارة.",
+            "teacher": "شكراً لتسجيلك في منصة مشروعي. حساب المعلم/المشرف الخاص بك قيد المراجعة من قبل المؤسسة التعليمية وفريق الإدارة. سيتم التحقق من بياناتك والموافقة على حسابك قريباً.",
+            "default": "شكراً لتسجيلك في منصة مشروعي. حسابك قيد المراجعة من قبل فريق الإدارة."
+        },
+        "whatHappensNext": "ماذا يحدث الآن؟",
+        "steps": {
+            "review": "يقوم فريق الإدارة بمراجعة طلب التسجيل الخاص بك",
+            "verify": "سيتم التحقق من المعلومات المقدمة للتأكد من صحتها",
+            "email": "ستتلقى إشعاراً عبر البريد الإلكتروني عند الموافقة على حسابك",
+            "timeframe": "عادة ما تستغرق عملية المراجعة من 24 إلى 48 ساعة عمل"
+        },
+        "contactInfo": "معلومات الاتصال",
+        "approvalStates": {
+            "approved": "تمت المراجعة والموافقة",
+            "approvedDesc": "ستتمكن من الوصول إلى المنصة",
+            "rejected": "تم الرفض",
+            "rejectedDesc": "ستتلقى إشعاراً بسبب الرفض"
+        },
+        "needHelp": "هل تحتاج إلى مساعدة؟",
+        "helpText": "إذا كان لديك أي استفسار أو تحتاج إلى مساعدة، يرجى التواصل مع فريق الدعم على البريد الإلكتروني:",
+        "refreshPage": "تحديث الصفحة",
+        "logout": "تسجيل الخروج"
+    },
+    "home": {
+        "welcome": "مرحباً بك في (منصة مشروعي)",
+        "tagline": "لتعزيز مهارات القرن الواحد والعشرين وتطبيق برامج ستيم",
+        "description": "اكتشف عالماً من الإبداع والتعلم التفاعلي. منصة شاملة تجمع بين الطلاب والمشرفين لإنجاز مشاريع تعليمية مميزة في مجالات العلوم والتقنية  وريادة الأعمال والتطوع و القيم والأخلاق. منصة مشروعي هي أفضل وأسهل طريقة لإدارة المشاريع الطلابية وتطبيق برامج ستيم والتعلم القائم على المشاريع في مؤسستك التعليمية.",
+        "exploreIdeas": "استكشف الأفكار",
+        "manageProjects": "إدارة المشاريع",
+        "features": {
+            "projectIdeas": {
+                "description": "استكشف مكتبة غنية من أفكار المشاريع الإبداعية في مختلف المجالات التعليمية والتقنية"
+            },
+            "projects": {
+                "description": "أنشئ وأدر مشاريعك التعليمية بسهولة مع أدوات التتبع والتعاون المتقدمة"
+            },
+            "consultations": {
+                "description": "احصل على استشارات مخصصة من خبراء ومعلمين متخصصين لدعم مشاريعك"
+            },
+            "store": {
+                "description": "تسوق الأدوات والمواد اللازمة لتنفيذ مشاريعك التعليمية والتقنية"
+            },
+            "aiAssistant": {
+                "description": "استفد من المساعد الذكي للحصول على إجابات فورية ومساعدة في حل المشكلات"
+            },
+            "gallery": {
+                "description": "تصفح معرض المشاريع المميزة واستلهم أفكاراً جديدة من إنجازات الطلاب"
+            }
+        },
+        "stats": {
+            "activeUsers": "المستخدمون النشطون",
+            "activeProjects": "المشاريع النشطة",
+            "completedProjects": "المشاريع المكتملة",
+            "successRate": "معدل النجاح"
+        },
+        "featuresSection": {
+            "title": "أهلاً بكم في منصة مشروعي",
+            "description": "اكتشف مجموعة شاملة من الأدوات والخدمات المصممة لتعزيز تجربة التعلم القائم على المشاريع",
+            "exploreMore": "استكشف المزيد"
+        },
+        "testimonials": {
+            "title": "آراء المستخدمين",
+            "subtitle": "ماذا يقول مستخدمو منصة مشروعي عن تجربتهم"
+        },
+        "cta": {
+            "title": "ابدأ رحلتك التعليمية اليوم",
+            "description": "انضم إلى الطلاب والمشرفين الذين يحققون النجاح مع منصة مشروعي",
+            "exploreIdeas": "استكشف الأفكار",
+            "createProject": "إنشاء مشروع جديد"
+        }
+    },
+    "landingPage": {
+        "welcomeMessage": "علماء المستقبل",
+        "stats": {
+            "students": "طالب مسجل",
+            "projects": "مشروع منجز",
+            "teachers": "مشرف ومعلم",
+            "schools": "مؤسسة تعليمية شريكة"
+        },
+        "projectShowcase": {
+            "title": "معرض المشاريع الطلابية",
+            "description": "نماذج من مشاريع الطلاب المميزة التي تم تنفيذها باستخدام منصة مشروعي",
+            "viewMore": "عرض المزيد من المشاريع",
+            "project1": "مشروع الروبوت المساعد",
+            "category1": "التقنية",
+            "project2": "مشروع الطاقة المتجددة",
+            "category2": "العلوم",
+            "project3": "تطبيق تعليمي",
+            "category3": "البرمجة",
+            "project4": "مشروع إعادة التدوير",
+            "category4": "البيئة"
+        },
+        "benefits": {
+            "title": "لماذا منصة مشروعي؟",
+            "benefit1": {
+                "title": "تعلم قائم على المشاريع",
+                "description": "تطوير مهارات الطلاب من خلال مشاريع عملية تطبيقية في مختلف المجالات"
+            },
+            "benefit2": {
+                "title": "تطوير المهارات",
+                "description": "تنمية مهارات القرن الواحد والعشرين والتفكير النقدي والإبداعي"
+            },
+            "benefit3": {
+                "title": "مجتمع تعليمي",
+                "description": "بيئة تفاعلية تجمع الطلاب والمعلمين والمستشارين في منصة واحدة"
+            }
+        },
+        "cta": {
+            "summerProgram": "التسجيل في البرنامج الصيفي"
+        },
+        "footer": {
+            "quickLinks": "روابط سريعة",
+            "contactUs": "تواصل معنا",
+            "followUs": "تابعنا",
+            "summerProgram": "البرنامج الصيفي",
+            "email": "البريد الإلكتروني",
+            "phone": "الهاتف",
+            "copyright": "جميع الحقوق محفوظة",
+            "legal": "قانوني"
+        },
+        "testimonials": {
+            "name1": "سارة أحمد",
+            "role1": "معلمة علوم",
+            "content1": "منصة مشروعي غيرت طريقة تدريسي تماماً. الطلاب أصبحوا أكثر تفاعلاً وإبداعاً.",
+            "name2": "محمد علي",
+            "role2": "طالب ",
+            "content2": "تمكنت من تطوير مشروع روبوت متقدم بفضل الإرشادات والدعم المتاح في المنصة.",
+            "name3": "فاطمة خالد",
+            "role3": "مديرة مؤسسة تعليمية",
+            "content3": "المنصة ساعدتنا في تنظيم وإدارة مشاريع الطلاب بكفاءة عالية ومتابعة تقدمهم."
+        }
+    },
+    "summerProgram": {
+        "title": "البرنامج الصيفي \"صيفي تك\"",
+        "subtitle": "برنامج تدريبي صيفي للطلاب في مجالات التكنولوجيا والابتكار",
+        "enrollmentForm": {
+            "title": "نموذج التسجيل في البرنامج الصيفي",
+            "subtitle": "يرجى تعبئة النموذج التالي للتسجيل في برنامج \"صيفي تك\"",
+            "fullName": "الاسم الكامل",
+            "fullNamePlaceholder": "أدخل اسمك الكامل",
+            "email": "البريد الإلكتروني",
+            "emailPlaceholder": "أدخل بريدك الإلكتروني",
+            "phone": "رقم الهاتف",
+            "phonePlaceholder": "أدخل رقم هاتفك",
+            "parentPhone": "رقم هاتف ولي الأمر",
+            "parentPhonePlaceholder": "أدخل رقم هاتف ولي الأمر",
+            "city": "المدينة",
+            "cityPlaceholder": "اختر المدينة",
+            "idNumber": "رقم الهوية",
+            "idNumberPlaceholder": "أدخل رقم الهوية",
+            "school": "المؤسسة تعليمية، ",
+            "schoolPlaceholder": "أدخل اسم المؤسسة تعليمية أو ",
+            "grade": "المرحلة الدراسية",
+            "gradePlaceholder": "اختر المرحلة الدراسية",
+            "educationAdministration": "إدارة التعليم",
+            "educationAdministrationPlaceholder": "اختر إدارة التعليم",
+            "hasParticipatedBefore": "هل سبق لك المشاركة في مشاريع طلابية؟",
+            "yes": "نعم",
+            "no": "لا",
+            "previousProjects": "المشاريع السابقة",
+            "previousProjectsPlaceholder": "اذكر المشاريع التي شاركت فيها سابقاً",
+            "interests": "مجالات الاهتمام",
+            "interestsPlaceholder": "اختر مجالات اهتمامك",
+            "howDidYouHear": "كيف سمعت عن البرنامج؟",
+            "howDidYouHearPlaceholder": "اختر كيف سمعت عن البرنامج",
+            "notes": "ملاحظات إضافية",
+            "notesPlaceholder": "أي ملاحظات أو استفسارات تود إضافتها",
+            "submit": "تقديم الطلب",
+            "submitting": "جاري التقديم...",
+            "successMessage": "تم تقديم طلبك بنجاح! سنتواصل معك قريباً.",
+            "errorMessage": "حدث خطأ أثناء تقديم الطلب. يرجى المحاولة مرة أخرى.",
+            "requiredField": "هذا الحقل مطلوب",
+            "invalidEmail": "يرجى إدخال بريد إلكتروني صالح",
+            "invalidPhone": "يرجى إدخال رقم هاتف صالح",
+            "invalidIdNumber": "يرجى إدخال رقم هوية صالح"
+        },
+        "cities": [
+            "الرياض",
+            "جدة",
+            "مكة المكرمة",
+            "المدينة المنورة",
+            "الدمام",
+            "الخبر",
+            "الظهران",
+            "الأحساء",
+            "القطيف",
+            "الطائف",
+            "بريدة",
+            "عنيزة",
+            "حائل",
+            "تبوك",
+            "أبها",
+            "خميس مشيط",
+            "جازان",
+            "نجران",
+            "الباحة",
+            "سكاكا",
+            "عرعر",
+            "الجبيل",
+            "ينبع",
+            "أخرى"
+        ],
+        "grades": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12"
+        ],
+        "educationAdministrations": [
+            "حائل",
+            "نجران",
+            "الجوف",
+            "الحدود الشمالية",
+            "جازان",
+            "الطائف",
+            "الزلفي",
+            "الباحة",
+            "تبوك",
+            "مكة المكرمة",
+            "الرياض",
+            "جدة",
+            "الأحساء",
+            "المنطقة الشرقية",
+            "مدارس التعليم في الخارج"
+        ],
+        "interests": [
+            "البرمجة",
+            "الذكاء الاصطناعي",
+            "الروبوتات",
+            "تطوير التطبيقات",
+            "تطوير الألعاب",
+            "تصميم المواقع",
+            "الواقع الافتراضي",
+            "إنترنت الأشياء",
+            "الأمن السيبراني",
+            "التصميم الجرافيكي",
+            "الطباعة ثلاثية الأبعاد",
+            "الإلكترونيات",
+            "ريادة الأعمال التقنية"
+        ],
+        "hearAboutUs": [
+            "وسائل التواصل الاجتماعي",
+            "الموقع الإلكتروني",
+            "الأصدقاء أو العائلة",
+            "المؤسسة التعليمية",
+            "الإعلانات",
+            "فعاليات سابقة",
+            "أخرى"
+        ],
+        "admin": {
+            "title": "إدارة تسجيلات البرنامج الصيفي",
+            "subtitle": "عرض وإدارة طلبات التسجيل في برنامج \"صيفي تك\"",
+            "stats": {
+                "totalRegistrations": "إجمالي التسجيلات",
+                "pendingReview": "قيد المراجعة",
+                "approved": "تمت الموافقة",
+                "rejected": "مرفوض"
+            },
+            "searchPlaceholder": "البحث في التسجيلات...",
+            "filters": {
+                "status": "الحالة",
+                "city": "المدينة",
+                "grade": "المرحلة الدراسية",
+                "educationAdministration": "إدارة التعليم"
+            },
+            "statuses": {
+                "all": "جميع الحالات",
+                "pending": "قيد المراجعة",
+                "approved": "تمت الموافقة",
+                "rejected": "مرفوض"
+            },
+            "table": {
+                "name": "الاسم",
+                "email": "البريد الإلكتروني",
+                "phone": "رقم الهاتف",
+                "city": "المدينة",
+                "grade": "الصف",
+                "educationAdministration": "إدارة التعليم",
+                "status": "الحالة",
+                "submittedAt": "تاريخ التقديم",
+                "actions": "الإجراءات"
+            },
+            "actions": {
+                "view": "عرض",
+                "approve": "قبول",
+                "reject": "رفض",
+                "delete": "حذف",
+                "export": "تصدير إلى Excel"
+            },
+            "noRegistrations": "لا توجد تسجيلات",
+            "noRegistrationsMatch": "لم يتم العثور على تسجيلات تطابق معايير البحث",
+            "exportSuccess": "تم تصدير البيانات بنجاح",
+            "exportError": "حدث خطأ أثناء تصدير البيانات",
+            "deleteConfirmation": "هل أنت متأكد من حذف هذا التسجيل؟",
+            "deleteSuccess": "تم حذف التسجيل بنجاح",
+            "deleteError": "حدث خطأ أثناء حذف التسجيل",
+            "approveConfirmation": "هل أنت متأكد من قبول هذا التسجيل؟",
+            "approveSuccess": "تم قبول التسجيل بنجاح",
+            "approveError": "حدث خطأ أثناء قبول التسجيل",
+            "rejectConfirmation": "هل أنت متأكد من رفض هذا التسجيل؟",
+            "rejectSuccess": "تم رفض التسجيل بنجاح",
+            "rejectError": "حدث خطأ أثناء رفض التسجيل"
+        }
+    },
+    "aiAssistant": {
+        "title": "المساعد الذكي",
+        "subtitle": "مساعدك الشخصي للتعلم والإبداع",
+        "stats": {
+            "alwaysAvailable": "متاح دائماً",
+            "unlimitedQuestions": "أسئلة غير محدودة",
+            "specializations": "مجالات تخصص",
+            "artificialIntelligence": "ذكاء اصطناعي"
+        },
+        "howCanIHelp": "ما يمكنني مساعدتك فيه",
+        "features": {
+            "projectIdeas": {
+                "title": "أفكار المشاريع",
+                "description": "احصل على أفكار إبداعية لمشاريعك التعليمية"
+            },
+            "programming": {
+                "title": "مساعدة البرمجة",
+                "description": "حل مشاكل البرمجة وتعلم لغات جديدة"
+            },
+            "problemSolving": {
+                "title": "حل المسائل",
+                "description": "مساعدة في الرياضيات والعلوم"
+            },
+            "research": {
+                "title": "البحث والدراسة",
+                "description": "مساعدة في البحث وتلخيص المعلومات"
+            },
+            "design": {
+                "title": "التصميم والإبداع",
+                "description": "نصائح للتصميم والعمل الإبداعي"
+            },
+            "languages": {
+                "title": "اللغات والترجمة",
+                "description": "تعلم اللغات والترجمة الفورية"
+            }
+        },
+        "quickPrompts": {
+            "title": "أسئلة سريعة",
+            "aiProject": "اقترح فكرة مشروع في مجال الذكاء الاصطناعي",
+            "programming": "كيف أبدأ في تعلم البرمجة؟",
+            "mathProblem": "ساعدني في حل مسألة رياضية",
+            "entrepreneurship": "أريد أفكار لمشروع ريادة أعمال",
+            "presentation": "كيف أصمم عرض تقديمي مميز؟",
+            "timeManagement": "ما هي أفضل طرق إدارة الوقت؟"
+        },
+        "chatHeader": {
+            "title": "مساعد مشروعي الذكي",
+            "online": "متصل الآن"
+        },
+        "inputPlaceholder": "اكتب سؤالك هنا...",
+        "disclaimer": "المساعد الذكي يستخدم تقنيات الذكاء الاصطناعي المتقدمة لتقديم أفضل المساعدة",
+        "simulatedResponse": "شكراً لسؤالك! أعمل على إعداد إجابة شاملة لك. هذا مثال على رد المساعد الذكي الذي سيقدم معلومات مفيدة ومفصلة حول استفسارك.",
+        "mockConversation": {
+            "user1": "مرحباً، أريد مساعدة في مشروع الروبوتات",
+            "assistant1": "مرحباً بك! سعيد لمساعدتك في مشروع الروبوتات. يمكنني مساعدتك في عدة جوانب:\n\n• تصميم الروبوت وتحديد المكونات\n• البرمجة والتحكم\n• حل المشاكل التقنية\n• اقتراح تحسينات\n\nما هو التحدي المحدد الذي تواجهه؟",
+            "user2": "أريد بناء روبوت لجمع النفايات، ما هي المكونات المطلوبة؟",
+            "assistant2": "مشروع ممتاز! إليك المكونات الأساسية لروبوت جمع النفايات:\n\n**المكونات الأساسية:**\n• لوحة تحكم (Arduino/Raspberry Pi)\n• محركات للحركة والتوجيه\n• حساسات للكشف عن النفايات (كاميرا، حساس مسافة)\n• ذراع آلية أو آلية جمع\n• بطارية قابلة للشحن\n• عجلات أو نظام حركة\n\n**المكونات المتقدمة:**\n• نظام GPS للملاحة\n• حساسات لتصنيف النفايات\n• نظام اتصال لاسلكي\n\nهل تريد تفاصيل أكثر عن أي من هذه المكونات؟"
+        },
+        "tips": {
+            "title": "نصائح للحصول على أفضل النتائج",
+            "beSpecific": {
+                "title": "كن محدداً",
+                "description": "اطرح أسئلة واضحة ومحددة للحصول على إجابات دقيقة"
+            },
+            "provideContext": {
+                "title": "قدم السياق",
+                "description": "اشرح خلفية مشروعك أو مستواك التعليمي"
+            },
+            "askForExamples": {
+                "title": "اطلب أمثلة",
+                "description": "لا تتردد في طلب أمثلة عملية أو خطوات تفصيلية"
+            }
+        }
+    },
+    "search": {
+        "title": "البحث عن مستشارين",
+        "subtitle": "ابحث عن مستشارين متخصصين في مختلف المجالات",
+        "stats": {
+            "availableConsultants": "مستشار متاح",
+            "specialties": "تخصص مختلف",
+            "support": "دعم العملاء",
+            "satisfaction": "رضا العملاء"
+        },
+        "searchPlaceholder": "البحث عن مستشار...",
+        "specialty": "التخصص",
+        "allSpecialties": "جميع التخصصات",
+        "rating": "التقييم",
+        "showing": "عرض",
+        "of": "من أصل",
+        "consultant": "مستشار",
+        "reviews": "تقييم",
+        "specialties": "التخصصات",
+        "experience": "الخبرة",
+        "price": "السعر",
+        "pricePerHour": "ر.س/ساعة",
+        "languages": "اللغات",
+        "bookConsultation": "حجز استشارة",
+        "noConsultantsFound": "لم يتم العثور على مستشارين",
+        "tryChangingFilters": "جرب تغيير معايير البحث أو الفلاتر"
+    },
+    "favorites": {
+        "title": "المستشارين المفضلين",
+        "subtitle": "قائمة المستشارين المفضلين لديك",
+        "stats": {
+            "favoriteConsultants": "مستشار مفضل",
+            "differentSpecialties": "تخصص مختلف",
+            "averageRating": "متوسط التقييم",
+            "averagePrice": "متوسط السعر (ر.س)"
+        },
+        "searchPlaceholder": "البحث في المفضلين...",
+        "specialty": "التخصص",
+        "allSpecialties": "جميع التخصصات",
+        "showing": "عرض",
+        "of": "من أصل",
+        "consultant": "مستشار",
+        "reviews": "تقييم",
+        "specialties": "التخصصات",
+        "experience": "الخبرة",
+        "price": "السعر",
+        "pricePerHour": "ر.س/ساعة",
+        "location": "الموقع",
+        "languages": "اللغات",
+        "bookConsultation": "حجز استشارة",
+        "noFavorites": "لا يوجد مستشارين مفضلين",
+        "noFavoritesAdded": "لم تقم بإضافة أي مستشار إلى المفضلة بعد",
+        "noFavoritesMatch": "لم يتم العثور على مستشارين يطابقون معايير البحث",
+        "searchConsultants": "البحث عن مستشارين"
+    },
+    "consultations": {
+        "title": "الاستشارات",
+        "subtitle": "احصل على المساعدة من المعلمين والمستشارين",
+        "requestConsultation": "طلب استشارة",
+        "stats": {
+            "total": "إجمالي الاستشارات",
+            "scheduled": "مجدولة",
+            "completed": "مكتملة",
+            "pending": "في الانتظار"
+        },
+        "tabs": {
+            "myConsultations": "استشاراتي",
+            "searchConsultants": "البحث عن مستشار"
+        },
+        "searchPlaceholder": "البحث في الاستشارات...",
+        "searchConsultantPlaceholder": "البحث عن مستشار...",
+        "types": {
+            "all": "جميع الأنواع",
+            "technical": "استشارة تقنية",
+            "academic": "استشارة أكاديمية",
+            "career": "استشارة مهنية",
+            "project": "استشارة مشروع"
+        },
+        "typeDescriptions": {
+            "technical": "استشارة في مجال التقنية والبرمجة",
+            "academic": "استشارة في المجالات الأكاديمية والتعليمية",
+            "career": "استشارة في التطوير المهني والوظيفي",
+            "project": "استشارة متعلقة بمشروع محدد"
+        },
+        "statuses": {
+            "all": "جميع الحالات",
+            "pending": "في الانتظار",
+            "scheduled": "مجدولة",
+            "completed": "مكتملة",
+            "cancelled": "ملغية"
+        },
+        "methods": {
+            "video": "مكالمة فيديو",
+            "phone": "مكالمة صوتية",
+            "chat": "محادثة نصية",
+            "screenShare": "مشاركة الشاشة"
+        },
+        "durations": {
+            "30min": "30 دقيقة",
+            "60min": "ساعة واحدة",
+            "90min": "ساعة ونصف",
+            "120min": "ساعتان"
+        },
+        "consultant": "المستشار",
+        "unassigned": "غير محدد",
+        "minutes": "دقيقة",
+        "appointmentTime": "موعد الاستشارة",
+        "yourFeedback": "تقييمك",
+        "created": "تم الإنشاء",
+        "joinConsultation": "انضمام للاستشارة",
+        "reschedule": "إعادة جدولة",
+        "editRequest": "تعديل الطلب",
+        "rateConsultation": "تقييم الاستشارة",
+        "viewDetails": "عرض التفاصيل",
+        "noConsultations": "لا توجد استشارات",
+        "startByRequesting": "ابدأ بطلب استشارتك الأولى من المستشارين",
+        "requestNewConsultation": "طلب استشارة جديدة",
+        "noConsultants": "لا يوجد مستشارين",
+        "noConsultantsAvailable": "لا يوجد مستشارين متاحين حالياً",
+        "advancedSearch": "البحث المتقدم",
+        "reviews": "تقييم",
+        "bookConsultation": "حجز استشارة",
+        "form": {
+            "topic": "عنوان الاستشارة",
+            "topicPlaceholder": "أدخل عنوان الاستشارة",
+            "description": "وصف الاستشارة",
+            "descriptionPlaceholder": "اشرح تفاصيل الاستشارة واحتياجاتك بوضوح",
+            "type": "نوع الاستشارة",
+            "method": "طريقة الاستشارة",
+            "duration": "مدة الاستشارة",
+            "relatedProject": "المشروع المرتبط (اختياري)",
+            "noProject": "بدون مشروع",
+            "preferredDate": "التاريخ المفضل (اختياري)"
+        },
+        "errors": {
+            "requiredFields": "يرجى ملء جميع الحقول المطلوبة",
+            "submissionFailed": "حدث خطأ في إرسال طلب الاستشارة"
+        },
+        "importantInfo": {
+            "title": "معلومات مهمة",
+            "review": "سيتم مراجعة طلبك وتعيين معلم مناسب في أقرب وقت",
+            "link": "سيتم إرسال رابط الاستشارة قبل الموعد بـ 15 دقيقة",
+            "cancel": "يمكنك إلغاء الاستشارة قبل 24 ساعة من الموعد"
+        },
+        "submitting": "جاري الإرسال...",
+        "submitRequest": "إرسال الطلب",
+        "createRequest": {
+            "title": "طلب استشارة جديدة",
+            "subtitle": "قم بإنشاء طلب استشارة جديد للحصول على المساعدة من الخبراء"
+        },
+        "howToUse": {
+            "title": "كيفية الاستفادة من الاستشارات",
+            "step1": {
+                "title": "طلب استشارة",
+                "description": "قم بإنشاء طلب استشارة جديد وحدد نوع الاستشارة والتفاصيل المطلوبة"
+            },
+            "step2": {
+                "title": "انتظار الموافقة",
+                "description": "سيقوم المستشار المناسب بمراجعة طلبك وتحديد موعد للاستشارة"
+            },
+            "step3": {
+                "title": "حضور الاستشارة",
+                "description": "انضم إلى الاستشارة في الموعد المحدد عبر الرابط المرسل إليك"
+            }
+        }
+    },
+    "myConsultations": {
+        "title": "طلباتي",
+        "subtitle": "إدارة طلبات الاستشارة الخاصة بك",
+        "newRequest": "طلب جديد",
+        "stats": {
+            "total": "إجمالي الطلبات",
+            "pending": "في الانتظار",
+            "scheduled": "مجدولة",
+            "completed": "مكتملة"
+        },
+        "searchPlaceholder": "البحث في الطلبات...",
+        "filters": {
+            "allStatuses": "جميع الحالات"
+        },
+        "showing": "عرض",
+        "of": "من أصل",
+        "request": "طلب",
+        "createdAt": "تاريخ الإنشاء",
+        "actions": {
+            "viewDetails": "عرض التفاصيل",
+            "editRequest": "تعديل الطلب",
+            "cancelRequest": "إلغاء الطلب"
+        },
+        "noRequests": "لا توجد طلبات",
+        "noRequestsMatch": "لم يتم العثور على طلبات استشارة تطابق معايير البحث"
+    },
+    "projects": {
+        "title": "إدارة المشاريع",
+        "subtitle": "تتبع وإدارة جميع مشاريعك الطلابية",
+        "newProject": "مشروع جديد",
+        "stats": {
+            "total": "إجمالي المشاريع",
+            "active": "مشاريع نشطة",
+            "completed": "مشاريع مكتملة",
+            "averageProgress": "متوسط درجة الإنجاز"
+        },
+        "searchPlaceholder": "البحث في المشاريع...",
+        "projectStatus": "حالة المشروع",
+        "schoolFilter": "فلترة حسب المؤسسة التعليمية",
+        "allSchools": "جميع المؤسسات التعليمية",
+        "statuses": {
+            "all": "جميع المشاريع",
+            "draft": "مسودة",
+            "active": "نشط",
+            "completed": "مكتمل",
+            "archived": "مؤرشف"
+        },
+        "categories": {
+            "stem": "ستيم",
+            "entrepreneurship": "ريادة الأعمال",
+            "volunteer": "التطوع",
+            "ethics": "الأخلاق"
+        },
+        "showing": "عرض",
+        "of": "من أصل",
+        "project": "مشروع",
+        "progress": "درجة الإنجاز",
+        "tasks": "المهام",
+        "students": "الطلاب",
+        "remaining": "متبقي",
+        "days": "يوم",
+        "overdue": "متأخر",
+        "lastUpdate": "آخر تحديث",
+        "notSpecified": "غير محدد",
+        "supervisorTeacher": "المشرف",
+        "actions": {
+            "viewDetails": "عرض التفاصيل",
+            "edit": "تعديل",
+            "archive": "أرشفة",
+            "delete": "حذف",
+            "evaluation": "التقييم",
+            "chat": "المحادثة"
+        },
+        "noProjects": "لا توجد مشاريع",
+        "startCreating": "ابدأ بإنشاء مشروعك الأول أو جرب تغيير معايير البحث",
+        "createNewProject": "إنشاء مشروع جديد"
+    },
+    "projectIdeas": {
+        "title": "أفكار المشاريع",
+        "subtitle": "اكتشف مجموعة متنوعة من أفكار المشاريع الإبداعية",
+        "stats": {
+            "projectIdeas": "فكرة مشروع",
+            "differentCategories": "فئات مختلفة",
+            "difficultyLevels": "مستويات صعوبة",
+            "free": "مجاني"
+        },
+        "searchPlaceholder": "البحث في أفكار المشاريع...",
+        "filters": {
+            "categories": "الفئات",
+            "difficulty": "مستوى الصعوبة"
+        },
+        "categories": {
+            "all": "جميع الفئات",
+            "stem": "ستيم",
+            "entrepreneurship": "ريادة الأعمال",
+            "volunteer": "التطوع",
+            "ethics": "الأخلاق"
+        },
+        "difficulties": {
+            "all": "جميع المستويات",
+            "beginner": "مبتدئ",
+            "intermediate": "متوسط",
+            "advanced": "متقدم"
+        },
+        "showing": "عرض",
+        "of": "من أصل",
+        "idea": "فكرة",
+        "suggestNewIdea": "اقتراح فكرة جديدة",
+        "teamwork": "فريق العمل",
+        "viewDetails": "عرض التفاصيل",
+        "noResults": "لم يتم العثور على نتائج",
+        "tryChangingFilters": "جرب تغيير معايير البحث أو الفلاتر",
+        "errors": {
+            "loadingFailed": "حدث خطأ في تحميل أفكار المشاريع"
+        },
+        "modal": {
+            "description": "الوصف",
+            "projectInfo": "معلومات المشروع",
+            "expectedDuration": "المدة المتوقعة",
+            "subject": "الموضوع/المادة",
+            "rating": "التقييم",
+            "views": "المشاهدات",
+            "downloads": "التنزيلات",
+            "objectives": "أهداف المشروع",
+            "materials": "المواد والأدوات المطلوبة",
+            "steps": "خطوات تنفيذ المشروع",
+            "view": "مشاهدة",
+            "download": "تنزيل",
+            "useIdea": "استخدم هذه الفكرة",
+            "notSpecified": "غير محدد"
+        },
+        "form": {
+            "languageTabs": "اللغات",
+            "arabic": "العربية",
+            "english": "الإنجليزية",
+            "fillBothLanguages": "يرجى ملء المعلومات بكلا اللغتين",
+            "arabicTitle": "العنوان بالعربية",
+            "englishTitle": "العنوان بالإنجليزية",
+            "arabicDescription": "الوصف بالعربية",
+            "englishDescription": "الوصف بالإنجليزية",
+            "arabicSubject": "الموضوع بالعربية",
+            "englishSubject": "الموضوع بالإنجليزية",
+            "arabicDuration": "المدة بالعربية",
+            "englishDuration": "المدة بالإنجليزية",
+            "arabicObjectives": "الأهداف بالعربية",
+            "englishObjectives": "الأهداف بالإنجليزية",
+            "arabicMaterials": "المواد بالعربية",
+            "englishMaterials": "المواد بالإنجليزية",
+            "arabicSteps": "الخطوات بالعربية",
+            "englishSteps": "الخطوات بالإنجليزية",
+            "arabicTags": "الكلمات المفتاحية بالعربية",
+            "englishTags": "الكلمات المفتاحية بالإنجليزية"
+        }
+    },
+    "store": {
+        "title": "تجهيز المعامل",
+        "subtitle": "أدوات ومواد المشاريع التعليمية",
+        "wishlist": "المفضلة",
+        "cart": "السلة",
+        "stats": {
+            "availableProducts": "منتج متاح",
+            "categories": "فئة",
+            "customerSupport": "دعم العملاء",
+            "freeShipping": "مجاني",
+            "shipping": "الشحن"
+        },
+        "searchPlaceholder": "البحث في المنتجات...",
+        "filters": {
+            "categories": "الفئات"
+        },
+        "categories": {
+            "all": "جميع المنتجات",
+            "electronics": "الإلكترونيات",
+            "tools": "الأدوات",
+            "materials": "المواد",
+            "books": "الكتب",
+            "software": "البرمجيات"
+        },
+        "showing": "عرض",
+        "of": "من أصل",
+        "product": "منتج",
+        "sortBy": "ترتيب حسب",
+        "sortOptions": {
+            "newest": "الأحدث",
+            "priceLowToHigh": "السعر: من الأقل للأعلى",
+            "priceHighToLow": "السعر: من الأعلى للأقل",
+            "rating": "التقييم"
+        },
+        "addingProducts": "جاري إضافة المنتجات...",
+        "productsAdded": "تم إضافة المنتجات",
+        "addProductsToStore": "إضافة منتجات للمتجر",
+        "inStock": "متوفر",
+        "outOfStock": "غير متوفر",
+        "reviews": "تقييم",
+        "more": "المزيد",
+        "currency": "ر.س",
+        "addToCart": "إضافة للسلة",
+        "cartSummary": "ملخص السلة",
+        "numberOfProducts": "عدد المنتجات",
+        "total": "المجموع",
+        "checkout": "إتمام الشراء",
+        "viewCart": "عرض السلة",
+        "noProductsFound": "لم يتم العثور على منتجات",
+        "noProductsInStore": "لا توجد منتجات في المتجر حالياً",
+        "tryChangingFilters": "جرب تغيير معايير البحث أو الفلاتر",
+        "whyChooseUs": "لماذا تختار متجرنا؟",
+        "features": {
+            "freeShipping": "شحن مجاني",
+            "freeShippingDesc": "شحن مجاني لجميع الطلبات",
+            "qualityGuarantee": "ضمان الجودة",
+            "qualityGuaranteeDesc": "منتجات عالية الجودة مضمونة",
+            "securePayment": "دفع آمن",
+            "securePaymentDesc": "طرق دفع متعددة وآمنة",
+            "easyReturns": "إرجاع سهل",
+            "easyReturnsDesc": "سياسة إرجاع مرنة خلال 30 يوم"
+        }
+    },
+    "intellectualProperty": {
+        "title": "الملكية الفكرية",
+        "subtitle": "حماية وتسجيل أفكار ومشاريع الطلاب الإبداعية",
+        "newRegistration": "تسجيل جديد",
+        "stats": {
+            "totalRequests": "إجمالي الطلبات",
+            "approved": "موافق عليها",
+            "underReview": "قيد المراجعة",
+            "protectionTypes": "أنواع الحماية"
+        },
+        "searchPlaceholder": "البحث في طلبات الملكية الفكرية...",
+        "filters": {
+            "propertyType": "نوع الملكية",
+            "requestStatus": "حالة الطلب"
+        },
+        "types": {
+            "all": "جميع الأنواع",
+            "invention": "اختراع",
+            "design": "تصميم",
+            "software": "برمجيات",
+            "research": "بحث علمي"
+        },
+        "statuses": {
+            "all": "جميع الحالات",
+            "pending": "قيد المراجعة",
+            "approved": "موافق عليه",
+            "rejected": "مرفوض"
+        },
+        "showing": "عرض",
+        "of": "من أصل",
+        "request": "طلب",
+        "relatedProject": "المشروع المرتبط",
+        "submissionDate": "تاريخ التقديم",
+        "reviewDate": "تاريخ المراجعة",
+        "estimatedReview": "المراجعة المتوقعة",
+        "certificateNumber": "رقم الشهادة",
+        "attachedDocuments": "المستندات المرفقة",
+        "rejectionReason": "سبب الرفض",
+        "protectionType": "نوع الحماية",
+        "actions": {
+            "viewDetails": "عرض التفاصيل",
+            "downloadCertificate": "تحميل الشهادة",
+            "resubmit": "إعادة التقديم"
+        },
+        "noRequests": "لا توجد طلبات",
+        "noRequestsFound": "لم يتم العثور على طلبات ملكية فكرية تطابق معايير البحث",
+        "importantInfo": {
+            "title": "معلومات مهمة حول الملكية الفكرية",
+            "availableTypes": "أنواع الحماية المتاحة",
+            "inventions": "الاختراعات والابتكارات التقنية",
+            "software": "البرمجيات والتطبيقات",
+            "designs": "التصاميم الإبداعية",
+            "research": "الأبحاث العلمية",
+            "registrationSteps": "خطوات التسجيل",
+            "step1": "تحضير الوثائق المطلوبة",
+            "step2": "تعبئة نموذج التسجيل",
+            "step3": "مراجعة الطلب من قبل الخبراء",
+            "step4": "الحصول على شهادة الحماية"
+        },
+        "form": {
+            "title": "عنوان الملكية الفكرية",
+            "titlePlaceholder": "أدخل عنوان الاختراع أو التصميم أو البحث",
+            "description": "وصف تفصيلي",
+            "descriptionPlaceholder": "اكتب وصفاً تفصيلياً للملكية الفكرية، كيف تعمل، وما هي فوائدها",
+            "type": "نوع الملكية الفكرية",
+            "relatedProject": "المشروع المرتبط (اختياري)",
+            "selectProject": "اختر مشروع (اختياري)",
+            "documentsSection": "المستندات المرفقة",
+            "requiredDocuments": "المستندات المطلوبة",
+            "requiredDocsList": {
+                "description": "وصف تفصيلي للاختراع أو التصميم",
+                "drawings": "رسومات أو صور توضيحية",
+                "certificates": "شهادات أو أوراق ثبوتية (إن وجدت)",
+                "supportingDocs": "أي مستندات داعمة أخرى"
+            },
+            "documentName": "اسم المستند",
+            "documentNamePlaceholder": "اسم المستند (مثال: وصف الاختراع.pdf)",
+            "addDocument": "إضافة مستند",
+            "note": "ملاحظة: في النسخة الحالية، يتم إدخال أسماء المستندات فقط. سيتم إضافة ميزة رفع الملفات لاحقاً.",
+            "tags": "الكلمات المفتاحية",
+            "tagPlaceholder": "أضف كلمة مفتاحية (مثال: ذكي، مبتكر، بيئي)",
+            "addTag": "إضافة",
+            "importantInfo": "معلومات مهمة",
+            "importantInfoList": {
+                "review": "سيتم مراجعة طلبك من قبل خبراء الملكية الفكرية",
+                "timeframe": "قد تستغرق عملية المراجعة من 7 إلى 14 يوم عمل",
+                "notification": "ستتلقى إشعاراً عبر البريد الإلكتروني عند اكتمال المراجعة",
+                "accuracy": "تأكد من دقة جميع المعلومات المقدمة"
+            },
+            "requiredFields": "يرجى ملء جميع الحقول المطلوبة",
+            "submitting": "جاري الإرسال...",
+            "submitRequest": "إرسال الطلب",
+            "successMessage": "تم إرسال طلب الملكية الفكرية بنجاح",
+            "errorMessage": "حدث خطأ في إرسال طلب الملكية الفكرية"
+        }
+    },
+    "resources": {
+        "title": "المصادر التعليمية",
+        "subtitle": "مكتبة شاملة من الموارد التعليمية والتدريبية",
+        "stats": {
+            "learningResource": "مورد تعليمي",
+            "contentType": "نوع محتوى",
+            "specialtyCategory": "فئة تخصص",
+            "free": "مجاني"
+        },
+        "searchPlaceholder": "البحث في المصادر التعليمية...",
+        "filters": {
+            "contentType": "نوع المحتوى",
+            "category": "الفئة"
+        },
+        "types": {
+            "all": "جميع الموارد",
+            "article": "مقالات",
+            "video": "فيديوهات",
+            "course": "دورات",
+            "template": "قوالب",
+            "podcast": "بودكاست",
+            "link": "روابط مفيدة"
+        },
+        "categories": {
+            "all": "جميع الفئات",
+            "projectManagement": "إدارة المشاريع",
+            "programming": "البرمجة",
+            "design": "التصميم",
+            "entrepreneurship": "ريادة الأعمال",
+            "stem": "ستيم",
+            "softSkills": "المهارات الناعمة"
+        },
+        "difficulties": {
+            "beginner": "مبتدئ",
+            "intermediate": "متوسط",
+            "advanced": "متقدم"
+        },
+        "showing": "عرض",
+        "of": "من أصل",
+        "resource": "مورد",
+        "featured": "مميز",
+        "more": "المزيد",
+        "defaultDuration": "15 دقيقة",
+        "lesson": "درس",
+        "certifiedCourse": "شهادة معتمدة",
+        "fileSize": "حجم الملف",
+        "episode": "حلقة",
+        "actions": {
+            "watch": "مشاهدة",
+            "startCourse": "بدء الدورة",
+            "download": "تحميل",
+            "listen": "استماع",
+            "read": "قراءة",
+            "visit": "زيارة"
+        },
+        "noResourcesFound": "لم يتم العثور على موارد",
+        "tryChangingFilters": "جرب تغيير معايير البحث أو الفلاتر"
+    },
+    "settings": {
+        "title": "الإعدادات",
+        "subtitle": "إدارة إعدادات حسابك وتفضيلات المنصة",
+        "settingsSections": "أقسام الإعدادات",
+        "saveChanges": "حفظ التغييرات",
+        "saving": "جاري الحفظ...",
+        "saveSuccess": "تم حفظ الإعدادات بنجاح",
+        "sections": {
+            "profile": "الملف الشخصي",
+            "notifications": "الإشعارات",
+            "security": "الأمان والخصوصية",
+            "appearance": "المظهر",
+            "language": "اللغة والمنطقة",
+            "data": "البيانات والنسخ الاحتياطي"
+        },
+        "errors": {
+            "loginRequired": "يجب تسجيل الدخول لحفظ الإعدادات",
+            "saveFailed": "حدث خطأ في حفظ الإعدادات"
+        },
+        "profile": {
+            "title": "الملف الشخصي",
+            "profilePicture": "صورة الملف الشخصي",
+            "pictureRequirements": "اختر صورة واضحة لملفك الشخصي",
+            "changePicture": "تغيير الصورة",
+            "remove": "حذف",
+            "fullName": "الاسم الكامل",
+            "bio": "نبذة شخصية",
+            "bioPlaceholder": "اكتب نبذة مختصرة عن خبرتك المهنية...",
+            "timezone": "المنطقة الزمنية",
+            "timezones": {
+                "riyadh": "توقيت الرياض (GMT+3)",
+                "cairo": "توقيت القاهرة (GMT+2)",
+                "dubai": "توقيت دبي (GMT+4)"
+            }
+        },
+        "notifications": {
+            "title": "الإشعارات",
+            "emailNotifications": "إشعارات البريد الإلكتروني",
+            "emailNotificationsDesc": "تلقي الإشعارات عبر البريد الإلكتروني",
+            "pushNotifications": "الإشعارات الفورية",
+            "pushNotificationsDesc": "تلقي الإشعارات على الهاتف",
+            "projectUpdates": "تحديثات المشاريع",
+            "projectUpdatesDesc": "إشعارات عند تحديث المشاريع",
+            "weeklyReports": "التقارير الأسبوعية",
+            "weeklyReportsDesc": "تلقي تقرير أسبوعي عن نشاطك"
+        },
+        "security": {
+            "title": "الأمان والخصوصية",
+            "changePassword": "تغيير كلمة المرور",
+            "currentPassword": "كلمة المرور الحالية",
+            "newPassword": "كلمة المرور الجديدة",
+            "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
+            "updatePassword": "تحديث كلمة المرور",
+            "twoFactorAuth": "المصادقة الثنائية",
+            "twoFactorAuthDesc": "حماية إضافية لحسابك",
+            "enable": "تفعيل",
+            "loginSessions": "جلسات تسجيل الدخول",
+            "chromeWindows": "Chrome على Windows",
+            "safariIphone": "Safari على iPhone",
+            "riyadhSaudiArabia": "الرياض، السعودية",
+            "jeddahSaudiArabia": "جدة، السعودية",
+            "activeNow": "نشط الآن",
+            "twoDaysAgo": "منذ يومين",
+            "currentSession": "الجلسة الحالية",
+            "endSession": "إنهاء الجلسة"
+        },
+        "appearance": {
+            "title": "المظهر",
+            "theme": "المظهر العام",
+            "lightTheme": "المظهر الفاتح",
+            "darkTheme": "المظهر الداكن",
+            "autoTheme": "تلقائي (حسب النظام)",
+            "fontSize": "حجم الخط",
+            "small": "صغير",
+            "medium": "متوسط",
+            "large": "كبير",
+            "animations": "الحركات والانتقالات",
+            "animationsDesc": "تفعيل الحركات المتحركة في الواجهة"
+        },
+        "language": {
+            "title": "اللغة والمنطقة",
+            "interfaceLanguage": "لغة الواجهة",
+            "arabic": "العربية",
+            "english": "English",
+            "french": "Français",
+            "timezone": "المنطقة الزمنية",
+            "timezones": {
+                "riyadh": "توقيت الرياض (GMT+3)",
+                "cairo": "توقيت القاهرة (GMT+2)",
+                "dubai": "توقيت دبي (GMT+4)"
+            },
+            "dateFormat": "تنسيق التاريخ",
+            "timeFormat": "تنسيق الوقت",
+            "timeFormats": {
+                "24hour": "24 ساعة",
+                "12hour": "12 ساعة (AM/PM)"
+            }
+        },
+        "data": {
+            "title": "البيانات والنسخ الاحتياطي",
+            "exportData": "تصدير البيانات",
+            "exportDataDesc": "احصل على نسخة من جميع بياناتك",
+            "importData": "استيراد البيانات",
+            "importDataDesc": "استيراد البيانات من ملف سابق",
+            "deleteAccount": "حذف الحساب",
+            "deleteAccountWarning": "حذف الحساب نهائياً سيؤدي إلى فقدان جميع البيانات والمشاريع. هذا الإجراء لا يمكن التراجع عنه.",
+            "permanentlyDeleteAccount": "حذف الحساب نهائياً"
+        }
+    },
+    "createProject": {
+        "title": "إنشاء مشروع جديد",
+        "subtitle": "قم بإنشاء مشروع تعليمي جديد للطلاب",
+        "steps": {
+            "basicInfo": "المعلومات الأساسية",
+            "detailsObjectives": "التفاصيل والأهداف",
+            "materialsSteps": "المواد والخطوات",
+            "finalSettings": "الإعدادات النهائية",
+            "addStudents": "إضافة الطلاب"
+        },
+        "startWithBasicInfo": "ابدأ بإدخال المعلومات الأساسية للمشروع",
+        "defineObjectives": "حدد أهداف المشروع والمدة المتوقعة",
+        "defineMaterialsSteps": "حدد المواد المطلوبة وخطوات تنفيذ المشروع",
+        "setDeadlineStatus": "حدد الموعد النهائي وحالة المشروع",
+        "chooseParticipatingStudents": "اختر الطلاب المشاركين في المشروع من مؤسستك التعليمية",
+        "form": {
+            "title": "عنوان المشروع",
+            "titlePlaceholder": "أدخل عنوان المشروع",
+            "description": "وصف المشروع",
+            "descriptionPlaceholder": "اكتب وصفاً شاملاً للمشروع وأهدافه",
+            "problemSolved": "المشكلة التي يحلها المشروع (اختياري)",
+            "problemSolvedPlaceholder": "اشرح المشكلة التي يهدف المشروع إلى حلها",
+            "category": "فئة المشروع",
+            "subject": "الموضوع/المادة",
+            "subjectPlaceholder": "مثال: الفيزياء، البرمجة، التسويق",
+            "difficulty": "مستوى الصعوبة",
+            "duration": "المدة المتوقعة",
+            "durationPlaceholder": "مثال: 6-8 أسابيع",
+            "maxStudents": "عدد الطلاب الأقصى",
+            "objectives": "أهداف المشروع",
+            "objective": "الهدف",
+            "addNewObjective": "إضافة هدف جديد",
+            "materials": "المواد والأدوات المطلوبة",
+            "material": "المادة",
+            "addNewMaterial": "إضافة مادة جديدة",
+            "implementationSteps": "خطوات تنفيذ المشروع",
+            "step": "الخطوة",
+            "addNewStep": "إضافة خطوة جديدة",
+            "deadline": "الموعد النهائي للمشروع",
+            "status": "حالة المشروع"
+        },
+        "categories": {
+            "stemDesc": "مشاريع تقنية وعلمية",
+            "entrepreneurshipDesc": "مشاريع تجارية وريادية",
+            "volunteerDesc": "مشاريع خدمة المجتمع",
+            "ethicsDesc": "مشاريع القيم والأخلاق"
+        },
+        "difficulties": {
+            "beginnerDesc": "مناسب للمبتدئين",
+            "intermediateDesc": "يتطلب خبرة متوسطة",
+            "advancedDesc": "يتطلب خبرة عالية"
+        },
+        "projectSummary": "ملخص المشروع",
+        "notSpecified": "غير محدد",
+        "objectivesCount": "عدد الأهداف",
+        "materialsCount": "عدد المواد",
+        "stepsCount": "عدد الخطوات",
+        "initialProgress": "نسبة الإنجاز الأولية",
+        "searchStudentsPlaceholder": "البحث بالاسم أو البريد الإلكتروني...",
+        "selectedStudents": "تم اختيار {{count}} طالب من أصل {{max}} كحد أقصى",
+        "selected": "محدد",
+        "noStudents": "لا يوجد طلاب",
+        "noStudentsMatch": "لم يتم العثور على طلاب يطابقون البحث",
+        "noStudentsAvailable": "لا يوجد طلاب متاحين في مؤسستك التعليمية",
+        "importantInfo": "معلومات مهمة",
+        "onlySchoolStudents": "يتم عرض الطلاب من نفس مؤسستك التعليمية فقط",
+        "canAddUpTo": "يمكنك اختيار حتى {{max}} طلاب كحد أقصى",
+        "canModifyLater": "يمكن إضافة أو إزالة الطلاب لاحقاً من صفحة إدارة المشروع",
+        "searchIncludesNameEmail": "البحث يشمل الاسم والبريد الإلكتروني",
+        "creating": "جاري الإنشاء...",
+        "createProject": "إنشاء المشروع",
+        "errors": {
+            "creationFailed": "حدث خطأ في إنشاء المشروع"
+        }
+    },
+    "editProject": {
+        "title": "تعديل المشروع",
+        "subtitle": "تحديث وتعديل تفاصيل المشروع",
+        "saveChanges": "حفظ التغييرات",
+        "saving": "جاري الحفظ...",
+        "modifyBasicInfo": "تحديث المعلومات الأساسية للمشروع",
+        "modifyObjectives": "تحديث أهداف المشروع والمدة المتوقعة",
+        "modifyMaterialsSteps": "تحديث المواد المطلوبة وخطوات التنفيذ",
+        "modifyDeadlineStatus": "تحديث الموعد النهائي وحالة المشروع",
+        "studentsCount": "عدد الطلاب",
+        "outOf": "من أصل",
+        "manageStudents": "إدارة الطلاب",
+        "addRemoveStudents": "إضافة أو إزالة الطلاب المشاركين في المشروع",
+        "changesWillAffect": "التغييرات في قائمة الطلاب ستنعكس فوراً على المشروع"
+    },
+    "projectDetails": {
+        "supervisorTeacher": "المعلم المشرف",
+        "selectTeacher": "اختر المعلم المشرف",
+        "approveProject": "اعتماد المشروع",
+        "errors": {
+            "selectTeacherRequired": "يجب اختيار معلم مشرف قبل اعتماد المشروع"
+        },
+        "assignedToYou": "سيتم تعيينك كمعلم مشرف لهذا المشروع",
+        "projectApproved": "تم اعتماد المشروع بنجاح",
+        "approving": "جاري الاعتماد..."
+    },
+    "cart": {
+        "title": "سلة التسوق",
+        "subtitle": "مراجعة وإدارة منتجاتك",
+        "backToStore": "العودة إلى المتجر",
+        "products": "المنتجات",
+        "deleteAll": "حذف الكل",
+        "confirmDelete": "هل أنت متأكد من حذف هذا المنتج من السلة؟",
+        "category": "الفئة",
+        "available": "متوفر",
+        "notAvailable": "غير متوفر",
+        "quantity": "الكمية",
+        "total": "الإجمالي",
+        "emptyCart": "سلة التسوق فارغة",
+        "noProductsAdded": "لم تقم بإضافة أي منتجات إلى سلة التسوق بعد",
+        "shopNow": "تسوق الآن",
+        "page": "صفحة",
+        "of": "من",
+        "orderSummary": "ملخص الطلب",
+        "subtotal": "المجموع الفرعي",
+        "shipping": "الشحن",
+        "free": "مجاني",
+        "vat": "ضريبة القيمة المضافة (15%)",
+        "discount": "الخصم",
+        "couponCode": "كود الخصم",
+        "enterCoupon": "أدخل كود الخصم",
+        "apply": "تطبيق",
+        "applying": "جاري التطبيق...",
+        "couponRequired": "يرجى إدخال كود الخصم",
+        "invalidCoupon": "كود الخصم غير صالح",
+        "couponSuccess": "تم تطبيق الخصم بنجاح!",
+        "tryCode": "جرب كود \"DISCOUNT20\" للحصول على خصم 20%",
+        "proceedToPayment": "المتابعة للدفع",
+        "shippingInfo": "معلومات الشحن",
+        "freeShipping": "شحن مجاني",
+        "freeShippingThreshold": "للطلبات فوق {{amount}} ريال",
+        "fastDelivery": "توصيل سريع",
+        "deliveryTime": "خلال 2-5 أيام عمل",
+        "qualityGuarantee": "ضمان الجودة",
+        "returnPolicy": "ضمان استرجاع لمدة 30 يوم"
+    },
+    "checkout": {
+        "title": "إتمام الطلب",
+        "subtitle": "أدخل بيانات الشحن والدفع",
+        "backToCart": "العودة إلى سلة التسوق",
+        "shippingInformation": "معلومات الشحن",
+        "fullName": "الاسم الكامل",
+        "enterFullName": "أدخل الاسم الكامل",
+        "email": "البريد الإلكتروني",
+        "enterEmail": "أدخل البريد الإلكتروني",
+        "phone": "رقم الهاتف",
+        "enterPhone": "أدخل رقم الهاتف",
+        "city": "المدينة",
+        "enterCity": "أدخل المدينة",
+        "address": "العنوان",
+        "enterAddress": "أدخل العنوان بالتفصيل",
+        "postalCode": "الرمز البريدي",
+        "enterPostalCode": "أدخل الرمز البريدي",
+        "country": "الدولة",
+        "saudiArabia": "المملكة العربية السعودية",
+        "uae": "الإمارات العربية المتحدة",
+        "kuwait": "الكويت",
+        "bahrain": "البحرين",
+        "oman": "عمان",
+        "qatar": "قطر",
+        "notes": "ملاحظات إضافية",
+        "enterNotes": "أي ملاحظات خاصة بالطلب أو الشحن",
+        "saveInfo": "حفظ هذه المعلومات للطلبات القادمة",
+        "paymentMethod": "طريقة الدفع",
+        "creditCard": "بطاقة ائتمان",
+        "creditCardDesc": "Visa, Mastercard, American Express",
+        "mada": "مدى",
+        "madaDesc": "الدفع ببطاقة مدى",
+        "applePay": "Apple Pay",
+        "applePayDesc": "الدفع باستخدام Apple Pay",
+        "cashOnDelivery": "الدفع عند الاستلام",
+        "cashOnDeliveryDesc": "ادفع نقداً عند استلام الطلب",
+        "cardDetails": "تفاصيل البطاقة",
+        "cardNumber": "رقم البطاقة",
+        "cardName": "الاسم على البطاقة",
+        "cardNamePlaceholder": "الاسم كما يظهر على البطاقة",
+        "expiryDate": "تاريخ الانتهاء",
+        "cvv": "رمز الأمان (CVV)",
+        "secureTransaction": "جميع المعاملات مشفرة وآمنة. بياناتك محمية.",
+        "agreeToTerms": "أوافق على",
+        "termsAndConditions": "الشروط والأحكام",
+        "and": "و",
+        "privacyPolicy": "سياسة الخصوصية",
+        "orderSummary": "ملخص الطلب",
+        "placeOrder": "إتمام الطلب",
+        "processing": "جاري معالجة الطلب...",
+        "securPayment": "دفع آمن",
+        "fastShipping": "شحن سريع",
+        "qualityGuarantee": "ضمان الجودة",
+        "needHelp": "بحاجة إلى مساعدة؟",
+        "helpText": "إذا كان لديك أي أسئلة أو استفسارات حول طلبك، يرجى التواصل مع فريق خدمة العملاء.",
+        "contactUs": "اتصل بنا",
+        "faq": "الأسئلة الشائعة",
+        "emptyCart": "سلة التسوق فارغة",
+        "addProductsFirst": "يرجى إضافة منتجات إلى سلة التسوق قبل المتابعة للدفع",
+        "orderComplete": "تم إتمام الطلب بنجاح",
+        "thankYou": "شكراً لك على الطلب!",
+        "orderReceived": "تم استلام طلبك",
+        "orderReceivedDesc": "لقد تم استلام طلبك بنجاح وسيتم معالجته في أقرب وقت ممكن.\nسيتم إرسال تأكيد الطلب إلى بريدك الإلكتروني.",
+        "orderNumber": "رقم الطلب: #{{number}}",
+        "keepReference": "يرجى الاحتفاظ بهذا الرقم للرجوع إليه في المستقبل",
+        "backToStore": "العودة إلى المتجر",
+        "goToHome": "الذهاب إلى الصفحة الرئيسية",
+        "errors": {
+            "fillRequired": "يرجى ملء جميع الحقول المطلوبة",
+            "agreeTerms": "يجب الموافقة على الشروط والأحكام للمتابعة",
+            "invalidEmail": "يرجى إدخال بريد إلكتروني صحيح",
+            "invalidPhone": "يرجى إدخال رقم هاتف صحيح",
+            "fillCardDetails": "يرجى إدخال جميع تفاصيل بطاقة الائتمان",
+            "invalidCardNumber": "يرجى إدخال رقم بطاقة صحيح (16 رقم)",
+            "invalidExpiry": "يرجى إدخال تاريخ انتهاء صلاحية صحيح (MM/YY)",
+            "invalidCvv": "يرجى إدخال رمز CVV صحيح (3-4 أرقام)",
+            "processingError": "حدث خطأ أثناء معالجة الطلب. يرجى المحاولة مرة أخرى."
+        }
+    },
+    "gallery": {
+        "allProjects": "جميع المشاريع",
+        "allSchools": "جميع المؤسسات التعليمية",
+        "unknownSchool": "مؤسسة تعليمية غير معروفة",
+        "scienceAndTech": "العلوم والتقنية",
+        "entrepreneurship": "ريادة الأعمال",
+        "volunteering": "التطوع",
+        "ethics": "الأخلاق",
+        "addProject": "إضافة مشروع",
+        "editProject": "تعديل المشروع",
+        "deleteProject": "حذف المشروع",
+        "confirmDelete": "هل أنت متأكد من حذف هذا المشروع؟",
+        "deleting": "جاري الحذف...",
+        "views": "المشاهدات",
+        "likes": "الإعجابات",
+        "students": "الطلاب",
+        "projectDate": "تاريخ المشروع",
+        "description": "الوصف",
+        "noProjects": "لم يتم العثور على مشاريع",
+        "noProjectsMatch": "لم يتم العثور على مشاريع تطابق معايير البحث"
+    },
+    "reports": {
+        "title": "التقارير والإحصائيات",
+        "subtitle": "تحليل شامل لأداء المنصة والمشاريع",
+        "exportAll": "تصدير شامل",
+        "stats": {
+            "activeProjects": "مشروع نشط",
+            "completedProjects": "مشروع مكتمل",
+            "averageProgress": "متوسط نسبة الإنجاز",
+            "averageRating": "متوسط التقييم"
+        },
+        "tabs": {
+            "overview": "نظرة عامة",
+            "projects": "تقارير المشاريع",
+            "schools": "تقارير المؤسسات التعليمية",
+            "users": "تقارير المستخدمين",
+            "performance": "تقارير الأداء",
+            "teachers": "تقارير المعلمين/المشرفين",
+            "students": "تقارير الطلاب"
+        },
+        "columns": {
+            "projectTitle": "عنوان المشروع",
+            "category": "الفئة",
+            "status": "الحالة",
+            "progress": "نسبة الإنجاز",
+            "weightedScore": "الدرجة الموزونة",
+            "supervisorTeacher": "المعلم/المشرف المشرف",
+            "school": "المؤسسة التعليمية",
+            "studentsCount": "عدد الطلاب",
+            "createdAt": "تاريخ الإنشاء",
+            "studentName": "اسم الطالب",
+            "grade": "المرحلة الدراسية",
+            "projectsCount": "عدد المشاريع",
+            "completedProjects": "المشاريع المكتملة",
+            "averageRating": "متوسط التقييم",
+            "totalEvaluationScore": "مجموع درجات الإنجاز",
+            "teacherName": "اسم المعلم/المشرف",
+            "subject": "التخصص",
+            "averageProjectRating": "متوسط تقييم المشاريع",
+            "schoolName": "اسم المؤسسة التعليمية",
+            "teachersCount": "عدد المعلمين/المشرفين",
+            "completionRate": "معدل الإنجاز"
+        },
+        "categories": {
+            "stem": "العلوم والتقنية",
+            "entrepreneurship": "ريادة الأعمال",
+            "volunteer": "التطوع",
+            "ethics": "الأخلاق"
+        },
+        "statuses": {
+            "completed": "مكتمل",
+            "active": "نشط",
+            "draft": "مسودة",
+            "archived": "مؤرشف"
+        },
+        "metrics": {
+            "totalProjects": "إجمالي المشاريع",
+            "activeProjects": "المشاريع النشطة",
+            "averageProgress": "متوسط التقدم",
+            "averageRating": "متوسط التقييم"
+        },
+        "charts": {
+            "monthlyProgress": "تقدم المشاريع الشهري",
+            "projectsByCategory": "المشاريع حسب الفئة",
+            "progressDistribution": "توزيع التقدم"
+        },
+        "performance": {
+            "progressDistribution": "توزيع نسبة الإنجاز",
+            "averageProgress": "متوسط نسبة الإنجاز",
+            "averageRating": "متوسط الدرجة الموزونة",
+            "completionRate": "معدل إنجاز المشاريع",
+            "outOf": "من أصل",
+            "fromTotal": "من"
+        },
+        "exportError": "حدث خطأ أثناء تصدير البيانات",
+        "noData": "لا توجد بيانات متاحة",
+        "errorOccurred": "حدث خطأ",
+        "errorMessage": "خطأ"
+    },
+    "pointsDetails": {
+        "title": "تفاصيل حساب النقاط",
+        "subtitle": "تفصيل تفصيلي لـ {{name}}",
+        "back": "رجوع",
+        "calculationFormula": "معادلة حساب النقاط",
+        "totalPoints": "إجمالي النقاط",
+        "initiationPoints": "نقاط التفعيل",
+        "progressPoints": "نقاط التقدم",
+        "weightedScorePoints": "نقاط الدرجات الموزونة",
+        "chatPoints": "نقاط المحادثة",
+        "filePoints": "نقاط الملفات",
+        "projectActivation": "تفعيل المشروع",
+        "progress": "التقدم",
+        "evaluationScores": "درجات التقييم",
+        "chatMessages": "رسائل المحادثة",
+        "fileUploads": "رفع الملفات",
+        "breakdown": "التفاصيل",
+        "projectName": "اسم المشروع",
+        "category": "الفئة",
+        "pointsAwarded": "النقاط الممنوحة",
+        "noData": "لا توجد بيانات متاحة",
+        "loadError": "تعذر تحميل تفاصيل النقاط. يرجى المحاولة مرة أخرى."
+    },
+    "consultant": {
+        "dashboard": {
+            "title": "لوحة تحكم المستشار",
+            "welcome": "مرحباً بعودتك",
+            "stats": {
+                "totalConsultations": "إجمالي الاستشارات",
+                "scheduled": "مجدولة",
+                "completed": "مكتملة",
+                "revenue": "الإيرادات"
+            }
+        },
+        "schedule": {
+            "title": "جدول المواعيد",
+            "availability": "الأوقات المتاحة",
+            "setAvailability": "تحديد الأوقات المتاحة",
+            "upcomingConsultations": "الاستشارات القادمة"
+        },
+        "profile": {
+            "title": "الملف الشخصي",
+            "editProfile": "تعديل الملف الشخصي",
+            "specialties": "التخصصات",
+            "experience": "الخبرة",
+            "hourlyRate": "السعر بالساعة"
+        },
+        "reviews": {
+            "title": "التقييمات",
+            "averageRating": "متوسط التقييم",
+            "totalReviews": "إجمالي التقييمات"
+        }
+    },
+    "projectEvaluation": {
+        "title": "تقييم المشروع",
+        "overallScore": "الدرجة الموزونة",
+        "evaluationCriteria": "معايير التقييم",
+        "criteriaNames": {
+            "completionRate": "نسبة الإنجاز",
+            "workQuality": "جودة العمل",
+            "communicationAndCooperation": "التواصل والتعاون",
+            "creativityAndInnovation": "الإبداع والابتكار",
+            "presentationAndDocumentation": "جودة العرض والتوثيق"
+        },
+        "comments": "ملاحظات",
+        "commentsPlaceholder": "أضف ملاحظاتك حول هذا المعيار...",
+        "generalComment": "التعليق العام",
+        "generalCommentPlaceholder": "أضف تعليقك العام على المشروع وتوصياتك للطلاب...",
+        "saveEvaluation": "حفظ التقييم",
+        "saving": "جاري الحفظ...",
+        "savedSuccessfully": "تم حفظ التقييم بنجاح",
+        "saveFailed": "حدث خطأ في حفظ التقييم",
+        "cannotLoadForm": "لا يمكن تحميل نموذج التقييم. يرجى المحاولة مرة أخرى لاحقاً.",
+        "errorOccurred": "حدث خطأ"
+    },
+    "projectChat": {
+        "title": "محادثة الفريق",
+        "createMeeting": "إنشاء اجتماع",
+        "createMeetingTitle": "إنشاء اجتماع جديد في Google Meet",
+        "noMessages": "لا توجد رسائل بعد",
+        "startConversation": "ابدأ المحادثة مع فريق المشروع",
+        "messageTypes": {
+            "text": "رسالة نصية",
+            "image": "صورة",
+            "video": "فيديو",
+            "file": "ملف"
+        },
+        "fileSent": "تم إرسال",
+        "downloadFile": "تحميل الملف",
+        "messagePlaceholder": "اكتب رسالتك هنا...",
+        "send": "إرسال",
+        "edit": "تعديل",
+        "delete": "حذف",
+        "edited": "معدل",
+        "seen": "شاهد",
+        "seenBy": "شاهد الرسالة",
+        "noOneSeenYet": "لم يشاهد أحد هذه الرسالة بعد",
+        "confirmDelete": "تأكيد الحذف",
+        "confirmDeleteMessage": "هل أنت متأكد من حذف هذه الرسالة؟ لا يمكن التراجع عن هذا الإجراء.",
+        "cancel": "إلغاء",
+        "deleteButton": "حذف",
+        "close": "إغلاق",
+        "errorLoadingMessages": "حدث خطأ في تحميل الرسائل",
+        "errorSendingMessage": "حدث خطأ في إرسال الرسالة",
+        "errorUploadingFile": "حدث خطأ في رفع الملف",
+        "imageSent": "صورة",
+        "videoSent": "فيديو",
+        "fileSentGeneric": "ملف",
+        "user": "مستخدم",
+        "errorUpdatingMessage": "حدث خطأ في تحديث الرسالة",
+        "errorDeletingMessage": "حدث خطأ في حذف الرسالة",
+        "unknownUser": "مستخدم غير معروف"
+    },
+    "reportTable": {
+        "searchPlaceholder": "البحث...",
+        "showing": "عرض",
+        "of": "من أصل",
+        "items": "عنصر",
+        "exportExcel": "Excel",
+        "exportCSV": "CSV",
+        "noResults": "لم يتم العثور على نتائج تطابق البحث",
+        "noData": "لا توجد بيانات متاحة",
+        "exportError": "حدث خطأ أثناء تصدير البيانات"
+    },
+
+    "dashboard": {
+        "welcome": "مرحباً بعودتك، {{name}}!",
+        "subtitle": "إليك ما يحدث مع مشاريعك اليوم",
+        "stats": {
+            "totalProjects": "إجمالي المشاريع",
+            "activeProjects": "المشاريع النشطة",
+            "completedProjects": "المشاريع المكتملة",
+            "pendingTasks": "المهام المعلقة",
+            "rewardPoints": "نقاط المكافآت",
+            "upcomingConsultations": "الاستشارات القادمة"
+        },
+        "quickActions": {
+            "title": "إجراءات سريعة",
+            "exploreIdeas": "استكشف الأفكار",
+            "exploreIdeasDesc": "تصفح أفكار المشاريع الإبداعية",
+            "createProject": "إنشاء مشروع",
+            "createProjectDesc": "ابدأ مشروعاً جديداً",
+            "bookConsultation": "حجز استشارة",
+            "bookConsultationDesc": "احصل على إرشاد الخبراء",
+            "visitStore": "زيارة المتجر",
+            "visitStoreDesc": "تسوق للمواد والأدوات",
+            "aiAssistant": "المساعد الذكي",
+            "aiAssistantDesc": "احصل على مساعدة فورية",
+            "viewGallery": "عرض المعرض",
+            "viewGalleryDesc": "استكشف معرض المشاريع"
+        },
+        "recentProjects": {
+            "title": "المشاريع الأخيرة",
+            "noProjects": "لا توجد مشاريع حديثة. ابدأ مشروعاً جديداً للبدء!",
+            "members": "أعضاء",
+            "viewAll": "عرض الكل"
+        },
+        "upcomingDeadlines": {
+            "title": "المواعيد النهائية القادمة",
+            "noDeadlines": "لا توجد مواعيد نهائية قادمة. عمل رائع!",
+            "daysLeft": "يوم متبقي"
+        },
+        "recentActivity": {
+            "title": "النشاط الأخير",
+            "noActivity": "لا يوجد نشاط حديث بعد",
+            "sentMessageIn": "{{userName}}: {{message}}",
+            "uploadedFileTo": "{{userName}} قام بتحميل {{fileName}}",
+            "completedEvaluation": "{{teacherName}} أكمل التقييم",
+            "updatedEvaluation": "{{teacherName}} حدّث التقييم",
+            "unknownUser": "مستخدم غير معروف"
+        },
+        "notifications": {
+            "title": "الإشعارات",
+            "noNotifications": "لا توجد إشعارات بعد"
+        }
+    },
+    "recentConversations": {
+        "title": "المحادثات الحديثة",
+        "noConversations": "لا توجد محادثات حديثة في آخر 24 ساعة",
+        "viewProject": "عرض المشروع",
+        "sentImage": "أرسل صورة",
+        "sentVideo": "أرسل فيديو",
+        "sentFile": "أرسل ملف",
+        "unreadMessages": "{{count}} رسالة غير مقروءة",
+        "timeAgo": {
+            "justNow": "الآن",
+            "minutes": "منذ {{count}} دقيقة",
+            "minutes_plural": "منذ {{count}} دقيقة",
+            "hours": "منذ {{count}} ساعة",
+            "hours_plural": "منذ {{count}} ساعة"
+        }
+    },
+    "gantt": {
+        "title": "مخطط جانت الزمني",
+        "refresh": "تحديث",
+        "today": "اليوم",
+        "notAssigned": "غير محدد",
+        "notSet": "غير محدد",
+        "assignedTo": "المسؤول",
+        "dueDate": "الموعد النهائي",
+        "statusLabel": "الحالة",
+        "priorityLabel": "الأولوية",
+        "noTasksWithDates": "لا توجد مهام بتواريخ محددة لعرضها في المخطط الزمني",
+        "status": {
+            "pending": "في الانتظار",
+            "inProgress": "قيد التنفيذ",
+            "completed": "مكتملة"
+        },
+        "priority": {
+            "low": "منخفضة",
+            "medium": "متوسطة",
+            "high": "عالية"
+        }
+    },
+    "schoolCustomization": {
+        "title": "تخصيص المؤسسات التعليمية",
+        "description": "إدارة الدومين الفرعي والشعار لكل مؤسسة تعليمية",
+        "schoolsList": "قائمة المؤسسات",
+        "noSchools": "لا توجد مؤسسات تعليمية",
+        "selectSchool": "اختر مؤسسة تعليمية",
+        "selectSchoolDesc": "اختر مؤسسة من القائمة لتخصيص الدومين والشعار",
+        "subdomain": "الدومين الفرعي",
+        "subdomainPlaceholder": "institution1",
+        "subdomainRequired": "الدومين الفرعي مطلوب",
+        "invalidSubdomain": "الدومين الفرعي غير صالح (3-20 حرف، حروف وأرقام وشرطة فقط)",
+        "subdomainTaken": "هذا الدومين مستخدم من قبل مؤسسة أخرى",
+        "checkError": "فشل التحقق من توفر الدومين",
+        "savedSuccessfully": "تم الحفظ بنجاح",
+        "saveError": "فشل حفظ التغييرات",
+        "previewUrl": "معاينة الرابط",
+        "subdomainRules": "قواعد الدومين الفرعي:",
+        "rule1": "من 3 إلى 20 حرف",
+        "rule2": "حروف وأرقام وشرطة فقط",
+        "rule3": "يجب أن يبدأ وينتهي بحرف أو رقم",
+        "domainValidation": "التحقق من البريد الإلكتروني (اختياري)",
+        "domainValidationDesc": "تقييد التسجيل للمستخدمين الذين لديهم عناوين بريد إلكتروني رسمية فقط",
+        "enableDomainValidation": "تفعيل التحقق من نطاق البريد الإلكتروني",
+        "allEmailsAllowed": "مسموح بجميع عناوين البريد الإلكتروني",
+        "domainValidationWarning": "التحقق مفعل ولكن لا توجد نطاقات محددة. سيتم قبول جميع البريد الإلكتروني حتى تضيف نطاقاً واحداً على الأقل.",
+        "addEmailDomain": "إضافة نطاق بريد إلكتروني",
+        "domainPlaceholder": "مثال: @university.edu أو university.edu",
+        "domainFormatInfo": "يمكنك إدخال النطاق بصيغة @domain.edu أو domain.edu",
+        "allowedDomains": "النطاقات المسموح بها",
+        "customErrorMessage": "رسالة خطأ مخصصة (اختياري)",
+        "customMessageAr": "رسالة بالعربية",
+        "customMessageEn": "رسالة بالإنجليزية",
+        "defaultMessageNote": "سيتم استخدام الرسالة الافتراضية إذا تركت هذا الحقل فارغاً",
+        "testEmail": "اختبار بريد إلكتروني",
+        "testEmailPlaceholder": "مثال: student@university.edu",
+        "testEmailButton": "اختبار",
+        "emailWillBeAccepted": "سيتم قبول هذا البريد الإلكتروني",
+        "emailWillBeRejected": "سيتم رفض هذا البريد الإلكتروني",
+        "saveSettings": "حفظ الإعدادات",
+        "domainSettingsSaved": "تم حفظ إعدادات التحقق من النطاق بنجاح",
+        "invalidDomainFormat": "صيغة النطاق غير صحيحة. مثال: @university.edu",
+        "domainAlreadyExists": "هذا النطاق موجود بالفعل",
+        "pleaseEnterDomain": "يرجى إدخال النطاق",
+        "schoolLogo": "شعار المؤسسة",
+        "uploadLogo": "رفع شعار",
+        "uploadError": "فشل رفع الشعار",
+        "deleteError": "فشل حذف الشعار",
+        "confirmDeleteLogo": "هل تريد حذف الشعار؟",
+        "logoRequirements": "JPG أو PNG أو SVG، الحد الأقصى 5 ميجابايت",
+        "logoUpdated": "تم تحديث الشعار بنجاح"
+    },
+    "entrepreneurshipSubmissions": {
+        "title": "ريادة الأعمال",
+        "subtitle": "المشاريع المقدمة لريادة الأعمال",
+        "stats": {
+            "totalSubmissions": "إجمالي المشاريع المقدمة",
+            "underReview": "قيد المراجعة",
+            "approved": "مقبول",
+            "rejected": "مرفوض"
+        },
+        "searchPlaceholder": "البحث في المشاريع المقدمة...",
+        "filters": {
+            "status": "الحالة",
+            "allStatuses": "جميع الحالات"
+        },
+        "statuses": {
+            "all": "الكل",
+            "pending": "قيد المراجعة",
+            "approved": "مقبول",
+            "rejected": "مرفوض"
+        },
+        "table": {
+            "projectName": "اسم المشروع",
+            "teacherName": "المعلم المسؤول",
+            "submittedBy": "مقدم الطلب",
+            "submittedAt": "تاريخ التقديم",
+            "status": "الحالة",
+            "actions": "الإجراءات"
+        },
+        "actions": {
+            "viewProject": "عرض المشروع",
+            "changeStatus": "تغيير الحالة",
+            "updateStatus": "تحديث الحالة"
+        },
+        "noSubmissions": "لا توجد مشاريع مقدمة",
+        "noSubmissionsYet": "لم يتم تقديم أي مشاريع لريادة الأعمال بعد",
+        "noSubmissionsMatch": "لا توجد مشاريع تطابق معايير البحث",
+        "submitButton": "تقديم المشروع لريادة الأعمال",
+        "submitConfirmTitle": "تأكيد التقديم",
+        "submitConfirmMessage": "هل أنت متأكد من رغبتك في تقديم هذا المشروع لريادة الأعمال؟",
+        "submitting": "جاري التقديم...",
+        "submitSuccess": "تم تقديم المشروع بنجاح",
+        "submitError": "حدث خطأ أثناء تقديم المشروع",
+        "alreadySubmitted": "تم تقديم هذا المشروع مسبقاً",
+        "updateStatusTitle": "تحديث حالة التقديم",
+        "updateStatusMessage": "اختر الحالة الجديدة للتقديم",
+        "updateStatusSuccess": "تم تحديث الحالة بنجاح",
+        "updateStatusError": "حدث خطأ أثناء تحديث الحالة",
+        "submittedByRole": {
+            "teacher": "معلم",
+            "student": "طالب",
+            "school": "مدير مؤسسة",
+            "admin": "مدير نظام"
+        },
+        "submittedByLabel": "قدم بواسطة",
+        "showing": "عرض",
+        "of": "من",
+        "submission": "تقديم"
+    },
+    "legal": {
+        "backToHome": "العودة إلى الصفحة الرئيسية",
+        "privacyPolicy": {
+            "title": "سياسة الخصوصية",
+            "lastUpdated": "آخر تحديث",
+            "introduction": {
+                "title": "مقدمة",
+                "content": "نحن في منصة مشروعي نلتزم بحماية خصوصيتك وبياناتك الشخصية. توضح سياسة الخصوصية هذه كيفية جمع واستخدام وحماية معلوماتك الشخصية عند استخدامك لمنصتنا."
+            },
+            "dataCollection": {
+                "title": "المعلومات التي نجمعها",
+                "personalInfo": {
+                    "title": "المعلومات الشخصية",
+                    "name": "الاسم الكامل",
+                    "email": "عنوان البريد الإلكتروني",
+                    "phone": "رقم الهاتف",
+                    "school": "المؤسسة التعليمية",
+                    "grade": "الصف أو المستوى الدراسي"
+                },
+                "projectInfo": {
+                    "title": "معلومات المشاريع",
+                    "projects": "المشاريع التي تقوم بإنشائها أو المشاركة فيها",
+                    "tasks": "المهام والأنشطة المرتبطة بمشاريعك",
+                    "files": "الملفات والمستندات التي ترفعها",
+                    "comments": "التعليقات والمحادثات داخل المشاريع"
+                },
+                "technicalInfo": {
+                    "title": "المعلومات التقنية",
+                    "ip": "عنوان بروتوكول الإنترنت (IP)",
+                    "browser": "نوع المتصفح والإصدار",
+                    "device": "معلومات الجهاز",
+                    "activity": "سجل النشاط على المنصة"
+                }
+            },
+            "dataUsage": {
+                "title": "كيف نستخدم معلوماتك",
+                "service": "تقديم وتحسين خدمات المنصة",
+                "communication": "التواصل معك بشأن حسابك ومشاريعك",
+                "improvement": "تحسين وتطوير ميزات المنصة",
+                "security": "حماية أمن وسلامة المنصة",
+                "analytics": "إجراء التحليلات والإحصائيات",
+                "support": "تقديم الدعم الفني والمساعدة"
+            },
+            "dataStorage": {
+                "title": "تخزين البيانات",
+                "firebase": "نستخدم خدمات Firebase من Google لتخزين وإدارة البيانات بشكل آمن.",
+                "security": "نطبق إجراءات أمنية صارمة لحماية معلوماتك من الوصول غير المصرح به."
+            },
+            "dataSharing": {
+                "title": "مشاركة البيانات",
+                "intro": "لا نبيع معلوماتك الشخصية لأطراف ثالثة. قد نشارك معلوماتك في الحالات التالية:",
+                "school": "مع مؤسستك التعليمية المسجل بها",
+                "teachers": "مع المعلمين والمشرفين على مشاريعك",
+                "team": "مع أعضاء فريق المشروع",
+                "service": "مع مقدمي الخدمات الذين يساعدوننا في تشغيل المنصة",
+                "legal": "عندما يكون ذلك مطلوباً قانونياً أو للحماية من سوء الاستخدام"
+            },
+            "studentProtection": {
+                "title": "حماية بيانات الطلاب",
+                "commitment": "نلتزم بأعلى معايير حماية بيانات الطلاب:",
+                "noAds": "لا نعرض إعلانات مستهدفة للطلاب",
+                "noSelling": "لا نبيع أو نشارك بيانات الطلاب لأغراض تجارية",
+                "parentalAccess": "نوفر للأولياء إمكانية الوصول إلى بيانات أبنائهم",
+                "ageAppropriate": "نضمن توفير محتوى مناسب للفئة العمرية",
+                "schoolControl": "نمنح المؤسسات التعليمية التحكم الكامل في بيانات طلابها"
+            },
+            "userRights": {
+                "title": "حقوقك",
+                "access": "الوصول إلى معلوماتك الشخصية",
+                "correction": "تصحيح أو تحديث معلوماتك",
+                "deletion": "طلب حذف حسابك وبياناتك",
+                "export": "تصدير نسخة من بياناتك",
+                "objection": "الاعتراض على معالجة بياناتك",
+                "withdraw": "سحب موافقتك في أي وقت"
+            },
+            "cookies": {
+                "title": "ملفات تعريف الارتباط",
+                "description": "نستخدم ملفات تعريف الارتباط (Cookies) لتحسين تجربتك:",
+                "essential": "ملفات ضرورية لتشغيل المنصة",
+                "preferences": "ملفات لحفظ تفضيلاتك",
+                "analytics": "ملفات لتحليل استخدام المنصة"
+            },
+            "thirdParty": {
+                "title": "الخدمات الخارجية",
+                "intro": "نستخدم خدمات خارجية موثوقة:",
+                "firebase": "Firebase لإدارة البيانات والمصادقة",
+                "googleAuth": "Google للمصادقة الاجتماعية",
+                "classera": "Classera للتكامل مع الأنظمة التعليمية"
+            },
+            "dataRetention": {
+                "title": "الاحتفاظ بالبيانات",
+                "description": "نحتفظ ببياناتك طالما كان حسابك نشطاً. عند حذف حسابك، سيتم حذف معلوماتك الشخصية خلال 30 يوماً، مع الاحتفاظ ببعض المعلومات للأغراض القانونية والأمنية."
+           
+            },
+            "policyChanges": {
+                "title": "التغييرات على السياسة",
+                "description": "قد نقوم بتحديث سياسة الخصوصية من وقت لآخر. سنقوم بإعلامك بأي تغييرات جوهرية عبر البريد الإلكتروني أو من خلال إشعار على المنصة."
+            },
+            "contact": {
+                "title": "اتصل بنا",
+                "description": "إذا كان لديك أي أسئلة حول سياسة الخصوصية، يرجى التواصل معنا:",
+                "email": "البريد الإلكتروني",
+                "phone": "الهاتف"
+            }
+        },
+        "termsOfUse": {
+            "title": "شروط الاستخدام",
+            "lastUpdated": "آخر تحديث",
+            "introduction": {
+                "title": "مقدمة",
+                "welcome": "مرحباً بك في منصة مشروعي. هذه الشروط تحكم استخدامك للمنصة وخدماتها.",
+                "acceptance": "باستخدامك للمنصة، فإنك توافق على الالتزام بهذه الشروط. إذا كنت لا توافق، يرجى عدم استخدام المنصة."
+            },
+            "definitions": {
+                "title": "التعريفات",
+                "platform": "المنصة",
+                "platformDesc": "منصة مشروعي وجميع خدماتها وميزاتها",
+                "user": "المستخدم",
+                "userDesc": "أي شخص يستخدم المنصة",
+                "content": "المحتوى",
+                "contentDesc": "المشاريع والملفات والتعليقات والبيانات",
+                "services": "الخدمات",
+                "servicesDesc": "جميع الخدمات المقدمة عبر المنصة"
+            },
+            "account": {
+                "title": "التسجيل والحساب",
+                "eligibility": {
+                    "title": "الأهلية",
+                    "age": "يجب أن تكون فوق 13 عاماً أو بموافقة ولي الأمر",
+                    "parental": "الطلاب تحت 18 عاماً يحتاجون موافقة ولي الأمر",
+                    "accurate": "يجب تقديم معلومات دقيقة وصحيحة"
+                },
+                "security": {
+                    "title": "أمان الحساب",
+                    "password": "أنت مسؤول عن الحفاظ على سرية كلمة المرور",
+                    "confidential": "لا تشارك بيانات حسابك مع الآخرين",
+                    "notify": "أبلغنا فوراً بأي استخدام غير مصرح به",
+                    "liability": "أنت مسؤول عن جميع الأنشطة تحت حسابك"
+                }
+            },
+            "responsibilities": {
+                "title": "مسؤوليات المستخدم",
+                "intro": "عند استخدام المنصة، أنت توافق على:",
+                "lawful": "استخدام المنصة بطريقة قانونية ومشروعة",
+                "respectful": "احترام حقوق المستخدمين الآخرين",
+                "accurate": "تقديم معلومات دقيقة وصحيحة",
+                "rights": "عدم انتهاك حقوق الملكية الفكرية",
+                "security": "عدم محاولة اختراق أو تعطيل المنصة",
+                "appropriate": "نشر محتوى مناسب ولائق فقط"
+            },
+            "prohibited": {
+                "title": "الأنشطة المحظورة",
+                "intro": "يُحظر عليك القيام بما يلي:",
+                "harm": "إلحاق الضرر بالمنصة أو المستخدمين",
+                "harassment": "التنمر أو المضايقة أو التحرش",
+                "spam": "إرسال رسائل غير مرغوب فيها",
+                "impersonate": "انتحال شخصية الآخرين",
+                "malware": "نشر فيروسات أو برامج ضارة",
+                "reverse": "إجراء هندسة عكسية للمنصة",
+                "scraping": "جمع البيانات بطرق آلية",
+                "circumvent": "تجاوز إجراءات الأمان",
+                "interference": "التدخل في عمل المنصة"
+            },
+            "intellectualProperty": {
+                "title": "الملكية الفكرية",
+                "platform": {
+                    "title": "محتوى المنصة",
+                    "description": "جميع محتويات المنصة (التصميم، الشعار، النصوص، الصور) محمية بحقوق الملكية الفكرية ومملوكة لنا."
+                },
+                "userContent": {
+                    "title": "محتوى المستخدم",
+                    "ownership": "أنت تحتفظ بملكية المحتوى الذي تنشره على المنصة.",
+                    "license": "بنشر المحتوى، تمنحنا ترخيصاً محدوداً لاستخدامه ضمن المنصة وتقديم الخدمات."
+                },
+                "studentWork": {
+                    "title": "أعمال الطلاب",
+                    "description": "مشاريع وأعمال الطلاب تبقى ملكاً لهم. المنصة توفر فقط أدوات لإدارتها وعرضها."
+                }
+            },
+            "contentGuidelines": {
+                "title": "إرشادات المحتوى",
+                "intro": "يجب أن يكون المحتوى المنشور:",
+                "original": "أصلياً أو لديك الحق في نشره",
+                "respectful": "محترماً وغير مسيء",
+                "educational": "ذا طابع تعليمي وبناء",
+                "appropriate": "مناسباً لجميع الأعمار",
+                "noViolence": "خالياً من العنف والمحتوى الصادم",
+                "noPolitical": "بعيداً عن المحتوى السياسي أو الطائفي"
+            },
+            "privacy": {
+                "title": "الخصوصية وحماية البيانات",
+                "description": "استخدامك للمنصة يخضع أيضاً لسياسة الخصوصية الخاصة بنا. يرجى مراجعة",
+                "link": "سياسة الخصوصية"
+            },
+            "serviceAvailability": {
+                "title": "توفر الخدمة",
+                "description": "نسعى لتوفير خدمة مستمرة وموثوقة، لكن قد تحدث انقطاعات:",
+                "maintenance": "للصيانة الدورية والتحديثات",
+                "modifications": "لإجراء تحسينات وتعديلات",
+                "discontinuation": "نحتفظ بالحق في تعليق أو إيقاف الخدمة بدون إشعار مسبق"
+            },
+            "liability": {
+                "title": "حدود المسؤولية",
+                "serviceProvided": "المنصة والخدمات تُقدم \"كما هي\" دون أي ضمانات.",
+                "noWarranty": "لا نضمن أن المنصة ستكون خالية من الأخطاء أو متاحة دائماً.",
+                "limitation": "لن نكون مسؤولين عن أي أضرار مباشرة أو غير مباشرة ناتجة عن استخدام المنصة."
+            },
+            "indemnification": {
+                "title": "التعويض",
+                "description": "توافق على تعويضنا وحمايتنا من أي مطالبات أو دعاوى ناتجة عن انتهاكك لهذه الشروط أو استخدامك للمنصة."
+            },
+            "termination": {
+                "title": "إنهاء الحساب",
+                "byUser": {
+                    "title": "من قبل المستخدم",
+                    "description": "يمكنك إنهاء حسابك في أي وقت من خلال إعدادات الحساب."
+                },
+                "byUs": {
+                    "title": "من قبلنا",
+                    "description": "نحتفظ بالحق في تعليق أو إنهاء حسابك في حالة انتهاك الشروط أو سوء الاستخدام."
+                }
+            },
+            "disputes": {
+                "title": "حل النزاعات",
+                "governingLaw": "هذه الشروط تخضع لقوانين المملكة العربية السعودية.",
+                "resolution": "في حالة أي نزاع، نشجع التواصل معنا أولاً لحله ودياً."
+            },
+            "changes": {
+                "title": "التغييرات على الشروط",
+                "description": "قد نقوم بتحديث هذه الشروط من وقت لآخر. سنقوم بإعلامك بأي تغييرات جوهرية. استمرارك في استخدام المنصة بعد التغييرات يعني موافقتك عليها."
+            },
+            "contact": {
+                "title": "معلومات الاتصال",
+                "description": "لأي استفسارات حول شروط الاستخدام، يرجى التواصل معنا:",
+                "email": "البريد الإلكتروني",
+                "phone": "الهاتف"
+            },
+            "acceptance": "باستخدام منصة مشروعي، فإنك تؤكد أنك قرأت وفهمت ووافقت على الالتزام بشروط الاستخدام هذه."
+        }
+    }
+}

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تشغيل ترحيل البيانات</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .warning h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+        .warning ul {
+            color: #856404;
+            margin: 10px 0;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 2px solid #17a2b8;
+            color: #0c5460;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 تشغيل ترحيل أفكار المشاريع</h1>
+
+        <div class="warning">
+            <h3>⚠️ تحذير هام</h3>
+            <ul>
+                <li>يجب تشغيل هذا السكريبت مرة واحدة فقط</li>
+                <li>سيتم تحويل جميع البيانات الحالية إلى صيغة متعددة اللغات</li>
+                <li>المحتوى العربي الحالي سيوضع في حقل "ar"</li>
+                <li>سيتم إنشاء حقول فارغة للغة الإنجليزية "en"</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center;">
+            <button id="checkBtn" onclick="checkStatus()">🔍 فحص الحالة</button>
+            <button id="migrateBtn" onclick="runMigration()">▶️ تشغيل الترحيل</button>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+        import { getFirestore, collection, getDocs, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+
+        // استخدم إعدادات Firebase من ملف .env
+        const firebaseConfig = {
+            apiKey: "AIzaSyDaG6bNr3u-o5hZNnVNtcSDdDIpjwPZrvk",
+            authDomain: "mashroui-97.firebaseapp.com",
+            projectId: "mashroui-97",
+            storageBucket: "mashroui-97.firebasestorage.app",
+            messagingSenderId: "620493039325",
+            appId: "1:620493039325:web:91ba87e0bbe4e8b1df33c9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.checkStatus = async function() {
+            const btn = document.getElementById('checkBtn');
+            const resultDiv = document.getElementById('result');
+
+            btn.disabled = true;
+            resultDiv.innerHTML = '<div class="loader"></div>';
+            resultDiv.style.display = 'block';
+            resultDiv.className = '';
+
+            try {
+                const snapshot = await getDocs(collection(db, 'project_ideas'));
+
+                if (snapshot.empty) {
+                    resultDiv.className = 'info';
+                    resultDiv.innerHTML = '<h3>ℹ️ لا توجد أفكار مشاريع في قاعدة البيانات</h3>';
+                    return;
+                }
+
+                let migrated = 0;
+                let notMigrated = 0;
+
+                snapshot.docs.forEach(doc => {
+                    const data = doc.data();
+                    if (typeof data.title === 'object' && (data.title.ar || data.title.en)) {
+                        migrated++;
+                    } else {
+                        notMigrated++;
+                    }
+                });
+
+                resultDiv.className = 'info';
+                resultDiv.innerHTML = `
+                    <h3>📊 حالة الترحيل</h3>
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-value">${snapshot.size}</div>
+                            <div class="stat-label">إجمالي الأفكار</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value" style="color: #28a745;">${migrated}</div>
+                            <div class="stat-label">تم الترحيل (${((migrated/snapshot.size)*100).toFixed(1)}%)</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value" style="color: #ffc107;">${notMigrated}</div>
+                            <div class="stat-label">لم يتم الترحيل (${((notMigrated/snapshot.size)*100).toFixed(1)}%)</div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.className = 'error';
+                resultDiv.innerHTML = `<h3>❌ خطأ:</h3><p>${error.message}</p>`;
+            } finally {
+                btn.disabled = false;
+            }
+        };
+
+        window.runMigration = async function() {
+            if (!confirm('هل أنت متأكد من تشغيل سكريبت الترحيل؟\n\nسيتم تحويل جميع أفكار المشاريع إلى صيغة متعددة اللغات.')) {
+                return;
+            }
+
+            const btn = document.getElementById('migrateBtn');
+            const checkBtn = document.getElementById('checkBtn');
+            const resultDiv = document.getElementById('result');
+
+            btn.disabled = true;
+            checkBtn.disabled = true;
+            resultDiv.innerHTML = '<div class="loader"></div><p style="text-align: center;">جاري الترحيل...</p>';
+            resultDiv.style.display = 'block';
+            resultDiv.className = '';
+
+            try {
+                const snapshot = await getDocs(collection(db, 'project_ideas'));
+
+                if (snapshot.empty) {
+                    resultDiv.className = 'info';
+                    resultDiv.innerHTML = '<h3>ℹ️ لا توجد أفكار مشاريع للترحيل</h3>';
+                    return;
+                }
+
+                let migrated = 0;
+                let skipped = 0;
+                let errors = 0;
+                const errorDetails = [];
+
+                for (const docSnapshot of snapshot.docs) {
+                    const data = docSnapshot.data();
+                    const ideaId = docSnapshot.id;
+
+                    try {
+                        // تحقق إذا كانت البيانات مرحلة بالفعل
+                        if (typeof data.title === 'object' && data.title.ar) {
+                            skipped++;
+                            continue;
+                        }
+
+                        // إنشاء البنية متعددة اللغات
+                        const updates = {};
+
+                        if (data.title) {
+                            updates.title = { ar: data.title, en: '' };
+                        }
+                        if (data.description) {
+                            updates.description = { ar: data.description, en: '' };
+                        }
+                        if (data.subject) {
+                            updates.subject = { ar: data.subject, en: '' };
+                        }
+                        if (data.duration) {
+                            updates.duration = { ar: data.duration, en: '' };
+                        }
+                        if (Array.isArray(data.objectives)) {
+                            updates.objectives = { ar: data.objectives, en: [] };
+                        }
+                        if (Array.isArray(data.materials)) {
+                            updates.materials = { ar: data.materials, en: [] };
+                        }
+                        if (Array.isArray(data.steps)) {
+                            updates.steps = { ar: data.steps, en: [] };
+                        }
+                        if (Array.isArray(data.tags)) {
+                            updates.tags = { ar: data.tags, en: [] };
+                        }
+
+                        // تحديث الوثيقة
+                        await updateDoc(doc(db, 'project_ideas', ideaId), updates);
+                        migrated++;
+
+                    } catch (error) {
+                        errors++;
+                        errorDetails.push({ id: ideaId, error: error.message });
+                    }
+                }
+
+                // عرض النتائج
+                let resultHTML = `
+                    <h3>✅ اكتمل الترحيل!</h3>
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-value">${snapshot.size}</div>
+                            <div class="stat-label">الإجمالي</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value" style="color: #28a745;">${migrated}</div>
+                            <div class="stat-label">تم الترحيل</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value" style="color: #ffc107;">${skipped}</div>
+                            <div class="stat-label">تم تجاهله</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value" style="color: #dc3545;">${errors}</div>
+                            <div class="stat-label">أخطاء</div>
+                        </div>
+                    </div>
+                `;
+
+                if (errorDetails.length > 0) {
+                    resultHTML += '<h4 style="color: #dc3545;">تفاصيل الأخطاء:</h4><ul>';
+                    errorDetails.forEach(({ id, error }) => {
+                        resultHTML += `<li>${id}: ${error}</li>`;
+                    });
+                    resultHTML += '</ul>';
+                }
+
+                resultDiv.className = errors === 0 ? 'success' : 'error';
+                resultDiv.innerHTML = resultHTML;
+
+            } catch (error) {
+                resultDiv.className = 'error';
+                resultDiv.innerHTML = `<h3>❌ خطأ فادح:</h3><p>${error.message}</p>`;
+            } finally {
+                btn.disabled = false;
+                checkBtn.disabled = false;
+            }
+        };
+
+        // فحص الحالة تلقائياً عند تحميل الصفحة
+        window.addEventListener('load', () => {
+            checkStatus();
+        });
+    </script>
+</body>
+</html>

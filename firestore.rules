@@ -1,0 +1,240 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users collection rules
+    match /users/{userId} {
+      // Authenticated users can read/write their own profile
+      allow write: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null && request.auth.uid == userId; // Explicit read for own profile
+
+      // Admin users can read and list all user documents
+      allow read, list: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+
+      // Allow anyone (authenticated or unauthenticated) to read a specific school document
+      // if its role is 'school'.
+      allow read: if resource.data.role == 'school';
+      
+      // Allow anyone to list all users (needed for school dropdown)
+      // This is less secure but necessary for the current architecture
+      allow list: if true;
+    }
+
+    // Allow authenticated users to create new documents in various collections
+    match /projects/{projectId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null && (
+        resource.data.teacher_id == request.auth.uid || 
+        resource.data.school_id == request.auth.uid ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        exists(/databases/$(database)/documents/project_students/$(request.auth.uid + '_' + projectId))
+      );
+      allow update: if request.auth != null && (
+        resource.data.teacher_id == request.auth.uid || 
+        resource.data.school_id == request.auth.uid ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        exists(/databases/$(database)/documents/project_students/$(request.auth.uid + '_' + projectId))
+      );
+      allow delete: if request.auth != null && (
+        resource.data.teacher_id == request.auth.uid || 
+        resource.data.school_id == request.auth.uid ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
+    }
+    
+    // Chat messages rules
+    match /chat_messages/{messageId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null && (
+        // User is the sender
+        resource.data.user_id == request.auth.uid ||
+        // User is the project teacher
+        get(/databases/$(database)/documents/projects/$(resource.data.project_id)).data.teacher_id == request.auth.uid ||
+        // User is the project school
+        get(/databases/$(database)/documents/projects/$(resource.data.project_id)).data.school_id == request.auth.uid ||
+        // User is an admin
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        // User is a student in the project
+        exists(/databases/$(database)/documents/project_students/$(request.auth.uid + '_' + resource.data.project_id))
+      );
+      allow update, delete: if request.auth != null && resource.data.user_id == request.auth.uid;
+    }
+    
+    match /project_students/{docId} {
+      allow create, update, delete: if request.auth != null;
+      allow read: if request.auth != null && (
+        resource.data.student_id == request.auth.uid ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        get(/databases/$(database)/documents/projects/$(resource.data.project_id)).data.teacher_id == request.auth.uid ||
+        get(/databases/$(database)/documents/projects/$(resource.data.project_id)).data.school_id == request.auth.uid
+      );
+    }
+    
+    match /project_tasks/{taskId} {
+      allow create, update, delete: if request.auth != null;
+      allow read: if request.auth != null && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        get(/databases/$(database)/documents/projects/$(resource.data.project_id)).data.teacher_id == request.auth.uid ||
+        get(/databases/$(database)/documents/projects/$(resource.data.project_id)).data.school_id == request.auth.uid ||
+        exists(/databases/$(database)/documents/project_students/$(request.auth.uid + '_' + resource.data.project_id))
+      );
+    }
+    
+    match /project_ideas/{ideaId} {
+      allow create: if request.auth != null;
+      allow read: if true; // Everyone can read project ideas
+      allow update, delete: if request.auth != null && (
+        resource.data.created_by == request.auth.uid || 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
+    }
+    
+    match /consultations/{consultationId} {
+      allow create, read, update: if request.auth != null;
+    }
+    
+    match /reviews/{reviewId} {
+      allow create, read: if request.auth != null;
+      allow update, delete: if request.auth != null && resource.data.student_id == request.auth.uid;
+    }
+    
+    match /store_items/{itemId} {
+      allow read: if true; // Everyone can read store items
+      allow create, update, delete: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    match /learning_resources/{resourceId} {
+      allow read: if true; // Everyone can read learning resources
+      allow create, update, delete: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    match /gallery_projects/{projectId} {
+      // Public projects can be read by everyone
+      // Private projects can only be read by the owning school or admin
+      allow read: if resource.data.is_public == true ||
+                     (request.auth != null && (
+                       get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+                       (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'school' &&
+                        resource.data.school_id == request.auth.uid)
+                     ));
+
+      // Only admin and school accounts can create gallery projects
+      allow create: if request.auth != null && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'school'
+      );
+
+      // Only admin or the owning school can update/delete
+      allow update, delete: if request.auth != null && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'school' &&
+         resource.data.school_id == request.auth.uid)
+      );
+    }
+    
+    match /summer_program_registrations/{registrationId} {
+      allow create: if true; // Anyone can register for summer program
+      allow read, update, delete: if request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    match /project_meetings/{meetingId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        get(/databases/$(database)/documents/projects/$(resource.data.project_id)).data.teacher_id == request.auth.uid ||
+        get(/databases/$(database)/documents/projects/$(resource.data.project_id)).data.school_id == request.auth.uid ||
+        exists(/databases/$(database)/documents/project_students/$(request.auth.uid + '_' + resource.data.project_id))
+      );
+      allow update: if request.auth != null && (
+        resource.data.started_by_user_id == request.auth.uid ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        get(/databases/$(database)/documents/projects/$(resource.data.project_id)).data.teacher_id == request.auth.uid
+      );
+      allow delete: if request.auth != null && (
+        resource.data.started_by_user_id == request.auth.uid ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        get(/databases/$(database)/documents/projects/$(resource.data.project_id)).data.teacher_id == request.auth.uid
+      );
+    }
+
+    // Student points collection rules
+    match /student_points/{userId} {
+      // Students can only read their own points
+      allow read: if request.auth != null && request.auth.uid == userId;
+      // Admins can read all points
+      allow read: if request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+      // Allow authenticated users to write (the service functions will be called by authenticated users)
+      allow write: if request.auth != null;
+    }
+
+    // Points history collection rules
+    match /points_history/{historyId} {
+      // Students can read their own history
+      allow read: if request.auth != null && resource.data.studentId == request.auth.uid;
+      // Admins can read all history
+      allow read: if request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+      // Allow authenticated users to write
+      allow write: if request.auth != null;
+    }
+
+    // Achievements config collection rules
+    match /achievements_config/{configId} {
+      // Everyone can read the config
+      allow read: if request.auth != null;
+      // Only admins can write the config
+      allow write: if request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Student achievements collection rules
+    match /student_achievements/{achievementId} {
+      // Students can read their own achievements
+      allow read: if request.auth != null && resource.data.studentId == request.auth.uid;
+      // Admins can read all achievements
+      allow read: if request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+      // Allow authenticated users to write
+      allow write: if request.auth != null;
+    }
+
+    // Project evaluations collection rules
+    match /project_evaluations/{evaluationId} {
+      allow create, update: if request.auth != null;
+      allow read: if request.auth != null && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        get(/databases/$(database)/documents/projects/$(resource.data.projectId)).data.teacher_id == request.auth.uid ||
+        get(/databases/$(database)/documents/projects/$(resource.data.projectId)).data.school_id == request.auth.uid ||
+        exists(/databases/$(database)/documents/project_students/$(request.auth.uid + '_' + resource.data.projectId))
+      );
+    }
+
+    // AI Assistant configuration collection rules
+    match /ai_assistant_config/{configId} {
+      // Everyone can read the config (to check if service is enabled)
+      allow read: if request.auth != null;
+      // Only admins can write the config
+      allow write: if request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // AI Assistant usage collection rules
+    match /ai_assistant_usage/{usageId} {
+      // Authenticated users can create usage logs
+      allow create: if request.auth != null;
+      // Users can read their own usage logs
+      allow read: if request.auth != null && (
+        resource.data.userId == request.auth.uid ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
+      // Only admins can read all logs
+      allow list: if request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+  }
+  }
+}

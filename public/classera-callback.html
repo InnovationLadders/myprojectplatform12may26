@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classera Authentication</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .container {
+      text-align: center;
+      padding: 2rem;
+    }
+    .spinner {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 1rem;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .success {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.5rem;
+    }
+    p {
+      margin: 0;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="spinner"></div>
+    <h1>جاري تسجيل الدخول...</h1>
+    <p>يرجى الانتظار</p>
+  </div>
+
+  <script>
+    (function() {
+      console.log('[Classera Callback] Page loaded');
+      console.log('[Classera Callback] Current URL:', window.location.href);
+
+      function extractTokenAndUserData() {
+        const url = window.location.href;
+
+        // Check if URL contains token
+        if (!url.includes('/token:')) {
+          console.error('[Classera Callback] No token found in URL');
+          return null;
+        }
+
+        console.log('[Classera Callback] Token detected in URL');
+
+        // Extract token
+        const tokenMatch = url.match(/\/token:([^\/]+)/);
+        if (!tokenMatch) {
+          console.error('[Classera Callback] Could not extract token');
+          return null;
+        }
+
+        const token = tokenMatch[1];
+        console.log('[Classera Callback] Token extracted, length:', token.length);
+
+        // Extract all user data from URL path
+        const pathParts = url.split('/');
+        const userData = {};
+
+        pathParts.forEach(part => {
+          if (part.includes(':')) {
+            const colonIndex = part.indexOf(':');
+            const key = part.substring(0, colonIndex);
+            const value = part.substring(colonIndex + 1);
+
+            if (key !== 'token' && value) {
+              try {
+                userData[key] = decodeURIComponent(value);
+              } catch (e) {
+                userData[key] = value;
+              }
+            }
+          }
+        });
+
+        console.log('[Classera Callback] User data extracted:', userData);
+
+        return { token, userData };
+      }
+
+      function sendSuccessToOpener(token, userData) {
+        if (window.opener && !window.opener.closed) {
+          console.log('[Classera Callback] Sending success message to opener');
+
+          try {
+            window.opener.postMessage({
+              type: 'CLASSERA_LOGIN_SUCCESS',
+              token: token,
+              userData: userData
+            }, '*');
+
+            console.log('[Classera Callback] Message sent successfully');
+
+            // Update UI
+            document.querySelector('.container').innerHTML = `
+              <div class="success">✓</div>
+              <h1>تم تسجيل الدخول بنجاح</h1>
+              <p>جاري إغلاق النافذة...</p>
+            `;
+
+            // Close window after a short delay
+            setTimeout(() => {
+              console.log('[Classera Callback] Closing window');
+              window.close();
+            }, 500);
+
+          } catch (error) {
+            console.error('[Classera Callback] Error sending message:', error);
+
+            // Try to close anyway
+            setTimeout(() => {
+              window.close();
+            }, 1000);
+          }
+        } else {
+          console.error('[Classera Callback] No opener window available');
+
+          // Fallback: try to navigate parent if embedded
+          if (window.parent !== window) {
+            window.parent.postMessage({
+              type: 'CLASSERA_LOGIN_SUCCESS',
+              token: token,
+              userData: userData
+            }, '*');
+          }
+
+          // Try to close anyway
+          setTimeout(() => {
+            window.close();
+          }, 1000);
+        }
+      }
+
+      function handleCallback() {
+        const result = extractTokenAndUserData();
+
+        if (result) {
+          console.log('[Classera Callback] Processing authentication...');
+          sendSuccessToOpener(result.token, result.userData);
+        } else {
+          console.error('[Classera Callback] Failed to extract authentication data');
+
+          // Show error and try to close
+          document.querySelector('.container').innerHTML = `
+            <div class="success" style="color: #ff6b6b;">✕</div>
+            <h1>فشل في تسجيل الدخول</h1>
+            <p>لم يتم العثور على بيانات المصادقة</p>
+          `;
+
+          if (window.opener) {
+            window.opener.postMessage({
+              type: 'CLASSERA_LOGIN_ERROR',
+              error: 'NO_TOKEN_FOUND'
+            }, '*');
+          }
+
+          setTimeout(() => {
+            window.close();
+          }, 2000);
+        }
+      }
+
+      // Execute immediately
+      handleCallback();
+
+      // Also listen for URL changes (in case of redirects)
+      let lastUrl = window.location.href;
+      setInterval(() => {
+        if (window.location.href !== lastUrl) {
+          console.log('[Classera Callback] URL changed, re-checking...');
+          lastUrl = window.location.href;
+          handleCallback();
+        }
+      }, 100);
+    })();
+  </script>
+</body>
+</html>
