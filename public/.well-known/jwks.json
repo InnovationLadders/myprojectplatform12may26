@@ -1,0 +1,12 @@
+{
+  "keys": [
+    {
+      "kty": "RSA",
+      "use": "sig",
+      "kid": "68d8c42617d92",
+      "alg": "RS256",
+      "n": "myproject-platform-public-key-modulus-replace-with-actual-rsa-key",
+      "e": "AQAB"
+    }
+  ]
+}

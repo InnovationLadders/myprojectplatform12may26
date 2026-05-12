@@ -1,0 +1,1197 @@
+{
+  "appName": "MyProject",
+  "appTagline": "School Projects Platform",
+  
+  "common": {
+    "user": "User",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View",
+    "search": "Search",
+    "filter": "Filter",
+    "all": "All",
+    "active": "Active",
+    "inactive": "Inactive",
+    "pending": "Pending",
+    "completed": "Completed",
+    "inProgress": "In Progress",
+    "draft": "Draft",
+    "archived": "Archived",
+    "submit": "Submit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "details": "Details",
+    "actions": "Actions",
+    "status": "Status",
+    "date": "Date",
+    "time": "Time",
+    "description": "Description",
+    "title": "Title",
+    "category": "Category",
+    "type": "Type",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "role": "Role",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "noData": "No data available",
+    "noResults": "No results found",
+    "tryAgain": "Try Again",
+    "resetFilters": "Reset Filters",
+    "addNew": "Add New",
+    "create": "Create",
+    "update": "Update",
+    "remove": "Remove",
+    "close": "Close",
+    "confirm": "Confirm",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Information",
+    "error": "Error",
+    "clearAll": "Clear All",
+    "progress": "Progress",
+    "progressScore": "Completion Percentage",
+    "totalScore": "Total Score",
+    "weightedScore": "Weighted Score"
+  },
+  
+  "roles": {
+    "student": "Student",
+    "teacher": "Teacher",
+    "school": "School",
+    "admin": "Admin",
+    "consultant": "Consultant"
+  },
+  
+  "header": {
+    "searchProjects": "Search projects...",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout",
+    "notifications": "Notifications"
+  },
+  
+  "sidebar": {
+    "home": "Home",
+    "projectIdeas": "Project Ideas",
+    "projects": "Projects",
+    "store": "Store",
+    "consultations": "Consultations",
+    "gallery": "Gallery",
+    "aiAssistant": "AI Assistant",
+    "resources": "Resources",
+    "intellectualProperty": "Intellectual Property",
+    "settings": "Settings",
+    "students": "Students",
+    "reports": "Reports",
+    "consultantDashboard": "Consultant Dashboard",
+    "consultationRequests": "Consultation Requests",
+    "consultantSchedule": "Schedule",
+    "consultantProfile": "Profile",
+    "reviews": "Reviews",
+    "teachersAndStudents": "Teachers & Students",
+    "adminDashboard": "Admin Dashboard",
+    "users": "Users",
+    "summerProgram": "Summer Program"
+  },
+  
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "createAccount": "Create Account",
+    "loginWithGoogle": "Login with Google",
+    "loginWithApple": "Login with Apple",
+    "or": "or",
+    "enterEmail": "Enter your email",
+    "enterPassword": "Enter your password",
+    "confirmPassword": "Confirm your password",
+    "enterName": "Enter your full name",
+    "enterPhone": "Enter your phone number",
+    "selectRole": "Select your role",
+    "selectSchool": "Select your school",
+    "enterGrade": "Enter your grade",
+    "enterSubject": "Enter your subject",
+    "passwordMismatch": "Passwords do not match",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "invalidEmail": "Please enter a valid email",
+    "requiredField": "This field is required",
+    "loginError": "Login failed. Please check your credentials.",
+    "registerError": "Registration failed. Please try again.",
+    "networkError": "Network connection error. Please check your internet connection.",
+    "emailNotConfirmed": "Please confirm your email before logging in.",
+    "tooManyRequests": "Too many attempts. Please try again later."
+  },
+  
+  "pendingActivation": {
+    "title": "Your Account is Under Review",
+    "description": {
+      "school": "Thank you for registering on MyProject. Your school account is being reviewed by our administration team.",
+      "consultant": "Thank you for registering on MyProject. Your consultant account is being reviewed by our administration team.",
+      "default": "Thank you for registering on MyProject. Your account is being reviewed by our administration team."
+    },
+    "whatHappensNext": "What happens next?",
+    "steps": {
+      "review": "Our team reviews your registration request",
+      "verify": "We verify the provided information",
+      "email": "You'll receive an email notification when your account is approved",
+      "timeframe": "The review process typically takes 24-48 business hours"
+    },
+    "contactInfo": "Contact Information",
+    "approvalStates": {
+      "approved": "Approved",
+      "approvedDesc": "You'll be able to access the platform",
+      "rejected": "Rejected",
+      "rejectedDesc": "You'll receive a notification with the reason"
+    },
+    "needHelp": "Need help?",
+    "helpText": "If you have any questions or need assistance, please contact our support team at:",
+    "refreshPage": "Refresh Page",
+    "logout": "Logout"
+  },
+  
+  "home": {
+    "welcome": "Welcome to MyProject",
+    "tagline": "Modern School Projects Management Platform",
+    "description": "Discover a world of creativity and interactive learning. A comprehensive platform that brings together students, teachers, and schools to achieve outstanding educational projects in science, technology, entrepreneurship, and more. MyProject Platform is the best and easiest way to bring STEAM education and Project-based Learning to your school.",
+    "exploreIdeas": "Explore Ideas",
+    "manageProjects": "Manage Projects",
+    "features": {
+      "clearGoals": "Clear Goals",
+      "clearGoalsDesc": "Clearly define project objectives",
+      "timeManagement": "Time Management",
+      "timeManagementDesc": "Track deadlines and scheduling",
+      "teamwork": "Teamwork",
+      "teamworkDesc": "Effective collaboration between students",
+      "evaluation": "Evaluation",
+      "evaluationDesc": "Comprehensive project evaluation"
+    },
+    "stats": {
+      "activeUsers": "Active Users",
+      "activeProjects": "Active Projects",
+      "completedProjects": "Completed Projects",
+      "successRate": "Success Rate"
+    },
+    "featuresSection": {
+      "title": "Platform Features",
+      "description": "Discover a comprehensive set of tools and services designed to enhance project-based learning",
+      "exploreMore": "Explore More"
+    },
+     "features": {
+       "projectIdeas": {
+         "description": "Explore a rich library of creative project ideas across various educational and technical fields"
+       },
+       "projects": {
+         "description": "Create and manage your educational projects easily with advanced tracking and collaboration tools"
+       },
+       "consultations": {
+         "description": "Get personalized consultations from specialized experts and teachers to support your projects"
+       },
+       "store": {
+         "description": "Shop for tools and materials needed to implement your educational and technical projects"
+       },
+       "aiAssistant": {
+         "description": "Benefit from the AI assistant to get instant answers and help with problem-solving"
+       },
+       "gallery": {
+         "description": "Browse the gallery of outstanding projects and get inspired by student achievements"
+       }
+     },
+    "testimonials": {
+      "title": "User Testimonials",
+      "subtitle": "What MyProject users say about their experience"
+    },
+    "cta": {
+      "title": "Start Your Educational Journey Today",
+      "description": "Join thousands of students and teachers achieving success with MyProject",
+      "exploreIdeas": "Explore Ideas",
+      "createProject": "Create New Project"
+    }
+  },
+  
+  "landingPage": {
+    "welcomeMessage": "Our Future Scientists.",
+    "stats": {
+      "students": "Registered Students",
+      "projects": "Completed Projects",
+      "teachers": "Teachers & Consultants",
+      "schools": "Partner Schools"
+    },
+    "projectShowcase": {
+      "title": "Student Project Gallery",
+      "description": "Explore outstanding student projects created using our platform",
+      "viewMore": "View More Projects",
+      "project1": "Assistant Robot Project",
+      "category1": "Technology",
+      "project2": "Renewable Energy Project",
+      "category2": "Science",
+      "project3": "Educational App",
+      "category3": "Programming",
+      "project4": "Recycling Project",
+      "category4": "Environment"
+    },
+    "benefits": {
+      "title": "Why Choose MyProject?",
+      "benefit1": {
+        "title": "Project-Based Learning",
+        "description": "Develop student skills through practical projects in various fields"
+      },
+      "benefit2": {
+        "title": "Skills Development",
+        "description": "Cultivate 21st century skills, critical thinking and creativity"
+      },
+      "benefit3": {
+        "title": "Learning Community",
+        "description": "Interactive environment connecting students, teachers and consultants"
+      }
+    },
+    "cta": {
+      "summerProgram": "Register for Summer Program"
+    },
+    "footer": {
+      "quickLinks": "Quick Links",
+      "contactUs": "Contact Us",
+      "followUs": "Follow Us",
+      "summerProgram": "Summer Program",
+      "email": "Email",
+      "phone": "Phone",
+      "copyright": "All rights reserved"
+    },
+    "testimonials": {
+      "name1": "Sarah Ahmed",
+      "role1": "Science Teacher",
+      "content1": "MyProject platform has completely changed my teaching approach. Students are now more engaged and creative.",
+      "name2": "Mohammed Ali",
+      "role2": "High School Student",
+      "content2": "I was able to develop an advanced robot project thanks to the guidance and support available on the platform.",
+      "name3": "Fatima Khalid",
+      "role3": "School Principal",
+      "content3": "The platform helped us organize and manage student projects efficiently and track their progress."
+    }
+  },
+  
+  "summerProgram": {
+    "title": "Summer Program \"SaifiTech\"",
+    "subtitle": "Summer training program for students in technology and innovation",
+    "enrollmentForm": {
+      "title": "Summer Program Enrollment Form",
+      "subtitle": "Please fill out the form below to register for the \"SaifiTech\" program",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter your phone number",
+      "parentPhone": "Parent Phone Number",
+      "parentPhonePlaceholder": "Enter parent phone number",
+      "city": "City",
+      "cityPlaceholder": "Select your city",
+      "idNumber": "ID Number",
+      "idNumberPlaceholder": "Enter your ID number",
+      "school": "School",
+      "schoolPlaceholder": "Enter your school name",
+      "grade": "Grade",
+      "gradePlaceholder": "Select your grade",
+      "educationAdministration": "Education Administration",
+      "educationAdministrationPlaceholder": "Select your education administration",
+      "hasParticipatedBefore": "Have you participated in student projects before?",
+      "yes": "Yes",
+      "no": "No",
+      "previousProjects": "Previous Projects",
+      "previousProjectsPlaceholder": "Mention the projects you've participated in before",
+      "interests": "Areas of Interest",
+      "interestsPlaceholder": "Select your areas of interest",
+      "howDidYouHear": "How did you hear about the program?",
+      "howDidYouHearPlaceholder": "Select how you heard about the program",
+      "notes": "Additional Notes",
+      "notesPlaceholder": "Any additional notes or inquiries",
+      "submit": "Submit Application",
+      "submitting": "Submitting...",
+      "successMessage": "Your application has been submitted successfully! We will contact you soon.",
+      "errorMessage": "An error occurred while submitting your application. Please try again.",
+      "requiredField": "This field is required",
+      "invalidEmail": "Please enter a valid email",
+      "invalidPhone": "Please enter a valid phone number",
+      "invalidIdNumber": "Please enter a valid ID number"
+    },
+    "cities": [
+      "Riyadh",
+      "Jeddah",
+      "Mecca",
+      "Medina",
+      "Dammam",
+      "Khobar",
+      "Dhahran",
+      "Al-Ahsa",
+      "Qatif",
+      "Taif",
+      "Buraidah",
+      "Unaizah",
+      "Hail",
+      "Tabuk",
+      "Abha",
+      "Khamis Mushait",
+      "Jazan",
+      "Najran",
+      "Al Bahah",
+      "Sakaka",
+      "Arar",
+      "Jubail",
+      "Yanbu",
+      "Other"
+    ],
+    "grades": [
+      "7th Grade",
+      "8th Grade",
+      "9th Grade",
+      "10th Grade",
+      "11th Grade",
+      "12th Grade"
+    ],
+    "educationAdministrations": [
+      "Hail",
+      "Najran",
+      "Al Jawf",
+      "Northern Borders",
+      "Jazan",
+      "Taif",
+      "Al Zulfi",
+      "Al Bahah",
+      "Tabuk",
+      "Mecca",
+      "Riyadh",
+      "Jeddah",
+      "Al-Ahsa",
+      "Eastern Province",
+      "Overseas Education Schools"
+    ],
+    "interests": [
+      "Programming",
+      "Artificial Intelligence",
+      "Robotics",
+      "App Development",
+      "Game Development",
+      "Web Design",
+      "Virtual Reality",
+      "Internet of Things",
+      "Cybersecurity",
+      "Graphic Design",
+      "3D Printing",
+      "Electronics",
+      "Tech Entrepreneurship"
+    ],
+    "hearAboutUs": [
+      "Social Media",
+      "Website",
+      "Friends or Family",
+      "School",
+      "Advertisements",
+      "Previous Events",
+      "Other"
+    ],
+    "admin": {
+      "title": "Summer Program Registration Management",
+      "subtitle": "View and manage registration applications for the \"SaifiTech\" program",
+      "stats": {
+        "totalRegistrations": "Total Registrations",
+        "pendingReview": "Pending Review",
+        "approved": "Approved",
+        "rejected": "Rejected"
+      },
+      "searchPlaceholder": "Search registrations...",
+      "filters": {
+        "status": "Status",
+        "city": "City",
+        "grade": "Grade",
+        "educationAdministration": "Education Administration"
+      },
+      "statuses": {
+        "all": "All Statuses",
+        "pending": "Pending Review",
+        "approved": "Approved",
+        "rejected": "Rejected"
+      },
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "city": "City",
+        "grade": "Grade",
+        "educationAdministration": "Education Administration",
+        "status": "Status",
+        "submittedAt": "Submitted At",
+        "actions": "Actions"
+      },
+      "actions": {
+        "view": "View",
+        "approve": "Approve",
+        "reject": "Reject",
+        "delete": "Delete",
+        "export": "Export to Excel"
+      },
+      "noRegistrations": "No registrations",
+      "noRegistrationsMatch": "No registrations match your search criteria",
+      "exportSuccess": "Data exported successfully",
+      "exportError": "An error occurred while exporting data",
+      "deleteConfirmation": "Are you sure you want to delete this registration?",
+      "deleteSuccess": "Registration deleted successfully",
+      "deleteError": "An error occurred while deleting the registration",
+      "approveConfirmation": "Are you sure you want to approve this registration?",
+      "approveSuccess": "Registration approved successfully",
+      "approveError": "An error occurred while approving the registration",
+      "rejectConfirmation": "Are you sure you want to reject this registration?",
+      "rejectSuccess": "Registration rejected successfully",
+      "rejectError": "An error occurred while rejecting the registration"
+    }
+  },
+  
+  "aiAssistant": {
+    "title": "AI Assistant",
+    "subtitle": "Your personal learning and creativity assistant",
+    "stats": {
+      "alwaysAvailable": "Always Available",
+      "unlimitedQuestions": "Unlimited Questions",
+      "specializations": "Specializations",
+      "artificialIntelligence": "Artificial Intelligence"
+    },
+    "howCanIHelp": "How can I help you",
+    "features": {
+      "projectIdeas": {
+        "title": "Project Ideas",
+        "description": "Get creative ideas for your educational projects"
+      },
+      "programming": {
+        "title": "Programming Help",
+        "description": "Solve programming problems and learn new languages"
+      },
+      "problemSolving": {
+        "title": "Problem Solving",
+        "description": "Help with math and science problems"
+      },
+      "research": {
+        "title": "Research & Study",
+        "description": "Help with research and summarizing information"
+      },
+      "design": {
+        "title": "Design & Creativity",
+        "description": "Tips for design and creative work"
+      },
+      "languages": {
+        "title": "Languages & Translation",
+        "description": "Learn languages and get instant translations"
+      }
+    },
+    "quickPrompts": {
+      "title": "Quick Questions",
+      "aiProject": "Suggest an AI project idea",
+      "programming": "How do I start learning programming?",
+      "mathProblem": "Help me solve a math problem",
+      "entrepreneurship": "I need ideas for an entrepreneurship project",
+      "presentation": "How can I design an impressive presentation?",
+      "timeManagement": "What are the best time management methods?"
+    },
+    "chatHeader": {
+      "title": "MyProject AI Assistant",
+      "online": "Online now"
+    },
+    "inputPlaceholder": "Type your question here...",
+    "disclaimer": "The AI Assistant uses advanced artificial intelligence technologies to provide the best assistance",
+    "simulatedResponse": "Thank you for your question! I'm preparing a comprehensive answer for you. This is an example of how the AI assistant will provide useful and detailed information about your inquiry.",
+    "mockConversation": {
+      "user1": "Hello, I need help with a robotics project",
+      "assistant1": "Hello! I'm happy to help with your robotics project. I can assist you in several aspects:\n\n• Robot design and component selection\n• Programming and control\n• Technical problem solving\n• Suggesting improvements\n\nWhat specific challenge are you facing?",
+      "user2": "I want to build a waste collection robot, what components do I need?",
+      "assistant2": "Excellent project! Here are the essential components for a waste collection robot:\n\n**Basic Components:**\n• Control board (Arduino/Raspberry Pi)\n• Motors for movement and steering\n• Sensors for waste detection (camera, distance sensor)\n• Robotic arm or collection mechanism\n• Rechargeable battery\n• Wheels or movement system\n\n**Advanced Components:**\n• GPS system for navigation\n• Sensors for waste classification\n• Wireless communication system\n\nWould you like more details about any of these components?"
+    },
+    "tips": {
+      "title": "Tips for Best Results",
+      "beSpecific": {
+        "title": "Be Specific",
+        "description": "Ask clear and specific questions to get accurate answers"
+      },
+      "provideContext": {
+        "title": "Provide Context",
+        "description": "Explain your project background or educational level"
+      },
+      "askForExamples": {
+        "title": "Ask for Examples",
+        "description": "Don't hesitate to ask for practical examples or detailed steps"
+      }
+    }
+  },
+  
+  "search": {
+    "title": "Find Consultants",
+    "subtitle": "Search for specialized consultants in various fields",
+    "stats": {
+      "availableConsultants": "Available Consultant",
+      "specialties": "Different Specialty",
+      "support": "Customer Support",
+      "satisfaction": "Customer Satisfaction"
+    },
+    "searchPlaceholder": "Search for a consultant...",
+    "specialty": "Specialty",
+    "allSpecialties": "All Specialties",
+    "rating": "Rating",
+    "showing": "Showing",
+    "of": "of",
+    "consultant": "consultant",
+    "reviews": "reviews",
+    "specialties": "Specialties",
+    "experience": "Experience",
+    "price": "Price",
+    "pricePerHour": "SAR/hour",
+    "languages": "Languages",
+    "bookConsultation": "Book Consultation",
+    "noConsultantsFound": "No consultants found",
+    "tryChangingFilters": "Try changing your search criteria or filters"
+  },
+  
+  "favorites": {
+    "title": "Favorite Consultants",
+    "subtitle": "Your list of favorite consultants",
+    "stats": {
+      "favoriteConsultants": "Favorite Consultant",
+      "differentSpecialties": "Different Specialty",
+      "averageRating": "Average Rating",
+      "averagePrice": "Average Price (SAR)"
+    },
+    "searchPlaceholder": "Search in favorites...",
+    "specialty": "Specialty",
+    "allSpecialties": "All Specialties",
+    "showing": "Showing",
+    "of": "of",
+    "consultant": "consultant",
+    "reviews": "reviews",
+    "specialties": "Specialties",
+    "experience": "Experience",
+    "price": "Price",
+    "pricePerHour": "SAR/hour",
+    "location": "Location",
+    "languages": "Languages",
+    "bookConsultation": "Book Consultation",
+    "noFavorites": "No favorite consultants",
+    "noFavoritesAdded": "You haven't added any consultants to your favorites yet",
+    "noFavoritesMatch": "No consultants match your search criteria",
+    "searchConsultants": "Search for Consultants"
+  },
+  
+  "consultations": {
+    "title": "Consultations",
+    "subtitle": "Get help from teachers and consultants",
+    "requestConsultation": "Request Consultation",
+    "stats": {
+      "total": "Total Consultations",
+      "scheduled": "Scheduled",
+      "completed": "Completed",
+      "pending": "Pending"
+    },
+    "tabs": {
+      "myConsultations": "My Consultations",
+      "searchConsultants": "Search for Consultants"
+    },
+    "searchPlaceholder": "Search in consultations...",
+    "searchConsultantPlaceholder": "Search for a consultant...",
+    "types": {
+      "all": "All Types",
+      "technical": "Technical Consultation",
+      "academic": "Academic Consultation",
+      "career": "Career Consultation",
+      "project": "Project Consultation"
+    },
+    "typeDescriptions": {
+      "technical": "Consultation in technology and programming",
+      "academic": "Consultation in academic and educational fields",
+      "career": "Consultation in professional development",
+      "project": "Consultation related to a specific project"
+    },
+    "statuses": {
+      "all": "All Statuses",
+      "pending": "Pending",
+      "scheduled": "Scheduled",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "methods": {
+      "video": "Video Call",
+      "phone": "Voice Call",
+      "chat": "Text Chat",
+      "screenShare": "Screen Sharing"
+    },
+    "durations": {
+      "30min": "30 minutes",
+      "60min": "1 hour",
+      "90min": "1.5 hours",
+      "120min": "2 hours"
+    },
+    "consultant": "Consultant",
+    "unassigned": "Unassigned",
+    "minutes": "minutes",
+    "appointmentTime": "Appointment Time",
+    "yourFeedback": "Your Feedback",
+    "created": "Created",
+    "joinConsultation": "Join Consultation",
+    "reschedule": "Reschedule",
+    "editRequest": "Edit Request",
+    "rateConsultation": "Rate Consultation",
+    "viewDetails": "View Details",
+    "noConsultations": "No consultations",
+    "startByRequesting": "Start by requesting your first consultation from consultants",
+    "requestNewConsultation": "Request New Consultation",
+    "noConsultants": "No consultants",
+    "noConsultantsAvailable": "No consultants are currently available",
+    "advancedSearch": "Advanced Search",
+    "reviews": "reviews",
+    "bookConsultation": "Book Consultation",
+    "form": {
+      "topic": "Consultation Topic",
+      "topicPlaceholder": "Enter consultation topic",
+      "description": "Consultation Description",
+      "descriptionPlaceholder": "Clearly explain your consultation needs",
+      "type": "Consultation Type",
+      "method": "Consultation Method",
+      "duration": "Consultation Duration",
+      "relatedProject": "Related Project (Optional)",
+      "noProject": "No project",
+      "preferredDate": "Preferred Date (Optional)"
+    },
+    "errors": {
+      "requiredFields": "Please fill in all required fields",
+      "submissionFailed": "Error submitting consultation request"
+    },
+    "importantInfo": {
+      "title": "Important Information",
+      "review": "Your request will be reviewed and assigned to an appropriate teacher as soon as possible",
+      "link": "A consultation link will be sent 15 minutes before the appointment",
+      "cancel": "You can cancel the consultation up to 24 hours before the appointment"
+    },
+    "submitting": "Submitting...",
+    "submitRequest": "Submit Request",
+    "createRequest": {
+      "title": "New Consultation Request",
+      "subtitle": "Create a new consultation request to get help from experts"
+    },
+    "howToUse": {
+      "title": "How to Use Consultations",
+      "step1": {
+        "title": "Request a Consultation",
+        "description": "Create a new consultation request and specify the type and details"
+      },
+      "step2": {
+        "title": "Wait for Approval",
+        "description": "An appropriate consultant will review your request and schedule a time"
+      },
+      "step3": {
+        "title": "Attend the Consultation",
+        "description": "Join the consultation at the scheduled time via the link sent to you"
+      }
+    }
+  },
+  
+  "myConsultations": {
+    "title": "My Consultations",
+    "subtitle": "Manage your consultation requests",
+    "newRequest": "New Request",
+    "stats": {
+      "total": "Total Requests",
+      "pending": "Pending",
+      "scheduled": "Scheduled",
+      "completed": "Completed"
+    },
+    "searchPlaceholder": "Search in requests...",
+    "filters": {
+      "allStatuses": "All Statuses"
+    },
+    "showing": "Showing",
+    "of": "of",
+    "request": "request",
+    "createdAt": "Created at",
+    "actions": {
+      "viewDetails": "View Details",
+      "editRequest": "Edit Request",
+      "cancelRequest": "Cancel Request"
+    },
+    "noRequests": "No requests",
+    "noRequestsMatch": "No consultation requests match your search criteria"
+  },
+  
+  "projects": {
+    "title": "Project Management",
+    "subtitle": "Track and manage all your student projects",
+    "newProject": "New Project",
+    "stats": {
+      "total": "Total Projects",
+      "active": "Active Projects",
+      "completed": "Completed Projects",
+      "averageProgress": "Average Progress"
+    },
+    "searchPlaceholder": "Search in projects...",
+    "projectStatus": "Project Status",
+    "statuses": {
+      "all": "All Projects",
+      "draft": "Draft",
+      "active": "Active",
+      "completed": "Completed",
+      "archived": "Archived"
+    },
+    "categories": {
+      "stem": "STEM",
+      "entrepreneurship": "Entrepreneurship",
+      "volunteer": "Volunteering",
+      "ethics": "Ethics"
+    },
+    "showing": "Showing",
+    "of": "of",
+    "project": "project",
+    "progress": "Progress",
+    "tasks": "Tasks",
+    "students": "Students",
+    "remaining": "Remaining",
+    "days": "days",
+    "overdue": "Overdue",
+    "lastUpdate": "Last update",
+    "notSpecified": "Not specified",
+    "actions": {
+      "viewDetails": "View Details",
+      "edit": "Edit",
+      "archive": "Archive",
+      "delete": "Delete"
+    },
+    "noProjects": "No projects",
+    "startCreating": "Start by creating your first project or try changing search criteria",
+    "createNewProject": "Create New Project"
+  },
+  
+  "projectIdeas": {
+    "title": "Project Ideas",
+    "subtitle": "Discover a variety of creative project ideas",
+    "stats": {
+      "projectIdeas": "Project Idea",
+      "differentCategories": "Different Categories",
+      "difficultyLevels": "Difficulty Levels",
+      "free": "Free"
+    },
+    "searchPlaceholder": "Search in project ideas...",
+    "filters": {
+      "categories": "Categories",
+      "difficulty": "Difficulty Level"
+    },
+    "categories": {
+      "all": "All Categories",
+      "stem": "STEM",
+      "entrepreneurship": "Entrepreneurship",
+      "volunteer": "Volunteering",
+      "ethics": "Ethics"
+    },
+    "difficulties": {
+      "all": "All Levels",
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "showing": "Showing",
+    "of": "of",
+    "idea": "idea",
+    "suggestNewIdea": "Suggest New Idea",
+    "teamwork": "Teamwork",
+    "viewDetails": "View Details",
+    "noResults": "No results found",
+    "tryChangingFilters": "Try changing your search criteria or filters",
+    "errors": {
+      "loadingFailed": "Error loading project ideas"
+    }
+  },
+  
+  "store": {
+    "title": "Store",
+    "subtitle": "Tools and materials for educational projects",
+    "wishlist": "Wishlist",
+    "cart": "Cart",
+    "stats": {
+      "availableProducts": "Available Product",
+      "categories": "Category",
+      "customerSupport": "Customer Support",
+      "freeShipping": "Free",
+      "shipping": "Shipping"
+    },
+    "searchPlaceholder": "Search in products...",
+    "filters": {
+      "categories": "Categories"
+    },
+    "categories": {
+      "all": "All Products",
+      "electronics": "Electronics",
+      "tools": "Tools",
+      "materials": "Materials",
+      "books": "Books",
+      "software": "Software"
+    },
+    "showing": "Showing",
+    "of": "of",
+    "product": "product",
+    "sortBy": "Sort by",
+    "sortOptions": {
+      "newest": "Newest",
+      "priceLowToHigh": "Price: Low to High",
+      "priceHighToLow": "Price: High to Low",
+      "rating": "Rating"
+    },
+    "addingProducts": "Adding products...",
+    "productsAdded": "Products added",
+    "addProductsToStore": "Add Products to Store",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock",
+    "reviews": "reviews",
+    "more": "more",
+    "currency": "SAR",
+    "addToCart": "Add to Cart",
+    "cartSummary": "Cart Summary",
+    "numberOfProducts": "Number of products",
+    "total": "Total",
+    "checkout": "Checkout",
+    "viewCart": "View Cart",
+    "noProductsFound": "No products found",
+    "noProductsInStore": "There are currently no products in the store",
+    "tryChangingFilters": "Try changing your search criteria or filters",
+    "whyChooseUs": "Why Choose Our Store?",
+    "features": {
+      "freeShipping": "Free Shipping",
+      "freeShippingDesc": "Free shipping on all orders",
+      "qualityGuarantee": "Quality Guarantee",
+      "qualityGuaranteeDesc": "High quality products guaranteed",
+      "securePayment": "Secure Payment",
+      "securePaymentDesc": "Multiple secure payment methods",
+      "easyReturns": "Easy Returns",
+      "easyReturnsDesc": "Flexible 30-day return policy"
+    }
+  },
+  
+  "intellectualProperty": {
+    "title": "Intellectual Property",
+    "subtitle": "Protect and register students' creative ideas and projects",
+    "newRegistration": "New Registration",
+    "stats": {
+      "totalRequests": "Total Requests",
+      "approved": "Approved",
+      "underReview": "Under Review",
+      "protectionTypes": "Protection Types"
+    },
+    "searchPlaceholder": "Search in intellectual property requests...",
+    "filters": {
+      "propertyType": "Property Type",
+      "requestStatus": "Request Status"
+    },
+    "types": {
+      "all": "All Types",
+      "invention": "Invention",
+      "design": "Design",
+      "software": "Software",
+      "research": "Research"
+    },
+    "statuses": {
+      "all": "All Statuses",
+      "pending": "Under Review",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "showing": "Showing",
+    "of": "of",
+    "request": "request",
+    "relatedProject": "Related Project",
+    "submissionDate": "Submission Date",
+    "reviewDate": "Review Date",
+    "estimatedReview": "Estimated Review",
+    "certificateNumber": "Certificate Number",
+    "attachedDocuments": "Attached Documents",
+    "rejectionReason": "Rejection Reason",
+    "protectionType": "Protection Type",
+    "actions": {
+      "viewDetails": "View Details",
+      "downloadCertificate": "Download Certificate",
+      "resubmit": "Resubmit"
+    },
+    "noRequests": "No requests",
+    "noRequestsFound": "No intellectual property requests match your search criteria",
+    "importantInfo": {
+      "title": "Important Information about Intellectual Property",
+      "availableTypes": "Available Protection Types",
+      "inventions": "Technical and scientific inventions",
+      "software": "Software and applications",
+      "designs": "Creative designs",
+      "research": "Scientific research",
+      "registrationSteps": "Registration Steps",
+      "step1": "Prepare required documents",
+      "step2": "Fill out the registration form",
+      "step3": "Expert review of the request",
+      "step4": "Receive protection certificate"
+    }
+  },
+  
+  "resources": {
+    "title": "Learning Resources",
+    "subtitle": "Comprehensive library of educational and training resources",
+    "stats": {
+      "learningResource": "Learning Resource",
+      "contentType": "Content Type",
+      "specialtyCategory": "Specialty Category",
+      "free": "Free"
+    },
+    "searchPlaceholder": "Search in learning resources...",
+    "filters": {
+      "contentType": "Content Type",
+      "category": "Category"
+    },
+    "types": {
+      "all": "All Resources",
+      "article": "Articles",
+      "video": "Videos",
+      "course": "Courses",
+      "template": "Templates",
+      "podcast": "Podcasts",
+      "link": "Useful Links"
+    },
+    "categories": {
+      "all": "All Categories",
+      "projectManagement": "Project Management",
+      "programming": "Programming",
+      "design": "Design",
+      "entrepreneurship": "Entrepreneurship",
+      "stem": "STEM",
+      "softSkills": "Soft Skills"
+    },
+    "difficulties": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "showing": "Showing",
+    "of": "of",
+    "resource": "resource",
+    "featured": "Featured",
+    "more": "more",
+    "defaultDuration": "15 minutes",
+    "lesson": "lesson",
+    "certifiedCourse": "Certified Course",
+    "fileSize": "File Size",
+    "episode": "episode",
+    "actions": {
+      "watch": "Watch",
+      "startCourse": "Start Course",
+      "download": "Download",
+      "listen": "Listen",
+      "read": "Read",
+      "visit": "Visit"
+    },
+    "noResourcesFound": "No resources found",
+    "tryChangingFilters": "Try changing your search criteria or filters"
+  },
+  
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account settings and platform preferences",
+    "settingsSections": "Settings Sections",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "saveSuccess": "Settings saved successfully",
+    "sections": {
+      "profile": "Profile",
+      "notifications": "Notifications",
+      "security": "Security & Privacy",
+      "appearance": "Appearance",
+      "language": "Language & Region",
+      "data": "Data & Backup"
+    },
+    "errors": {
+      "loginRequired": "You must be logged in to save settings",
+      "saveFailed": "Error saving settings"
+    },
+    "profile": {
+      "title": "Profile",
+      "profilePicture": "Profile Picture",
+      "pictureRequirements": "Choose a clear picture for your profile",
+      "changePicture": "Change Picture",
+      "remove": "Remove",
+      "fullName": "Full Name",
+      "bio": "Bio",
+      "bioPlaceholder": "Write a brief about your professional experience...",
+      "timezone": "Time Zone",
+      "timezones": {
+        "riyadh": "Riyadh Time (GMT+3)",
+        "cairo": "Cairo Time (GMT+2)",
+        "dubai": "Dubai Time (GMT+4)"
+      }
+    },
+    "notifications": {
+      "title": "Notifications",
+      "emailNotifications": "Email Notifications",
+      "emailNotificationsDesc": "Receive notifications via email",
+      "pushNotifications": "Push Notifications",
+      "pushNotificationsDesc": "Receive notifications on your phone",
+      "projectUpdates": "Project Updates",
+      "projectUpdatesDesc": "Notifications when projects are updated",
+      "weeklyReports": "Weekly Reports",
+      "weeklyReportsDesc": "Receive a weekly report of your activity"
+    },
+    "security": {
+      "title": "Security & Privacy",
+      "changePassword": "Change Password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmNewPassword": "Confirm New Password",
+      "updatePassword": "Update Password",
+      "twoFactorAuth": "Two-Factor Authentication",
+      "twoFactorAuthDesc": "Additional protection for your account",
+      "enable": "Enable",
+      "loginSessions": "Login Sessions",
+      "chromeWindows": "Chrome on Windows",
+      "safariIphone": "Safari on iPhone",
+      "riyadhSaudiArabia": "Riyadh, Saudi Arabia",
+      "jeddahSaudiArabia": "Jeddah, Saudi Arabia",
+      "activeNow": "active now",
+      "twoDaysAgo": "two days ago",
+      "currentSession": "Current Session",
+      "endSession": "End Session"
+    },
+    "appearance": {
+      "title": "Appearance",
+      "theme": "General Theme",
+      "lightTheme": "Light Theme",
+      "darkTheme": "Dark Theme",
+      "autoTheme": "Auto (System)",
+      "fontSize": "Font Size",
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large",
+      "animations": "Animations & Transitions",
+      "animationsDesc": "Enable animations in the interface"
+    },
+    "language": {
+      "title": "Language & Region",
+      "interfaceLanguage": "Interface Language",
+      "arabic": "Arabic",
+      "english": "English",
+      "french": "French",
+      "timezone": "Time Zone",
+      "timezones": {
+        "riyadh": "Riyadh Time (GMT+3)",
+        "cairo": "Cairo Time (GMT+2)",
+        "dubai": "Dubai Time (GMT+4)"
+      },
+      "dateFormat": "Date Format",
+      "timeFormat": "Time Format",
+      "timeFormats": {
+        "24hour": "24 hours",
+        "12hour": "12 hours (AM/PM)"
+      }
+    },
+    "data": {
+      "title": "Data & Backup",
+      "exportData": "Export Data",
+      "exportDataDesc": "Get a copy of all your data",
+      "importData": "Import Data",
+      "importDataDesc": "Import data from a previous file",
+      "deleteAccount": "Delete Account",
+      "deleteAccountWarning": "Permanently deleting your account will result in losing all data and projects. This action cannot be undone.",
+      "permanentlyDeleteAccount": "Permanently Delete Account"
+    }
+  },
+  
+  "createProject": {
+    "title": "Create New Project",
+    "subtitle": "Create a new educational project for students",
+    "steps": {
+      "basicInfo": "Basic Information",
+      "detailsObjectives": "Details & Objectives",
+      "materialsSteps": "Materials & Steps",
+      "finalSettings": "Final Settings",
+      "addStudents": "Add Students"
+    },
+    "startWithBasicInfo": "Start by entering the basic information for the project",
+    "defineObjectives": "Define project objectives and expected duration",
+    "defineMaterialsSteps": "Define required materials and implementation steps",
+    "setDeadlineStatus": "Set the deadline and project status",
+    "chooseParticipatingStudents": "Choose students participating in the project from your school",
+    "form": {
+      "title": "Project Title",
+      "titlePlaceholder": "Enter project title",
+      "description": "Project Description",
+      "descriptionPlaceholder": "Write a comprehensive description of the project and its goals",
+      "problemSolved": "Problem Solved by the Project (Optional)",
+      "problemSolvedPlaceholder": "Explain the problem that the project aims to solve",
+      "category": "Project Category",
+      "subject": "Subject/Topic",
+      "subjectPlaceholder": "Example: Physics, Programming, Marketing",
+      "difficulty": "Difficulty Level",
+      "duration": "Expected Duration",
+      "durationPlaceholder": "Example: 6-8 weeks",
+      "maxStudents": "Maximum Number of Students",
+      "objectives": "Project Objectives",
+      "objective": "Objective",
+      "addNewObjective": "Add New Objective",
+      "materials": "Required Materials and Tools",
+      "material": "Material",
+      "addNewMaterial": "Add New Material",
+      "implementationSteps": "Project Implementation Steps",
+      "step": "Step",
+      "addNewStep": "Add New Step",
+      "deadline": "Project Deadline",
+      "status": "Project Status"
+    },
+    "categories": {
+      "stemDesc": "Technical and scientific projects",
+      "entrepreneurshipDesc": "Business and entrepreneurial projects",
+      "volunteerDesc": "Community service projects",
+      "ethicsDesc": "Values and ethics projects"
+    },
+    "difficulties": {
+      "beginnerDesc": "Suitable for beginners",
+      "intermediateDesc": "Requires moderate experience",
+      "advancedDesc": "Requires advanced experience"
+    },
+    "projectSummary": "Project Summary",
+    "notSpecified": "Not specified",
+    "objectivesCount": "Number of Objectives",
+    "materialsCount": "Number of Materials",
+    "stepsCount": "Number of Steps",
+    "initialProgress": "Initial Progress",
+    "searchStudentsPlaceholder": "Search by name or email...",
+    "selectedStudents": "Selected {{count}} students out of {{max}} maximum",
+    "selected": "Selected",
+    "noStudents": "No students",
+    "noStudentsMatch": "No students match your search",
+    "noStudentsAvailable": "No students available in your school",
+    "importantInfo": "Important Information",
+    "onlySchoolStudents": "Only students from your school are shown",
+    "canAddUpTo": "You can select up to {{max}} students maximum",
+    "canModifyLater": "Students can be added or removed later from the project management page",
+    "searchIncludesNameEmail": "Search includes name and email",
+    "creating": "Creating...",
+    "createProject": "Create Project",
+    "errors": {
+      "creationFailed": "Error creating project"
+    }
+  },
+  
+  "projectDetails": {
+    "supervisorTeacher": "Supervisor Teacher",
+    "selectTeacher": "Select Supervisor Teacher",
+    "approveProject": "Approve Project",
+    "errors": {
+      "selectTeacherRequired": "You must select a supervisor teacher before approving the project"
+    },
+    "assignedToYou": "You will be assigned as the supervisor teacher for this project",
+    "projectApproved": "Project approved successfully",
+    "approving": "Approving..."
+  }
+}
