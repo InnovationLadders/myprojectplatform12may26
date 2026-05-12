@@ -62,7 +62,7 @@ console.log('🔥 Firebase Configuration:', {
 
 // Initialize Firebase services
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+export const db = getFirestore(app, 'myprojectplatformdammam');
 export const storage = getStorage(app);
 export const increment = firestoreIncrement; // Export increment with a simpler name
 
