@@ -3,41 +3,40 @@ import react from '@vitejs/plugin-react';
 import fs from 'fs';
 import path from 'path';
 
-function copyPublicDirPlugin() {
+// Vite copies public/ normally, but some files have spaces in their names
+// which cause EAGAIN errors on certain systems. This plugin removes those
+// problematic files after the build completes — they are unused duplicates.
+function removeSpacedFilesPlugin() {
   return {
-    name: 'copy-public-safe',
+    name: 'remove-spaced-public-files',
     closeBundle() {
-      const publicDir = path.resolve(__dirname, 'public');
       const outDir = path.resolve(__dirname, 'dist');
 
-      function copyDirSafe(src: string, dest: string) {
-        if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
-        const entries = fs.readdirSync(src, { withFileTypes: true });
+      function removeSpacedFiles(dir: string) {
+        if (!fs.existsSync(dir)) return;
+        const entries = fs.readdirSync(dir, { withFileTypes: true });
         for (const entry of entries) {
-          if (entry.name.includes(' ')) continue; // skip files with spaces
-          const srcPath = path.join(src, entry.name);
-          const destPath = path.join(dest, entry.name);
+          const fullPath = path.join(dir, entry.name);
           if (entry.isDirectory()) {
-            copyDirSafe(srcPath, destPath);
-          } else {
+            removeSpacedFiles(fullPath);
+          } else if (entry.name.includes(' ')) {
             try {
-              fs.copyFileSync(srcPath, destPath);
+              fs.unlinkSync(fullPath);
             } catch {
-              // ignore copy errors for individual files
+              // ignore
             }
           }
         }
       }
 
-      copyDirSafe(publicDir, outDir);
+      removeSpacedFiles(outDir);
     }
   };
 }
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), copyPublicDirPlugin()],
-  publicDir: false,
+  plugins: [react(), removeSpacedFilesPlugin()],
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
