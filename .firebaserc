@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "my-project-plateform-react"
+  },
+  "targets": {
+    "my-project-plateform-react": {
+      "hosting": {
+        "main": [
+          "my-project-plateform-react"
+        ]
+      }
+    }
+  }
+}
