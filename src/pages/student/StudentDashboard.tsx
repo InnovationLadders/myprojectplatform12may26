@@ -1,22 +1,7 @@
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
-import {
-  BookOpen,
-  Lightbulb,
-  MessageCircle,
-  ShoppingCart,
-  Bot,
-  GalleryVertical,
-  TrendingUp,
-  CheckCircle,
-  AlertCircle,
-  Award,
-  Users,
-  ArrowRight,
-  Target,
-  Sparkles
-} from 'lucide-react';
+import { BookOpen, Lightbulb, MessageCircle, ShoppingCart, Bot, GalleryVertical, TrendingUp, CircleCheck as CheckCircle, CircleAlert as AlertCircle, Award, Users, ArrowRight, Target, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
@@ -28,7 +13,9 @@ import {
   RecentProject,
   RecentProjectConversation
 } from '../../services/dashboardService';
+import { getAchievementConfig } from '../../services/rewardPointsService';
 import { RecentConversations } from '../../components/Dashboard/RecentConversations';
+import StudentRankingWidget from '../../components/Rewards/StudentRankingWidget';
 
 export const StudentDashboard: React.FC = () => {
   const { t } = useTranslation();
@@ -56,6 +43,15 @@ export const StudentDashboard: React.FC = () => {
     },
     enabled: !!user,
     staleTime: 2 * 60 * 1000,
+  });
+
+  const { data: rankingEnabled = false } = useQuery({
+    queryKey: ['rankingDisplayEnabled'],
+    queryFn: async () => {
+      const cfg = await getAchievementConfig();
+      return cfg.rankingDisplayEnabled ?? false;
+    },
+    staleTime: 5 * 60 * 1000,
   });
 
   const stats = dashboardData?.stats || null;
@@ -238,6 +234,17 @@ export const StudentDashboard: React.FC = () => {
           <p className="text-sm text-gray-600">{t('dashboard.stats.rewardPoints')}</p>
         </motion.div>
       </div>
+
+      {/* Student Ranking Widget */}
+      {rankingEnabled && user?.school_id && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.45 }}
+        >
+          <StudentRankingWidget userId={user.id} schoolId={user.school_id} />
+        </motion.div>
+      )}
 
       {/* Quick Actions */}
       <motion.div

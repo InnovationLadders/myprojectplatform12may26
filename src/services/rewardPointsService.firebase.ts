@@ -12,6 +12,8 @@ import {
   orderBy,
   limit,
   deleteDoc,
+  onSnapshot,
+  Unsubscribe,
 } from 'firebase/firestore';
 
 export interface StudentPoints {
@@ -47,6 +49,15 @@ export interface AchievementConfig {
   chatMessagePoints: number;
   fileUploadPoints: number;
   weightedScorePointsPerUnit: number;
+  rankingDisplayEnabled?: boolean;
+}
+
+export interface RankedStudent {
+  userId: string;
+  totalPoints: number;
+  rank: number;
+  name?: string;
+  isCurrentUser?: boolean;
 }
 
 export interface StudentAchievement {
@@ -110,6 +121,7 @@ export const getAchievementConfig = async (): Promise<AchievementConfig> => {
       chatMessagePoints: data.chatMessagePoints || DEFAULT_CONFIG.chatMessagePoints,
       fileUploadPoints: data.fileUploadPoints || DEFAULT_CONFIG.fileUploadPoints,
       weightedScorePointsPerUnit: data.weightedScorePointsPerUnit || DEFAULT_CONFIG.weightedScorePointsPerUnit,
+      rankingDisplayEnabled: data.rankingDisplayEnabled ?? false,
     };
   } catch (error) {
     console.error('Error in getAchievementConfig:', error);
@@ -132,6 +144,7 @@ export const updateAchievementConfig = async (config: AchievementConfig): Promis
       goldThreshold: config.gold,
       platinumThreshold: config.platinum,
       trophyThreshold: config.trophy,
+      rankingDisplayEnabled: config.rankingDisplayEnabled ?? false,
       updatedAt: serverTimestamp(),
     });
   } catch (error) {
@@ -579,27 +592,146 @@ export const getPointsHistory = async (
 
 export const getTopStudents = async (schoolId?: string, limitCount: number = 10): Promise<StudentPoints[]> => {
   try {
-    const pointsQuery = query(
-      collection(db, 'student_points'),
-      orderBy('totalPoints', 'desc'),
-      limit(limitCount)
-    );
-    const pointsSnapshot = await getDocs(pointsQuery);
+    if (!schoolId) {
+      const pointsQuery = query(
+        collection(db, 'student_points'),
+        orderBy('totalPoints', 'desc'),
+        limit(limitCount)
+      );
+      const pointsSnapshot = await getDocs(pointsQuery);
+      return pointsSnapshot.docs.map(doc => ({
+        userId: doc.data().userId,
+        totalPoints: doc.data().totalPoints || 0,
+        initiationPoints: doc.data().initiationPoints || 0,
+        progressPoints: doc.data().progressPoints || 0,
+        chatPoints: doc.data().chatPoints || 0,
+        filePoints: doc.data().filePoints || 0,
+        weightedScorePoints: doc.data().weightedScorePoints || 0,
+        lastUpdated: doc.data().lastUpdated?.toDate?.()?.toISOString() || new Date().toISOString(),
+      }));
+    }
 
-    return pointsSnapshot.docs.map(doc => ({
-      userId: doc.data().userId,
-      totalPoints: doc.data().totalPoints || 0,
-      initiationPoints: doc.data().initiationPoints || 0,
-      progressPoints: doc.data().progressPoints || 0,
-      chatPoints: doc.data().chatPoints || 0,
-      filePoints: doc.data().filePoints || 0,
-      weightedScorePoints: doc.data().weightedScorePoints || 0,
-      lastUpdated: doc.data().lastUpdated?.toDate?.()?.toISOString() || new Date().toISOString(),
-    }));
+    // Get students belonging to the school
+    const usersQuery = query(
+      collection(db, 'users'),
+      where('school_id', '==', schoolId),
+      where('role', '==', 'student')
+    );
+    const usersSnapshot = await getDocs(usersQuery);
+    const studentIds = usersSnapshot.docs.map(d => d.id);
+
+    if (studentIds.length === 0) return [];
+
+    // Fetch points for all school students, sort client-side
+    const chunks: StudentPoints[][] = [];
+    for (let i = 0; i < studentIds.length; i += 30) {
+      const chunk = studentIds.slice(i, i + 30);
+      const pointsQuery = query(
+        collection(db, 'student_points'),
+        where('userId', 'in', chunk)
+      );
+      const snap = await getDocs(pointsQuery);
+      chunks.push(snap.docs.map(doc => ({
+        userId: doc.data().userId,
+        totalPoints: doc.data().totalPoints || 0,
+        initiationPoints: doc.data().initiationPoints || 0,
+        progressPoints: doc.data().progressPoints || 0,
+        chatPoints: doc.data().chatPoints || 0,
+        filePoints: doc.data().filePoints || 0,
+        weightedScorePoints: doc.data().weightedScorePoints || 0,
+        lastUpdated: doc.data().lastUpdated?.toDate?.()?.toISOString() || new Date().toISOString(),
+      })));
+    }
+
+    const all = chunks.flat().sort((a, b) => b.totalPoints - a.totalPoints);
+    return all.slice(0, limitCount);
   } catch (error) {
     console.error('Error in getTopStudents:', error);
     return [];
   }
+};
+
+export const getRankingWindow = async (
+  userId: string,
+  schoolId: string,
+  windowSize: number = 10
+): Promise<RankedStudent[]> => {
+  try {
+    const usersQuery = query(
+      collection(db, 'users'),
+      where('school_id', '==', schoolId),
+      where('role', '==', 'student')
+    );
+    const usersSnapshot = await getDocs(usersQuery);
+    const studentIds = usersSnapshot.docs.map(d => d.id);
+    const namesMap = new Map<string, string>();
+    usersSnapshot.docs.forEach(d => namesMap.set(d.id, d.data().name || ''));
+
+    if (studentIds.length === 0) return [];
+
+    const allPoints: Array<{ userId: string; totalPoints: number }> = [];
+    for (let i = 0; i < studentIds.length; i += 30) {
+      const chunk = studentIds.slice(i, i + 30);
+      const pointsQuery = query(
+        collection(db, 'student_points'),
+        where('userId', 'in', chunk)
+      );
+      const snap = await getDocs(pointsQuery);
+      snap.docs.forEach(doc => {
+        allPoints.push({ userId: doc.data().userId, totalPoints: doc.data().totalPoints || 0 });
+      });
+    }
+
+    // Add students with no points record
+    studentIds.forEach(id => {
+      if (!allPoints.find(p => p.userId === id)) {
+        allPoints.push({ userId: id, totalPoints: 0 });
+      }
+    });
+
+    allPoints.sort((a, b) => b.totalPoints - a.totalPoints);
+
+    const userRank = allPoints.findIndex(p => p.userId === userId);
+    if (userRank === -1) return [];
+
+    const half = Math.floor(windowSize / 2);
+    let start = Math.max(0, userRank - half);
+    let end = start + windowSize;
+    if (end > allPoints.length) {
+      end = allPoints.length;
+      start = Math.max(0, end - windowSize);
+    }
+
+    return allPoints.slice(start, end).map((p, i) => ({
+      userId: p.userId,
+      totalPoints: p.totalPoints,
+      rank: start + i + 1,
+      name: namesMap.get(p.userId) || '',
+      isCurrentUser: p.userId === userId,
+    }));
+  } catch (error) {
+    console.error('Error in getRankingWindow:', error);
+    return [];
+  }
+};
+
+export const subscribeToSchoolRanking = (
+  userId: string,
+  schoolId: string,
+  windowSize: number = 10,
+  callback: (window: RankedStudent[]) => void
+): Unsubscribe => {
+  // Subscribe to student_points changes; recompute window on each update
+  const pointsQuery = query(collection(db, 'student_points'));
+  const unsubscribe = onSnapshot(pointsQuery, async () => {
+    try {
+      const window = await getRankingWindow(userId, schoolId, windowSize);
+      callback(window);
+    } catch (e) {
+      console.error('Error in subscribeToSchoolRanking:', e);
+    }
+  });
+  return unsubscribe;
 };
 
 export const manuallyAdjustPoints = async (
