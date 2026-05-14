@@ -16,7 +16,7 @@ import {
 } from '../../services/rewardPointsService';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
-import { Award, Settings, Download, Search, Plus, Minus, RefreshCw, History, Calculator, FileText, CircleCheck as CheckCircle, ChartBar as BarChart2, ToggleLeft, ToggleRight } from 'lucide-react';
+import { Award, Settings, Download, Search, Plus, Minus, RefreshCw, History, Calculator, FileText, CircleCheck as CheckCircle } from 'lucide-react';
 import AchievementBadge from '../../components/Rewards/AchievementBadge';
 import PointsConsistencyChecker from '../../components/Admin/PointsConsistencyChecker';
 import { useAuth } from '../../contexts/AuthContext';
@@ -534,31 +534,6 @@ const ManageRewards: React.FC = () => {
                 </div>
               </div>
 
-              {/* Ranking Display Service */}
-              <div className="border-t border-gray-200 pt-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <BarChart2 className="w-5 h-5 text-blue-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">Student Ranking Display</h3>
-                </div>
-                <p className="text-sm text-gray-500 mb-4">
-                  When enabled, students will see their rank among peers in their institution on the home dashboard, along with a window of nearby-ranked students.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setConfigForm({ ...configForm, rankingDisplayEnabled: !configForm.rankingDisplayEnabled })}
-                  className={`flex items-center gap-3 px-5 py-3 rounded-xl border-2 transition-all font-medium text-sm ${
-                    configForm.rankingDisplayEnabled
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
-                      : 'border-gray-300 bg-gray-50 text-gray-600'
-                  }`}
-                >
-                  {configForm.rankingDisplayEnabled
-                    ? <ToggleRight className="w-6 h-6 text-blue-500" />
-                    : <ToggleLeft className="w-6 h-6 text-gray-400" />
-                  }
-                  {configForm.rankingDisplayEnabled ? 'Service Enabled' : 'Service Disabled'}
-                </button>
-              </div>
             </div>
 
             <div className="flex gap-4 mt-6">

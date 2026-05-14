@@ -8,6 +8,7 @@ import {
   where,
   addDoc,
   updateDoc,
+  setDoc,
   serverTimestamp,
   orderBy,
   limit,
@@ -49,7 +50,6 @@ export interface AchievementConfig {
   chatMessagePoints: number;
   fileUploadPoints: number;
   weightedScorePointsPerUnit: number;
-  rankingDisplayEnabled?: boolean;
 }
 
 export interface RankedStudent {
@@ -121,7 +121,6 @@ export const getAchievementConfig = async (): Promise<AchievementConfig> => {
       chatMessagePoints: data.chatMessagePoints || DEFAULT_CONFIG.chatMessagePoints,
       fileUploadPoints: data.fileUploadPoints || DEFAULT_CONFIG.fileUploadPoints,
       weightedScorePointsPerUnit: data.weightedScorePointsPerUnit || DEFAULT_CONFIG.weightedScorePointsPerUnit,
-      rankingDisplayEnabled: data.rankingDisplayEnabled ?? false,
     };
   } catch (error) {
     console.error('Error in getAchievementConfig:', error);
@@ -144,7 +143,6 @@ export const updateAchievementConfig = async (config: AchievementConfig): Promis
       goldThreshold: config.gold,
       platinumThreshold: config.platinum,
       trophyThreshold: config.trophy,
-      rankingDisplayEnabled: config.rankingDisplayEnabled ?? false,
       updatedAt: serverTimestamp(),
     });
   } catch (error) {
@@ -721,17 +719,52 @@ export const subscribeToSchoolRanking = (
   windowSize: number = 10,
   callback: (window: RankedStudent[]) => void
 ): Unsubscribe => {
-  // Subscribe to student_points changes; recompute window on each update
-  const pointsQuery = query(collection(db, 'student_points'));
-  const unsubscribe = onSnapshot(pointsQuery, async () => {
-    try {
-      const window = await getRankingWindow(userId, schoolId, windowSize);
-      callback(window);
-    } catch (e) {
-      console.error('Error in subscribeToSchoolRanking:', e);
+  let unsubscribers: Unsubscribe[] = [];
+  let settled = false;
+
+  // First resolve the school's student IDs, then subscribe only to their points docs
+  const usersQuery = query(
+    collection(db, 'users'),
+    where('school_id', '==', schoolId),
+    where('role', '==', 'student')
+  );
+
+  const setupListeners = (studentIds: string[]) => {
+    if (studentIds.length === 0) return;
+
+    const recompute = async () => {
+      try {
+        const window = await getRankingWindow(userId, schoolId, windowSize);
+        callback(window);
+      } catch (e) {
+        console.error('Error in subscribeToSchoolRanking recompute:', e);
+      }
+    };
+
+    // Subscribe to student_points filtered to this school's students (in chunks of 30)
+    for (let i = 0; i < studentIds.length; i += 30) {
+      const chunk = studentIds.slice(i, i + 30);
+      const pointsQuery = query(
+        collection(db, 'student_points'),
+        where('userId', 'in', chunk)
+      );
+      unsubscribers.push(onSnapshot(pointsQuery, recompute));
     }
-  });
-  return unsubscribe;
+  };
+
+  // Resolve student IDs once, then subscribe
+  getDocs(usersQuery).then(snap => {
+    if (!settled) {
+      const ids = snap.docs.map(d => d.id);
+      setupListeners(ids);
+    }
+  }).catch(e => console.error('Error resolving school students for subscription:', e));
+
+  return () => {
+    settled = true;
+    unsubscribers.forEach(u => u());
+    unsubscribers = [];
+  };
 };
 
 export const manuallyAdjustPoints = async (
@@ -893,6 +926,35 @@ export const recalculateAllStudentPoints = async (
 
   } catch (error) {
     console.error('❌ Error in bulk recalculation:', error);
+    throw error;
+  }
+};
+
+// --- Per-school ranking display setting ---
+
+export const getSchoolRankingSetting = async (schoolId: string): Promise<boolean> => {
+  try {
+    const settingRef = doc(db, 'school_settings', schoolId);
+    const settingDoc = await getDoc(settingRef);
+    if (!settingDoc.exists()) return false;
+    return settingDoc.data().rankingDisplayEnabled ?? false;
+  } catch (error) {
+    console.error('Error in getSchoolRankingSetting:', error);
+    return false;
+  }
+};
+
+export const setSchoolRankingSetting = async (schoolId: string, enabled: boolean): Promise<void> => {
+  try {
+    const settingRef = doc(db, 'school_settings', schoolId);
+    const settingDoc = await getDoc(settingRef);
+    if (settingDoc.exists()) {
+      await updateDoc(settingRef, { rankingDisplayEnabled: enabled, updatedAt: serverTimestamp() });
+    } else {
+      await setDoc(settingRef, { rankingDisplayEnabled: enabled, schoolId, updatedAt: serverTimestamp() });
+    }
+  } catch (error) {
+    console.error('Error in setSchoolRankingSetting:', error);
     throw error;
   }
 };

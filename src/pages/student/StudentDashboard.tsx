@@ -13,7 +13,7 @@ import {
   RecentProject,
   RecentProjectConversation
 } from '../../services/dashboardService';
-import { getAchievementConfig } from '../../services/rewardPointsService';
+import { getSchoolRankingSetting } from '../../services/rewardPointsService';
 import { RecentConversations } from '../../components/Dashboard/RecentConversations';
 import StudentRankingWidget from '../../components/Rewards/StudentRankingWidget';
 
@@ -46,11 +46,12 @@ export const StudentDashboard: React.FC = () => {
   });
 
   const { data: rankingEnabled = false } = useQuery({
-    queryKey: ['rankingDisplayEnabled'],
+    queryKey: ['rankingDisplayEnabled', user?.school_id],
     queryFn: async () => {
-      const cfg = await getAchievementConfig();
-      return cfg.rankingDisplayEnabled ?? false;
+      if (!user?.school_id) return false;
+      return getSchoolRankingSetting(user.school_id);
     },
+    enabled: !!user?.school_id,
     staleTime: 5 * 60 * 1000,
   });
 

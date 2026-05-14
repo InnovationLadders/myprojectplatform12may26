@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Settings as SettingsIcon, User, Bell, Shield, Palette, Globe, Database, Mail, Smartphone, Lock, Eye, EyeOff, Save, RefreshCw, Download, Upload, Trash2, TriangleAlert as AlertTriangle, CircleCheck as CheckCircle, Camera, UserCheck } from 'lucide-react';
+import { Settings as SettingsIcon, User, Bell, Shield, Palette, Globe, Database, Mail, Smartphone, Lock, Eye, EyeOff, Save, RefreshCw, Download, Upload, Trash2, TriangleAlert as AlertTriangle, CircleCheck as CheckCircle, Camera, UserCheck, ChartBar as BarChart2, ToggleLeft, ToggleRight } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { updateUser, updateCurrentUserPassword, storage, db } from '../lib/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
@@ -8,6 +8,7 @@ import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebas
 import { useTranslation } from 'react-i18next';
 import { migrateConsultantRatesToZero } from '../utils/migrateConsultantRates';
 import { AvatarDisplay } from '../components/Common/AvatarDisplay';
+import { getSchoolRankingSetting, setSchoolRankingSetting } from '../services/rewardPointsService';
 
 export const Settings: React.FC = () => {
   const { t } = useTranslation();
@@ -65,6 +66,17 @@ export const Settings: React.FC = () => {
   const [savingApproval, setSavingApproval] = useState(false);
   const [approvalSuccess, setApprovalSuccess] = useState(false);
 
+  // Ranking display service state (school accounts only)
+  const [rankingEnabled, setRankingEnabled] = useState<boolean>(false);
+  const [savingRanking, setSavingRanking] = useState(false);
+  const [rankingSuccess, setRankingSuccess] = useState(false);
+
+  useEffect(() => {
+    if (isSchool && user?.id) {
+      getSchoolRankingSetting(user.id).then(setRankingEnabled);
+    }
+  }, [isSchool, user?.id]);
+
   const settingsSections = [
     { id: 'profile', name: t('settings.sections.profile'), icon: User },
     { id: 'notifications', name: t('settings.sections.notifications'), icon: Bell },
@@ -73,7 +85,10 @@ export const Settings: React.FC = () => {
     { id: 'language', name: t('settings.sections.language'), icon: Globe },
     { id: 'data', name: t('settings.sections.data'), icon: Database },
     ...(isAdmin ? [{ id: 'admin-migration', name: 'ترحيل البيانات (إدارة)', icon: RefreshCw }] : []),
-    ...(isSchool ? [{ id: 'institution-settings', name: 'إعدادات القبول', icon: UserCheck }] : []),
+    ...(isSchool ? [
+      { id: 'institution-settings', name: 'إعدادات القبول', icon: UserCheck },
+      { id: 'ranking-service', name: 'خدمة الترتيب', icon: BarChart2 },
+    ] : []),
   ];
 
   const handleInputChange = (field: string, value: string | boolean) => {
@@ -208,6 +223,22 @@ export const Settings: React.FC = () => {
       console.error('Error saving student approval setting:', error);
     } finally {
       setSavingApproval(false);
+    }
+  };
+
+  const handleToggleRanking = async (value: boolean) => {
+    if (!user) return;
+    setSavingRanking(true);
+    setRankingSuccess(false);
+    try {
+      await setSchoolRankingSetting(user.id, value);
+      setRankingEnabled(value);
+      setRankingSuccess(true);
+      setTimeout(() => setRankingSuccess(false), 3000);
+    } catch (error) {
+      console.error('Error saving ranking setting:', error);
+    } finally {
+      setSavingRanking(false);
     }
   };
 
@@ -1158,6 +1189,78 @@ export const Settings: React.FC = () => {
                     <li>ستظهر تنبيهات للطلاب المنتظرين للموافقة</li>
                     <li>انقر على "تفعيل" بجانب اسم الطالب للموافقة عليه</li>
                   </ol>
+                </div>
+              </div>
+            )}
+
+            {/* Ranking Service - School accounts only */}
+            {activeSection === 'ranking-service' && isSchool && (
+              <div className="space-y-6">
+                <div className="flex items-center gap-4 mb-6">
+                  <BarChart2 className="w-6 h-6 text-blue-600" />
+                  <h2 className="text-2xl font-bold text-gray-800">خدمة الترتيب</h2>
+                </div>
+
+                {rankingSuccess && (
+                  <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center gap-2">
+                    <CheckCircle className="w-5 h-5" />
+                    <span>تم حفظ الإعداد بنجاح</span>
+                  </div>
+                )}
+
+                <div className="border border-gray-200 rounded-xl p-6 space-y-5">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-800">عرض ترتيب الطلاب</h3>
+                      <p className="text-sm text-gray-600 mt-1">
+                        عند التفعيل، يرى كل طالب في مؤسستك ترتيبه بين زملائه على الصفحة الرئيسية بناءً على نقاطه المكتسبة،
+                        مع عرض قائمة بالطلاب المحيطين به في الترتيب.
+                      </p>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer flex-shrink-0 mt-1">
+                      <input
+                        type="checkbox"
+                        checked={rankingEnabled}
+                        onChange={(e) => handleToggleRanking(e.target.checked)}
+                        disabled={savingRanking}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 disabled:opacity-50"></div>
+                    </label>
+                  </div>
+
+                  <div className={`p-4 rounded-lg ${rankingEnabled ? 'bg-blue-50 border border-blue-200' : 'bg-gray-50 border border-gray-200'}`}>
+                    {rankingEnabled ? (
+                      <div className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="text-sm font-medium text-blue-800">خدمة الترتيب مفعّلة</p>
+                          <p className="text-sm text-blue-700 mt-1">
+                            طلاب مؤسستك يرون ترتيبهم الحالي وقائمة بأقرب المنافسين على الصفحة الرئيسية.
+                            يتحدث الترتيب فورياً عند تغيير النقاط.
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-start gap-3">
+                        <ToggleLeft className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="text-sm font-medium text-gray-700">الخدمة معطّلة (الوضع الافتراضي)</p>
+                          <p className="text-sm text-gray-600 mt-1">
+                            لن يرى الطلاب قائمة الترتيب على الصفحة الرئيسية.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="border border-gray-100 rounded-xl p-5 bg-gray-50">
+                  <h4 className="text-sm font-semibold text-gray-700 mb-2">ملاحظة</h4>
+                  <p className="text-sm text-gray-600">
+                    الترتيب يشمل فقط طلاب مؤسستك. لا يرى الطلاب ترتيباً مقارناً بطلاب مؤسسات أخرى.
+                    الخدمة تعمل بشكل مستقل لكل مؤسسة.
+                  </p>
                 </div>
               </div>
             )}

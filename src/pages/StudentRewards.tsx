@@ -7,6 +7,7 @@ import {
   calculateAchievements,
   getPointsHistory,
   getTopStudents,
+  getSchoolRankingSetting,
   StudentPoints,
   PointsHistory,
   AchievementConfig,
@@ -29,6 +30,7 @@ const StudentRewards: React.FC = () => {
   });
   const [history, setHistory] = useState<PointsHistory[]>([]);
   const [leaderboard, setLeaderboard] = useState<StudentPoints[]>([]);
+  const [rankingEnabled, setRankingEnabled] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,17 +38,22 @@ const StudentRewards: React.FC = () => {
 
     const fetchData = async () => {
       try {
-        const [studentPoints, achievementConfig, pointsHistory, topStudents] = await Promise.all([
+        const [studentPoints, achievementConfig, pointsHistory, rankingSetting] = await Promise.all([
           getStudentPoints(user.id),
           getAchievementConfig(),
           getPointsHistory(user.id, 20),
-          getTopStudents(user.school_id, 10),
+          user.school_id ? getSchoolRankingSetting(user.school_id) : Promise.resolve(false),
         ]);
 
         setPoints(studentPoints);
         setConfig(achievementConfig);
         setHistory(pointsHistory);
-        setLeaderboard(topStudents);
+        setRankingEnabled(rankingSetting);
+
+        if (rankingSetting && user.school_id) {
+          const topStudents = await getTopStudents(user.school_id, 10);
+          setLeaderboard(topStudents);
+        }
 
         const calculatedAchievements = calculateAchievements(
           studentPoints.totalPoints,
@@ -185,15 +192,17 @@ const StudentRewards: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
-          <div className="flex items-center justify-between mb-4">
-            <Users className="w-8 h-8 text-blue-600" />
+        {rankingEnabled && (
+          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
+            <div className="flex items-center justify-between mb-4">
+              <Users className="w-8 h-8 text-blue-600" />
+            </div>
+            <p className="text-gray-600 text-sm mb-1">School Rank</p>
+            <p className="text-3xl font-bold text-gray-900">
+              {userRank > 0 ? `#${userRank}` : 'N/A'}
+            </p>
           </div>
-          <p className="text-gray-600 text-sm mb-1">School Rank</p>
-          <p className="text-3xl font-bold text-gray-900">
-            {userRank > 0 ? `#${userRank}` : 'N/A'}
-          </p>
-        </div>
+        )}
 
         <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
           <div className="flex items-center justify-between mb-4">
@@ -254,49 +263,51 @@ const StudentRewards: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
-          <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <Users className="w-5 h-5" />
-            School Leaderboard
-          </h2>
-          <div className="space-y-3 max-h-[400px] overflow-y-auto">
-            {leaderboard.map((student, index) => (
-              <div
-                key={student.userId}
-                className={`flex items-center justify-between p-3 rounded-lg ${
-                  student.userId === user?.id
-                    ? 'bg-blue-50 border-2 border-blue-500'
-                    : 'bg-gray-50'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
-                      index === 0
-                        ? 'bg-yellow-500 text-white'
-                        : index === 1
-                        ? 'bg-gray-400 text-white'
-                        : index === 2
-                        ? 'bg-orange-500 text-white'
-                        : 'bg-gray-200 text-gray-700'
-                    }`}
-                  >
-                    {index + 1}
+        {rankingEnabled && (
+          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
+            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <Users className="w-5 h-5" />
+              School Leaderboard
+            </h2>
+            <div className="space-y-3 max-h-[400px] overflow-y-auto">
+              {leaderboard.map((student, index) => (
+                <div
+                  key={student.userId}
+                  className={`flex items-center justify-between p-3 rounded-lg ${
+                    student.userId === user?.id
+                      ? 'bg-blue-50 border-2 border-blue-500'
+                      : 'bg-gray-50'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
+                        index === 0
+                          ? 'bg-yellow-500 text-white'
+                          : index === 1
+                          ? 'bg-gray-400 text-white'
+                          : index === 2
+                          ? 'bg-orange-500 text-white'
+                          : 'bg-gray-200 text-gray-700'
+                      }`}
+                    >
+                      {index + 1}
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900">
+                        {student.userId === user?.id ? 'You' : `Student ${index + 1}`}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium text-gray-900">
-                      {student.userId === user?.id ? 'You' : `Student ${index + 1}`}
-                    </p>
+                  <div className="flex items-center gap-2">
+                    <Award className="w-4 h-4 text-purple-600" />
+                    <span className="font-bold text-gray-900">{student.totalPoints}</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Award className="w-4 h-4 text-purple-600" />
-                  <span className="font-bold text-gray-900">{student.totalPoints}</span>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">

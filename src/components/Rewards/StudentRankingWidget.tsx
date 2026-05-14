@@ -70,6 +70,8 @@ const StudentRankingWidget: React.FC<StudentRankingWidgetProps> = ({ userId, sch
     return '';
   };
 
+  const maxPoints = rankWindow.length > 0 ? Math.max(...rankWindow.map(s => s.totalPoints), 1) : 1;
+
   if (loading) {
     return (
       <div className="bg-white rounded-2xl p-6 shadow-sm">
@@ -137,30 +139,52 @@ const StudentRankingWidget: React.FC<StudentRankingWidgetProps> = ({ userId, sch
               <motion.div
                 animate={rankChanged ? { scale: [1, 1.03, 1] } : {}}
                 transition={{ duration: 0.4 }}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-teal-500 shadow-md"
+                className="flex flex-col gap-1.5 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-teal-500 shadow-md"
               >
-                <RankBadge rank={student.rank} isHighlighted />
-                <div className="flex-1 min-w-0">
-                  <p className="font-bold text-white text-sm truncate">
-                    {student.name || 'أنت'}
-                  </p>
+                <div className="flex items-center gap-3">
+                  <RankBadge rank={student.rank} isHighlighted />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-white text-sm truncate">
+                      {student.name || 'أنت'}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Award className="w-4 h-4 text-yellow-300" />
+                    <span className="text-white font-bold text-sm">{student.totalPoints.toLocaleString()}</span>
+                    <span className="text-blue-100 text-xs">نقطة</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <Award className="w-4 h-4 text-yellow-300" />
-                  <span className="text-white font-bold text-sm">{student.totalPoints.toLocaleString()}</span>
-                  <span className="text-blue-100 text-xs">نقطة</span>
+                {/* Progress bar indicator */}
+                <div className="h-1.5 bg-white bg-opacity-25 rounded-full overflow-hidden ms-11">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${Math.round((student.totalPoints / maxPoints) * 100)}%` }}
+                    transition={{ duration: 0.8, ease: 'easeOut' }}
+                    className="h-full bg-yellow-300 rounded-full"
+                  />
                 </div>
               </motion.div>
             ) : (
-              <div className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border transition-colors hover:bg-gray-50 ${getMedalBg(student.rank)} ${student.rank <= 3 ? 'border' : 'border-transparent'}`}>
-                <RankBadge rank={student.rank} isHighlighted={false} />
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-gray-700 text-sm truncate">{student.name || '---'}</p>
+              <div className={`flex flex-col gap-1 px-4 py-2.5 rounded-xl border transition-colors hover:bg-gray-50 ${getMedalBg(student.rank)} ${student.rank <= 3 ? 'border' : 'border-transparent'}`}>
+                <div className="flex items-center gap-3">
+                  <RankBadge rank={student.rank} isHighlighted={false} />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-gray-700 text-sm truncate">{student.name || '---'}</p>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <TrendingUp className={`w-3.5 h-3.5 ${getMedalColor(student.rank)}`} />
+                    <span className="text-gray-600 font-semibold text-sm">{student.totalPoints.toLocaleString()}</span>
+                    <span className="text-gray-400 text-xs">نق</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <TrendingUp className={`w-3.5 h-3.5 ${getMedalColor(student.rank)}`} />
-                  <span className="text-gray-600 font-semibold text-sm">{student.totalPoints.toLocaleString()}</span>
-                  <span className="text-gray-400 text-xs">نق</span>
+                {/* Thin progress bar */}
+                <div className="h-1 bg-gray-100 rounded-full overflow-hidden ms-11">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${Math.round((student.totalPoints / maxPoints) * 100)}%` }}
+                    transition={{ duration: 0.6, ease: 'easeOut', delay: idx * 0.03 }}
+                    className={`h-full rounded-full ${student.rank === 1 ? 'bg-yellow-400' : student.rank === 2 ? 'bg-gray-400' : student.rank === 3 ? 'bg-amber-500' : 'bg-blue-300'}`}
+                  />
                 </div>
               </div>
             )}
