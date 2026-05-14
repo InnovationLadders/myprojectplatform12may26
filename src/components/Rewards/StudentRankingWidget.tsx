@@ -147,6 +147,9 @@ const StudentRankingWidget: React.FC<StudentRankingWidgetProps> = ({ userId, sch
                     <p className="font-bold text-white text-sm truncate">
                       {student.name || 'أنت'}
                     </p>
+                    {student.name && (
+                      <span className="text-blue-100 text-xs">أنت</span>
+                    )}
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Award className="w-4 h-4 text-yellow-300" />

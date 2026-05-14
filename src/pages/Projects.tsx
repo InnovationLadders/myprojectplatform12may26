@@ -1,34 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
-import {
-  Plus,
-  Search,
-  Filter,
-  FolderOpen,
-  Users,
-  Calendar,
-  Clock,
-  MoreVertical,
-  Play,
-  Pause,
-  CheckCircle,
-  AlertCircle,
-  Eye,
-  Edit,
-  Trash2,
-  Archive,
-  Star,
-  Building,
-  Award,
-  MessageCircle
-} from 'lucide-react';
+import { Plus, Search, Filter, FolderOpen, Users, Calendar, Clock, MoveVertical as MoreVertical, Play, Pause, CircleCheck as CheckCircle, CircleAlert as AlertCircle, Eye, CreditCard as Edit, Trash2, Archive, Star, Building, Award, MessageCircle } from 'lucide-react';
 import { useProjects } from '../hooks/useProjects';
 import { formatDate, getDaysRemaining } from '../utils/dateUtils';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { useQuery } from '@tanstack/react-query';
+import { getSchoolRankingSetting } from '../services/rewardPointsService';
+import RankingMotivationBanner from '../components/Rewards/RankingMotivationBanner';
 
 export const Projects: React.FC = () => {
   const { t } = useTranslation();
@@ -55,6 +37,13 @@ export const Projects: React.FC = () => {
   const [selectedSchool, setSelectedSchool] = useState('all');
   const [schools, setSchools] = useState<Array<{id: string, name: string}>>([]);
   const { projects, loading, error, archiveProject, deleteProject } = useProjects();
+
+  const { data: rankingEnabled = false } = useQuery({
+    queryKey: ['rankingDisplayEnabled', user?.school_id],
+    queryFn: () => getSchoolRankingSetting(user!.school_id),
+    enabled: isStudent && !!user?.school_id,
+    staleTime: 5 * 60 * 1000,
+  });
 
   // Update searchTerm when URL query parameter changes
   useEffect(() => {
@@ -345,6 +334,11 @@ export const Projects: React.FC = () => {
           </div>
         </div>
       </motion.div>
+
+      {/* Ranking Motivation Banner - students only when ranking is enabled */}
+      {isStudent && rankingEnabled && user?.id && user?.school_id && (
+        <RankingMotivationBanner userId={user.id} schoolId={user.school_id} />
+      )}
 
       {/* Search and Filters */}
       <motion.div
