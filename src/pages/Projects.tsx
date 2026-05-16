@@ -10,7 +10,7 @@ import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firesto
 import { db } from '../lib/firebase';
 import { useQuery } from '@tanstack/react-query';
 import { getSchoolRankingSetting } from '../services/rewardPointsService';
-import RankingMotivationBanner from '../components/Rewards/RankingMotivationBanner';
+import RankingCardsStrip from '../components/Rewards/RankingCardsStrip';
 
 export const Projects: React.FC = () => {
   const { t } = useTranslation();
@@ -335,9 +335,9 @@ export const Projects: React.FC = () => {
         </div>
       </motion.div>
 
-      {/* Ranking Motivation Banner - students only when ranking is enabled */}
+      {/* Ranking Strip - students only when ranking is enabled */}
       {isStudent && rankingEnabled && user?.id && user?.school_id && (
-        <RankingMotivationBanner userId={user.id} schoolId={user.school_id} />
+        <RankingCardsStrip userId={user.id} schoolId={user.school_id} />
       )}
 
       {/* Search and Filters */}
