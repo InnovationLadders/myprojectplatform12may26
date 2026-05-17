@@ -71,7 +71,7 @@ const RankingCardsStrip: React.FC<RankingCardsStripProps> = ({ userId, schoolId 
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: idx * 0.06 }}
               className={`
-                flex-shrink-0 flex flex-col items-center justify-center rounded-xl px-3 py-2 min-w-[80px] transition-all
+                flex-shrink-0 flex flex-col items-center justify-center rounded-xl px-4 py-2.5 min-w-[110px] transition-all
                 ${student.isCurrentUser
                   ? 'bg-white bg-opacity-30 ring-2 ring-white scale-105 shadow-lg'
                   : 'bg-white bg-opacity-15 hover:bg-opacity-20'}
@@ -86,8 +86,8 @@ const RankingCardsStrip: React.FC<RankingCardsStripProps> = ({ userId, schoolId 
               </div>
 
               {/* Name */}
-              <span className={`text-xs font-medium mt-1 text-center leading-tight max-w-[70px] truncate ${student.isCurrentUser ? 'text-white' : 'text-white opacity-80'}`}>
-                {student.name ? student.name.split(' ')[0] : '—'}
+              <span className={`text-xs font-semibold mt-1 text-center leading-snug w-full line-clamp-2 ${student.isCurrentUser ? 'text-white' : 'text-white opacity-80'}`}>
+                {student.name || '—'}
               </span>
 
               {/* Points */}

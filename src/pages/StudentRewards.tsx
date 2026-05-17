@@ -295,7 +295,7 @@ const StudentRewards: React.FC = () => {
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">
-                        {student.userId === user?.id ? 'You' : `Student ${index + 1}`}
+                        {student.name || (student.userId === user?.id ? 'You' : `Student ${index + 1}`)}
                       </p>
                     </div>
                   </div>

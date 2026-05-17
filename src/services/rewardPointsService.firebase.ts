@@ -26,6 +26,7 @@ export interface StudentPoints {
   filePoints: number;
   weightedScorePoints: number;
   lastUpdated: string;
+  name?: string;
 }
 
 export interface PointsHistory {
@@ -617,6 +618,8 @@ export const getTopStudents = async (schoolId?: string, limitCount: number = 10)
     );
     const usersSnapshot = await getDocs(usersQuery);
     const studentIds = usersSnapshot.docs.map(d => d.id);
+    const namesMap = new Map<string, string>();
+    usersSnapshot.docs.forEach(d => namesMap.set(d.id, d.data().name || ''));
 
     if (studentIds.length === 0) return [];
 
@@ -638,6 +641,7 @@ export const getTopStudents = async (schoolId?: string, limitCount: number = 10)
         filePoints: doc.data().filePoints || 0,
         weightedScorePoints: doc.data().weightedScorePoints || 0,
         lastUpdated: doc.data().lastUpdated?.toDate?.()?.toISOString() || new Date().toISOString(),
+        name: namesMap.get(doc.data().userId) || '',
       })));
     }
 
