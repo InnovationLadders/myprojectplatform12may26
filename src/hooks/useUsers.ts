@@ -508,8 +508,51 @@ export const useUsers = () => {
 
   const activateUser = async (userId: string) => {
     try {
+      // Fetch user data before activating to get email/name for notification
+      let studentEmail = '';
+      let studentName = '';
+      let schoolName = '';
+      try {
+        const userDocSnap = await getDoc(doc(db, 'users', userId));
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          studentEmail = userData.email || '';
+          studentName = userData.name || '';
+          if (userData.school_id) {
+            const schoolDocSnap = await getDoc(doc(db, 'users', userData.school_id));
+            if (schoolDocSnap.exists()) {
+              schoolName = schoolDocSnap.data().name || '';
+            }
+          }
+        }
+      } catch (fetchError) {
+        console.warn('Could not fetch user data for activation email (non-critical):', fetchError);
+      }
+
       await updateUserStatus(userId, 'active');
-      
+
+      // Send activation email to student via Edge Function
+      if (studentEmail) {
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+        if (supabaseUrl && anonKey) {
+          fetch(`${supabaseUrl}/functions/v1/send-notification-email`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${anonKey}`
+            },
+            body: JSON.stringify({
+              type: 'student_activated',
+              to_email: studentEmail,
+              to_name: studentName,
+              school_name: schoolName,
+              login_url: window.location.origin
+            })
+          }).catch(e => console.warn('Activation email failed (non-critical):', e));
+        }
+      }
+
       // Refresh users list
       await fetchUsers();
 

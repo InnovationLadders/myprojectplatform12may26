@@ -1,18 +1,37 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Clock, TriangleAlert as AlertTriangle, Mail, Phone, RefreshCw, LogOut, CircleCheck as CheckCircle, Circle as XCircle, Shield } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { db } from '../lib/firebase';
+import { doc, onSnapshot } from 'firebase/firestore';
 
 export const PendingActivationPage: React.FC = () => {
   const { user, logout } = useAuth();
   const { t } = useTranslation();
+  const hasReloaded = useRef(false);
 
   const isSchool = user?.role === 'school';
   const isConsultant = user?.role === 'consultant';
   const isTeacher = user?.role === 'teacher';
   const isStudent = user?.role === 'student';
+
+  // Listen for real-time status changes so the student is redirected automatically when admin approves
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const unsubscribe = onSnapshot(doc(db, 'users', user.id), (snapshot) => {
+      if (!snapshot.exists()) return;
+      const data = snapshot.data();
+      if (data.status === 'active' && !hasReloaded.current) {
+        hasReloaded.current = true;
+        window.location.reload();
+      }
+    });
+
+    return () => unsubscribe();
+  }, [user?.id]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-sky-50 flex items-center justify-center p-4">
@@ -29,7 +48,7 @@ export const PendingActivationPage: React.FC = () => {
           <h1 className="text-3xl font-bold text-gray-800 mb-2">{t('pendingActivation.title')}</h1>
           <p className="text-gray-600 text-lg">
             {isStudent
-              ? 'حسابك في انتظار الموافقة من قِبل جهتك التعليمية. سيتم إخطارك عند تفعيله.'
+              ? 'حسابك في انتظار الموافقة من قِبل جهتك التعليمية. ستصلك رسالة على بريدك الإلكتروني عند الموافقة على حسابك.'
               : isSchool
                 ? t('pendingActivation.description.school')
                 : isConsultant
@@ -47,10 +66,10 @@ export const PendingActivationPage: React.FC = () => {
               <h2 className="font-semibold text-blue-800 mb-2">{t('pendingActivation.whatHappensNext')}</h2>
               {isStudent ? (
                 <ul className="space-y-2 text-blue-700">
-                  <li>• سيتلقى مسؤول جهتك التعليمية إشعاراً بطلبك</li>
+                  <li>• تم إرسال إشعار لمسؤول جهتك التعليمية بطلب انضمامك</li>
                   <li>• سيقوم بمراجعة بياناتك والموافقة على انضمامك</li>
-                  <li>• بمجرد الموافقة ستتمكن من الوصول الكامل للمنصة</li>
-                  <li>• يمكنك النقر على "تحديث" أدناه للتحقق من حالة حسابك</li>
+                  <li>• بمجرد الموافقة ستصلك رسالة تأكيد على بريدك الإلكتروني <strong>{user?.email}</strong></li>
+                  <li>• ستنتقل تلقائياً للمنصة عند الموافقة دون الحاجة للتحديث اليدوي</li>
                 </ul>
               ) : (
                 <ul className="space-y-2 text-blue-700">
@@ -63,6 +82,15 @@ export const PendingActivationPage: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {isStudent && (
+          <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6 flex items-start gap-3">
+            <Mail className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+            <p className="text-green-800 text-sm">
+              سيتم إرسال رسالة تأكيد إلى <strong>{user?.email}</strong> فور موافقة إدارة المؤسسة على حسابك. تأكد من مراجعة بريدك الإلكتروني.
+            </p>
+          </div>
+        )}
 
         <div className="border border-gray-200 rounded-xl p-6 mb-6">
           <h2 className="font-semibold text-gray-800 mb-4">{t('pendingActivation.contactInfo')}</h2>
@@ -121,6 +149,16 @@ export const PendingActivationPage: React.FC = () => {
           </div>
         </div>
 
+        {isStudent && (
+          <div className="flex items-center justify-center gap-2 mb-4 text-sm text-gray-500">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+            </span>
+            يتم مراقبة حالة حسابك تلقائياً
+          </div>
+        )}
+
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
             onClick={() => window.location.reload()}
@@ -129,7 +167,7 @@ export const PendingActivationPage: React.FC = () => {
             <RefreshCw className="w-5 h-5" />
             {t('pendingActivation.refreshPage')}
           </button>
-          
+
           <button
             onClick={logout}
             className="px-6 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"

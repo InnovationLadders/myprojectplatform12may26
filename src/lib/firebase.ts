@@ -1560,6 +1560,32 @@ export const updateUserStatus = async (userId: string, status: string) => {
   }
 };
 
+// Create admin notification when a student registers and needs approval
+export const createAdminNotification = async (params: {
+  school_id: string;
+  student_id: string;
+  student_name: string;
+  student_email: string;
+  school_name: string;
+  school_email: string;
+}) => {
+  try {
+    await addDoc(collection(db, 'admin_notifications'), {
+      school_id: params.school_id,
+      student_id: params.student_id,
+      student_name: params.student_name,
+      student_email: params.student_email,
+      school_name: params.school_name,
+      school_email: params.school_email,
+      type: 'new_student_pending',
+      read: false,
+      created_at: serverTimestamp()
+    });
+  } catch (error) {
+    console.error('Error creating admin notification:', error);
+  }
+};
+
 // Update user password function for current user
 export const updateCurrentUserPassword = async (
   currentPassword: string,
@@ -1787,6 +1813,48 @@ export const handleEmailVerification = async (
           newStatus: newStatus,
           role: userData.role
         });
+
+        // If student needs admin approval, notify the school admin
+        if (newStatus === 'pending' && userData.role === 'student' && userData.school_id) {
+          try {
+            const schoolDoc = await getDoc(doc(db, 'users', userData.school_id));
+            if (schoolDoc.exists()) {
+              const schoolData = schoolDoc.data();
+              await createAdminNotification({
+                school_id: userData.school_id,
+                student_id: userDoc.id,
+                student_name: userData.name || '',
+                student_email: userEmail,
+                school_name: schoolData.name || '',
+                school_email: schoolData.email || ''
+              });
+
+              // Trigger email to school admin via Edge Function
+              const appUrl = import.meta.env.VITE_SUPABASE_URL;
+              const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+              if (appUrl && anonKey && schoolData.email) {
+                fetch(`${appUrl}/functions/v1/send-notification-email`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${anonKey}`
+                  },
+                  body: JSON.stringify({
+                    type: 'admin_new_student',
+                    to_email: schoolData.email,
+                    to_name: schoolData.name || 'مسؤول المؤسسة',
+                    student_name: userData.name || '',
+                    student_email: userEmail,
+                    school_name: schoolData.name || '',
+                    login_url: `${window.location.origin}/users`
+                  })
+                }).catch(e => console.warn('Email notification failed (non-critical):', e));
+              }
+            }
+          } catch (notifyError) {
+            console.warn('Could not send admin notification (non-critical):', notifyError);
+          }
+        }
       }
     }
 
