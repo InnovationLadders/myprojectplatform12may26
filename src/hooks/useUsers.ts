@@ -536,20 +536,25 @@ export const useUsers = () => {
         const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
         const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
         if (supabaseUrl && anonKey) {
-          fetch(`${supabaseUrl}/functions/v1/send-notification-email`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${anonKey}`
-            },
-            body: JSON.stringify({
-              type: 'student_activated',
-              to_email: studentEmail,
-              to_name: studentName,
-              school_name: schoolName,
-              login_url: window.location.origin
-            })
-          }).catch(e => console.warn('Activation email failed (non-critical):', e));
+          try {
+            const res = await fetch(`${supabaseUrl}/functions/v1/send-notification-email`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${anonKey}`
+              },
+              body: JSON.stringify({
+                type: 'student_activated',
+                to_email: studentEmail,
+                to_name: studentName,
+                school_name: schoolName,
+                login_url: window.location.origin
+              })
+            });
+            console.log('📧 Activation email sent, status:', res.status);
+          } catch (e) {
+            console.warn('Activation email failed (non-critical):', e);
+          }
         }
       }
 

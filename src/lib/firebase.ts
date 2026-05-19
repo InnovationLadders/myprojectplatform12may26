@@ -1833,22 +1833,27 @@ export const handleEmailVerification = async (
               const appUrl = import.meta.env.VITE_SUPABASE_URL;
               const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
               if (appUrl && anonKey && schoolData.email) {
-                fetch(`${appUrl}/functions/v1/send-notification-email`, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${anonKey}`
-                  },
-                  body: JSON.stringify({
-                    type: 'admin_new_student',
-                    to_email: schoolData.email,
-                    to_name: schoolData.name || 'مسؤول المؤسسة',
-                    student_name: userData.name || '',
-                    student_email: userEmail,
-                    school_name: schoolData.name || '',
-                    login_url: `${window.location.origin}/users`
-                  })
-                }).catch(e => console.warn('Email notification failed (non-critical):', e));
+                try {
+                  const res = await fetch(`${appUrl}/functions/v1/send-notification-email`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${anonKey}`
+                    },
+                    body: JSON.stringify({
+                      type: 'admin_new_student',
+                      to_email: schoolData.email,
+                      to_name: schoolData.name || 'مسؤول المؤسسة',
+                      student_name: userData.name || '',
+                      student_email: userEmail,
+                      school_name: schoolData.name || '',
+                      login_url: `${window.location.origin}/users`
+                    })
+                  });
+                  console.log('📧 Admin notification email sent, status:', res.status);
+                } catch (e) {
+                  console.warn('Email notification failed (non-critical):', e);
+                }
               }
             }
           } catch (notifyError) {

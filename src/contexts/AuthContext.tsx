@@ -219,6 +219,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                   updated_at: serverTimestamp()
                 });
                 effectiveStatus = resolvedStatus;
+
+                // If student is now pending admin approval, notify the school admin
+                if (resolvedStatus === 'pending' && userData.role === 'student' && userData.school_id) {
+                  try {
+                    const schoolDoc = await getDoc(doc(db, 'users', userData.school_id));
+                    if (schoolDoc.exists()) {
+                      const schoolData = schoolDoc.data();
+                      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+                      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+                      if (supabaseUrl && anonKey && schoolData.email) {
+                        const res = await fetch(`${supabaseUrl}/functions/v1/send-notification-email`, {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${anonKey}`
+                          },
+                          body: JSON.stringify({
+                            type: 'admin_new_student',
+                            to_email: schoolData.email,
+                            to_name: schoolData.name || 'مسؤول المؤسسة',
+                            student_name: userData.name || '',
+                            student_email: firebaseUser.email || '',
+                            school_name: schoolData.name || '',
+                            login_url: `${window.location.origin}/users`
+                          })
+                        });
+                        console.log('📧 Admin notification email sent, status:', res.status);
+                      }
+                    }
+                  } catch (notifyErr) {
+                    console.warn('Admin notification email failed (non-critical):', notifyErr);
+                  }
+                }
               } catch (updateErr) {
                 console.error('Failed to update status after email verification:', updateErr);
                 // Fall through — use resolvedStatus in memory even if Firestore write failed
