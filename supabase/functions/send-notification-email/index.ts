@@ -108,13 +108,6 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const smtpHost = Deno.env.get("SMTP_HOST");
-    const smtpPort = parseInt(Deno.env.get("SMTP_PORT") || "587");
-    const smtpUser = Deno.env.get("SMTP_USER");
-    const smtpPass = Deno.env.get("SMTP_PASS");
-    const fromEmail = Deno.env.get("FROM_EMAIL") || smtpUser || "noreply@mashroui.com";
-    const fromName = Deno.env.get("FROM_NAME") || "منصة مشروعي";
-
     const subject =
       payload.type === "admin_new_student"
         ? `طلب انضمام طالب جديد - ${payload.student_name || ""}`
@@ -125,34 +118,26 @@ Deno.serve(async (req: Request) => {
         ? buildAdminNewStudentHtml(payload)
         : buildStudentActivatedHtml(payload);
 
-    // Send via SMTP using Deno native TCP if credentials are available
-    if (smtpHost && smtpUser && smtpPass) {
-      // Use nodemailer-compatible approach via npm
-      const nodemailer = await import("npm:nodemailer@6.9.9");
-      const transporter = nodemailer.default.createTransport({
-        host: smtpHost,
-        port: smtpPort,
-        secure: smtpPort === 465,
-        auth: { user: smtpUser, pass: smtpPass },
-      });
+    const nodemailer = await import("npm:nodemailer@6.9.9");
+    const transporter = nodemailer.default.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: "mansour@innovationladders.com",
+        pass: "zjzx xlyb qdvp efyu",
+      },
+    });
 
-      await transporter.sendMail({
-        from: `"${fromName}" <${fromEmail}>`,
-        to: payload.to_email,
-        subject,
-        html,
-      });
+    await transporter.sendMail({
+      from: '"منصة مشروعي" <mansour@innovationladders.com>',
+      to: payload.to_email,
+      subject,
+      html,
+    });
 
-      return new Response(
-        JSON.stringify({ success: true }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    // Fallback: log to console when SMTP not configured
-    console.log(`[EMAIL - NO SMTP] Would send to: ${payload.to_email} | Subject: ${subject}`);
     return new Response(
-      JSON.stringify({ success: true, note: "SMTP not configured, email logged only" }),
+      JSON.stringify({ success: true }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
