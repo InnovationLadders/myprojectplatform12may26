@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { collection, getDocs, query, where, orderBy, limit, doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { db, updateUser, updateUserStatus, deleteUser as deleteUserFromFirestore, sendPasswordResetEmailToUser } from '../lib/firebase';
+import { db, updateUser, updateUserStatus, deleteUser as deleteUserFromFirestore, sendPasswordResetEmailToUser, functions } from '../lib/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../lib/firebase';
+import { httpsCallable } from 'firebase/functions';
 import { useAuth } from '../contexts/AuthContext';
 
 export interface User {
@@ -531,30 +532,20 @@ export const useUsers = () => {
 
       await updateUserStatus(userId, 'active');
 
-      // Send activation email to student via Edge Function
+      // Send activation email to student via Firebase Cloud Function
       if (studentEmail) {
-        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-        const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-        if (supabaseUrl && anonKey) {
-          try {
-            const res = await fetch(`${supabaseUrl}/functions/v1/send-notification-email`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${anonKey}`
-              },
-              body: JSON.stringify({
-                type: 'student_activated',
-                to_email: studentEmail,
-                to_name: studentName,
-                school_name: schoolName,
-                login_url: window.location.origin
-              })
-            });
-            console.log('📧 Activation email sent, status:', res.status);
-          } catch (e) {
-            console.warn('Activation email failed (non-critical):', e);
-          }
+        try {
+          const sendEmail = httpsCallable(functions, 'sendNotificationEmail');
+          await sendEmail({
+            type: 'student_activated',
+            to_email: studentEmail,
+            to_name: studentName,
+            school_name: schoolName,
+            login_url: window.location.origin
+          });
+          console.log('📧 Activation email sent via Firebase Function');
+        } catch (e) {
+          console.warn('Activation email failed (non-critical):', e);
         }
       }
 

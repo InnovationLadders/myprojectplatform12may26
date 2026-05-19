@@ -10,7 +10,8 @@ import {
   sendEmailVerification
 } from 'firebase/auth';
 import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '../lib/firebase';
+import { auth, db, functions } from '../lib/firebase';
+import { httpsCallable } from 'firebase/functions';
 import { validateEmailDomain } from '../utils/domainValidation';
 
 // Debug flag
@@ -226,26 +227,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     const schoolDoc = await getDoc(doc(db, 'users', userData.school_id));
                     if (schoolDoc.exists()) {
                       const schoolData = schoolDoc.data();
-                      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-                      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-                      if (supabaseUrl && anonKey && schoolData.email) {
-                        const res = await fetch(`${supabaseUrl}/functions/v1/send-notification-email`, {
-                          method: 'POST',
-                          headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${anonKey}`
-                          },
-                          body: JSON.stringify({
-                            type: 'admin_new_student',
-                            to_email: schoolData.email,
-                            to_name: schoolData.name || 'مسؤول المؤسسة',
-                            student_name: userData.name || '',
-                            student_email: firebaseUser.email || '',
-                            school_name: schoolData.name || '',
-                            login_url: `${window.location.origin}/users`
-                          })
+                      if (schoolData.email) {
+                        const sendEmail = httpsCallable(functions, 'sendNotificationEmail');
+                        await sendEmail({
+                          type: 'admin_new_student',
+                          to_email: schoolData.email,
+                          to_name: schoolData.name || 'مسؤول المؤسسة',
+                          student_name: userData.name || '',
+                          student_email: firebaseUser.email || '',
+                          school_name: schoolData.name || '',
+                          login_url: `${window.location.origin}/users`
                         });
-                        console.log('📧 Admin notification email sent, status:', res.status);
+                        console.log('📧 Admin notification email sent via Firebase Function');
                       }
                     }
                   } catch (notifyErr) {

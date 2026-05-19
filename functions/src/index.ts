@@ -1,10 +1,5 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Client-Info, Apikey",
-};
+import * as functions from "firebase-functions";
+import * as nodemailer from "nodemailer";
 
 interface EmailPayload {
   type: "admin_new_student" | "student_activated";
@@ -15,6 +10,16 @@ interface EmailPayload {
   school_name?: string;
   login_url?: string;
 }
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "mansour@innovationladders.com",
+    pass: "zjzx xlyb qdvp efyu",
+  },
+});
 
 const buildAdminNewStudentHtml = (p: EmailPayload): string => `
 <!DOCTYPE html>
@@ -93,58 +98,32 @@ const buildStudentActivatedHtml = (p: EmailPayload): string => `
 </html>
 `;
 
-Deno.serve(async (req: Request) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { status: 200, headers: corsHeaders });
-  }
-
-  try {
-    const payload: EmailPayload = await req.json();
-
-    if (!payload.to_email || !payload.type) {
-      return new Response(
-        JSON.stringify({ error: "Missing required fields: to_email, type" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+export const sendNotificationEmail = functions
+  .region("us-central1")
+  .https.onCall(async (data: EmailPayload) => {
+    if (!data.to_email || !data.type) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Missing required fields: to_email, type"
       );
     }
 
     const subject =
-      payload.type === "admin_new_student"
-        ? `طلب انضمام طالب جديد - ${payload.student_name || ""}`
-        : `تمت الموافقة على حسابك في ${payload.school_name || "المنصة"}`;
+      data.type === "admin_new_student"
+        ? `طلب انضمام طالب جديد - ${data.student_name || ""}`
+        : `تمت الموافقة على حسابك في ${data.school_name || "المنصة"}`;
 
     const html =
-      payload.type === "admin_new_student"
-        ? buildAdminNewStudentHtml(payload)
-        : buildStudentActivatedHtml(payload);
-
-    const nodemailer = await import("npm:nodemailer@6.9.9");
-    const transporter = nodemailer.default.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: "mansour@innovationladders.com",
-        pass: "zjzx xlyb qdvp efyu",
-      },
-    });
+      data.type === "admin_new_student"
+        ? buildAdminNewStudentHtml(data)
+        : buildStudentActivatedHtml(data);
 
     await transporter.sendMail({
       from: '"منصة مشروعي" <mansour@innovationladders.com>',
-      to: payload.to_email,
+      to: data.to_email,
       subject,
       html,
     });
 
-    return new Response(
-      JSON.stringify({ success: true }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
-  } catch (error) {
-    console.error("Error sending email:", error);
-    return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
-  }
-});
+    return { success: true };
+  });

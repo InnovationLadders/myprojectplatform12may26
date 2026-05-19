@@ -36,6 +36,7 @@ import {
 } from 'firebase/firestore';
 import { getStorage, connectStorageEmulator } from 'firebase/storage';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
+import { getFunctions, httpsCallable, connectFunctionsEmulator } from 'firebase/functions';
 
 // Use environment variables if available, otherwise use these hardcoded values as fallback
 // This ensures the app works even if environment variables aren't properly loaded
@@ -64,6 +65,7 @@ console.log('🔥 Firebase Configuration:', {
 export const auth = getAuth(app);
 export const db = getFirestore(app, 'myprojectplatformdammam');
 export const storage = getStorage(app);
+export const functions = getFunctions(app, 'us-central1');
 export const increment = firestoreIncrement; // Export increment with a simpler name
 
 // Export the doc function with consistent alias
@@ -94,7 +96,11 @@ if (useEmulators && import.meta.env.DEV) {
       connectStorageEmulator(storage, 'localhost', 9199);
       console.log('✅ Connected to Storage emulator on localhost:9199');
     }
-    
+
+    // Connect to Functions emulator
+    connectFunctionsEmulator(functions, 'localhost', 5001);
+    console.log('✅ Connected to Functions emulator on localhost:5001');
+
     console.log('🎯 All Firebase emulators connected successfully');
   } catch (error) {
     console.warn('⚠️ Failed to connect to emulators:', error);
@@ -1829,28 +1835,20 @@ export const handleEmailVerification = async (
                 school_email: schoolData.email || ''
               });
 
-              // Trigger email to school admin via Edge Function
-              const appUrl = import.meta.env.VITE_SUPABASE_URL;
-              const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-              if (appUrl && anonKey && schoolData.email) {
+              // Send email notification to school admin via Firebase Cloud Function
+              if (schoolData.email) {
                 try {
-                  const res = await fetch(`${appUrl}/functions/v1/send-notification-email`, {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': `Bearer ${anonKey}`
-                    },
-                    body: JSON.stringify({
-                      type: 'admin_new_student',
-                      to_email: schoolData.email,
-                      to_name: schoolData.name || 'مسؤول المؤسسة',
-                      student_name: userData.name || '',
-                      student_email: userEmail,
-                      school_name: schoolData.name || '',
-                      login_url: `${window.location.origin}/users`
-                    })
+                  const sendEmail = httpsCallable(functions, 'sendNotificationEmail');
+                  await sendEmail({
+                    type: 'admin_new_student',
+                    to_email: schoolData.email,
+                    to_name: schoolData.name || 'مسؤول المؤسسة',
+                    student_name: userData.name || '',
+                    student_email: userEmail,
+                    school_name: schoolData.name || '',
+                    login_url: `${window.location.origin}/users`
                   });
-                  console.log('📧 Admin notification email sent, status:', res.status);
+                  console.log('📧 Admin notification email sent via Firebase Function');
                 } catch (e) {
                   console.warn('Email notification failed (non-critical):', e);
                 }
