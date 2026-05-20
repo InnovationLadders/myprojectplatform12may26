@@ -11,16 +11,6 @@ interface EmailPayload {
   login_url?: string;
 }
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: "mansour@innovationladders.com",
-    pass: "zjzx xlyb qdvp efyu",
-  },
-});
-
 const buildAdminNewStudentHtml = (p: EmailPayload): string => `
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
@@ -100,6 +90,7 @@ const buildStudentActivatedHtml = (p: EmailPayload): string => `
 
 export const sendNotificationEmail = functions
   .region("us-central1")
+  .runWith({ secrets: ["GMAIL_APP_PASSWORD"] })
   .https.onCall(async (data: EmailPayload) => {
     if (!data.to_email || !data.type) {
       throw new functions.https.HttpsError(
@@ -107,6 +98,16 @@ export const sendNotificationEmail = functions
         "Missing required fields: to_email, type"
       );
     }
+
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: "mansour@innovationladders.com",
+        pass: process.env.GMAIL_APP_PASSWORD,
+      },
+    });
 
     const subject =
       data.type === "admin_new_student"

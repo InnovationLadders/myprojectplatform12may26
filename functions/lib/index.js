@@ -3,15 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendNotificationEmail = void 0;
 const functions = require("firebase-functions");
 const nodemailer = require("nodemailer");
-const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-        user: "mansour@innovationladders.com",
-        pass: "zjzx xlyb qdvp efyu",
-    },
-});
 const buildAdminNewStudentHtml = (p) => `
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
@@ -89,10 +80,20 @@ const buildStudentActivatedHtml = (p) => `
 `;
 exports.sendNotificationEmail = functions
     .region("us-central1")
+    .runWith({ secrets: ["GMAIL_APP_PASSWORD"] })
     .https.onCall(async (data) => {
     if (!data.to_email || !data.type) {
         throw new functions.https.HttpsError("invalid-argument", "Missing required fields: to_email, type");
     }
+    const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+            user: "mansour@innovationladders.com",
+            pass: process.env.GMAIL_APP_PASSWORD,
+        },
+    });
     const subject = data.type === "admin_new_student"
         ? `طلب انضمام طالب جديد - ${data.student_name || ""}`
         : `تمت الموافقة على حسابك في ${data.school_name || "المنصة"}`;
