@@ -1,31 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import {
-  Home,
-  Search,
-  MessageSquare,
-  User,
-  FileText,
-  Award,
-  BookOpen,
-  Settings,
-  Users,
-  BarChart3,
-  ChevronRight,
-  ChevronLeft,
-  Briefcase,
-  Star,
-  Calendar,
-  MessageCircle,
-  Lightbulb,
-  ShoppingCart,
-  Bot,
-  GalleryVertical,
-  Shield,
-  LayoutDashboard,
-  School,
-  Wrench
-} from 'lucide-react';
+import { Chrome as Home, Search, MessageSquare, User, FileText, Award, BookOpen, Settings, Users, ChartBar as BarChart3, ChevronRight, ChevronLeft, Briefcase, Star, Calendar, MessageCircle, Lightbulb, ShoppingCart, Bot, GalleryVertical, Shield, LayoutDashboard, School, Wrench, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -52,6 +27,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMinimized, 
         return '/admin-dashboard';
       case 'consultant':
         return '/consultant-dashboard';
+      case 'investor':
+        return '/gallery';
       case 'student':
       case 'teacher':
       case 'school':
@@ -74,6 +51,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMinimized, 
   ];
 
   const getMenuItems = () => {
+    // Investor gets a focused menu - only gallery and their requests
+    if (user?.role === 'investor') {
+      return [
+        { id: 'gallery', icon: GalleryVertical, label: 'معرض المشاريع', path: '/gallery' },
+        { id: 'my-investor-requests', icon: TrendingUp, label: 'طلباتي الاستثمارية', path: '/my-investor-requests' },
+        { id: 'settings', icon: Settings, label: t('sidebar.settings'), path: '/settings' },
+      ];
+    }
+
     // Start with common menu items for all users, but filter out dashboard for admin (they have their own)
     let menuItems = user?.role === 'admin'
       ? commonMenuItems.filter(item => item.id !== 'dashboard')
@@ -100,7 +86,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMinimized, 
       menuItems.push(
         { id: 'users', icon: Users, label: t('sidebar.users') || 'Students & Teachers', path: '/users' },
         { id: 'reports', icon: BarChart3, label: t('sidebar.reports'), path: '/reports' },
-        { id: 'entrepreneurship-submissions', icon: Briefcase, label: t('sidebar.entrepreneurshipSubmissions'), path: '/entrepreneurship-submissions' }
+        { id: 'entrepreneurship-submissions', icon: Briefcase, label: t('sidebar.entrepreneurshipSubmissions'), path: '/entrepreneurship-submissions' },
+        { id: 'investor-requests', icon: TrendingUp, label: 'طلبات المستثمرين', path: '/investor-requests' }
       );
     } else if (user?.role === 'admin') {
       menuItems.push(
@@ -108,6 +95,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMinimized, 
         { id: 'users', icon: Users, label: t('sidebar.users') || 'User Management', path: '/users' },
         { id: 'manage-rewards', icon: Award, label: t('sidebar.manageRewards') || 'Manage Rewards', path: '/admin/manage-rewards' },
         { id: 'entrepreneurship-submissions', icon: Briefcase, label: t('sidebar.entrepreneurshipSubmissions'), path: '/entrepreneurship-submissions' },
+        { id: 'investor-requests', icon: TrendingUp, label: 'طلبات المستثمرين', path: '/investor-requests' },
         { id: 'admin-fix-tools', icon: Wrench, label: 'أدوات الإصلاح', path: '/admin/fix-tools' }
       );
     }

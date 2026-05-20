@@ -111,13 +111,14 @@ service cloud.firestore {
     }
     
     match /gallery_projects/{projectId} {
-      // Public projects can be read by everyone
+      // Public projects can be read by everyone (including investors)
       // Private projects can only be read by the owning school or admin
       allow read: if resource.data.is_public == true ||
                      (request.auth != null && (
                        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
                        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'school' &&
-                        resource.data.school_id == request.auth.uid)
+                        resource.data.school_id == request.auth.uid) ||
+                       get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'investor'
                      ));
 
       // Only admin and school accounts can create gallery projects
@@ -234,6 +235,51 @@ service cloud.firestore {
       // Only admins can read all logs
       allow list: if request.auth != null &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Investor interest requests collection rules
+    match /investor_interest_requests/{requestId} {
+      // Investors can create requests
+      allow create: if request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'investor';
+
+      // Investors can read their own requests
+      allow read: if request.auth != null && (
+        resource.data.investor_id == request.auth.uid ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'school' &&
+         resource.data.school_id == request.auth.uid)
+      );
+
+      // Allow listing for admin, school (their requests), and investor (their own)
+      allow list: if request.auth != null && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'school' ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'investor'
+      );
+
+      // Investors can update investor_notes on their own requests
+      // School admins and system admins can update status and admin_notes
+      allow update: if request.auth != null && (
+        resource.data.investor_id == request.auth.uid ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'school' &&
+         resource.data.school_id == request.auth.uid)
+      );
+    }
+
+    // Platform notifications collection
+    match /notifications/{notificationId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null && (
+        resource.data.recipient_id == request.auth.uid ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
+      allow update: if request.auth != null && resource.data.recipient_id == request.auth.uid;
+      allow list: if request.auth != null && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        resource.data.recipient_id == request.auth.uid
+      );
     }
   }
   }

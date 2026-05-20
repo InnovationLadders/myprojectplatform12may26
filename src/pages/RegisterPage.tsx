@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Lock, Eye, EyeOff, User, Building, GraduationCap, BookOpen, Briefcase, DollarSign, Languages, Award, Phone, TriangleAlert as AlertTriangle, CircleCheck as CheckCircle, Circle as XCircle } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, User, Building, GraduationCap, BookOpen, Briefcase, DollarSign, Languages, Award, Phone, TriangleAlert as AlertTriangle, CircleCheck as CheckCircle, Circle as XCircle, TrendingUp, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { getSchools, getSchoolBySubdomain } from '../lib/firebase';
@@ -19,21 +19,24 @@ export const RegisterPage: React.FC = () => {
     password: '',
     confirmPassword: '',
     phone: '',
-    role: 'student' as 'student' | 'teacher' | 'school' | 'admin' | 'consultant',
+    role: 'student' as 'student' | 'teacher' | 'school' | 'admin' | 'consultant' | 'investor',
     bio: '',
     school_id: '',
     grade: '',
     subject: '',
-    schoolIdNumber: '', // New field for school ID number
-    city: '', // New field for user's city
-    aboutYourself: '', // Areas of skills, specialties, and hobbies
-    gender: '' as 'male' | 'female' | '', // User's gender
-    specializations: [] as string[], // Keep this if it's used elsewhere
+    schoolIdNumber: '',
+    city: '',
+    aboutYourself: '',
+    gender: '' as 'male' | 'female' | '',
+    specializations: [] as string[],
     experience_years: 0,
     hourly_rate: 0,
     languages: ['العربية'] as string[],
-    otherSpecialization: '' // New field for custom specialization
+    otherSpecialization: '',
+    company_name: '',
+    investment_interests: '',
   });
+  const [acceptedInvestorPledge, setAcceptedInvestorPledge] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -211,6 +214,11 @@ export const RegisterPage: React.FC = () => {
       return;
     }
 
+    if (formData.role === 'investor' && !acceptedInvestorPledge) {
+      setError('يجب الموافقة على تعهد المستثمر للمتابعة');
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError('كلمات المرور غير متطابقة');
       return;
@@ -226,7 +234,7 @@ export const RegisterPage: React.FC = () => {
     try {
       // Prepare specializations array including custom specialization if provided
       let finalSpecializations = [...formData.specializations];
-      
+
       // If "أخرى" is selected and custom specialization is provided, add it
       if (formData.specializations.includes('أخرى') && formData.otherSpecialization.trim()) {
         finalSpecializations = finalSpecializations.filter(s => s !== 'أخرى');
@@ -246,7 +254,10 @@ export const RegisterPage: React.FC = () => {
         gender: formData.gender || undefined,
         specializations: finalSpecializations,
         experience_years: formData.experience_years,
-        languages: formData.languages
+        languages: formData.languages,
+        company_name: formData.role === 'investor' ? formData.company_name : undefined,
+        investment_interests: formData.role === 'investor' ? formData.investment_interests : undefined,
+        agreed_to_investor_pledge: formData.role === 'investor' ? acceptedInvestorPledge : undefined,
       });
       // No need to navigate here - the ProtectedRoute in App.tsx will handle redirection
       // based on the user's status after registration
@@ -297,7 +308,7 @@ export const RegisterPage: React.FC = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 نوع الحساب
               </label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 <label className={`flex items-center justify-center gap-2 p-4 border rounded-xl cursor-pointer transition-colors ${
                   formData.role === 'student' ? 'bg-blue-50 border-blue-500 text-blue-700' : 'border-gray-300 hover:bg-gray-50'
                 }`}>
@@ -353,6 +364,20 @@ export const RegisterPage: React.FC = () => {
                   />
                   <Building className="w-5 h-5" />
                   <span className="font-medium">مؤسسة تعليمية</span>
+                </label>
+                <label className={`flex items-center justify-center gap-2 p-4 border rounded-xl cursor-pointer transition-colors col-span-2 md:col-span-2 ${
+                  formData.role === 'investor' ? 'bg-emerald-50 border-emerald-500 text-emerald-700' : 'border-gray-300 hover:bg-gray-50'
+                }`}>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="investor"
+                    checked={formData.role === 'investor'}
+                    onChange={() => handleInputChange('role', 'investor')}
+                    className="sr-only"
+                  />
+                  <TrendingUp className="w-5 h-5" />
+                  <span className="font-medium">مستثمر</span>
                 </label>
               </div>
             </div>
@@ -493,8 +518,8 @@ export const RegisterPage: React.FC = () => {
               </div>
             </div>
 
-            {/* About Yourself - Hidden for schools */}
-            {formData.role !== 'school' && (
+            {/* About Yourself - Hidden for schools and investors */}
+            {formData.role !== 'school' && formData.role !== 'investor' && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   أخبرنا عنك: مجالات المهارات والتخصص والهوايات التي تجيدها
@@ -818,6 +843,78 @@ export const RegisterPage: React.FC = () => {
               </div>
             )}
 
+            {/* Investor-specific fields */}
+            {formData.role === 'investor' && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    اسم الشركة <span className="text-gray-400 font-normal">(اختياري)</span>
+                  </label>
+                  <div className="relative">
+                    <Building className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                      type="text"
+                      value={formData.company_name}
+                      onChange={(e) => handleInputChange('company_name', e.target.value)}
+                      className="w-full pr-12 pl-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                      placeholder="أدخل اسم الشركة إن وجدت"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    مجالات الاهتمام الاستثماري
+                  </label>
+                  <div className="relative">
+                    <TrendingUp className="absolute right-3 top-3 w-5 h-5 text-gray-400" />
+                    <textarea
+                      value={formData.investment_interests}
+                      onChange={(e) => handleInputChange('investment_interests', e.target.value)}
+                      rows={3}
+                      className="w-full pr-12 pl-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none"
+                      placeholder="مثال: التقنية، الذكاء الاصطناعي، ريادة الأعمال، الطاقة المتجددة..."
+                    />
+                  </div>
+                </div>
+
+                {/* Investor Pledge */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="border-2 border-emerald-200 bg-emerald-50 rounded-xl p-5"
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <FileText className="w-5 h-5 text-emerald-700 flex-shrink-0" />
+                    <h3 className="font-bold text-emerald-800 text-base">تعهد المستثمر</h3>
+                  </div>
+                  <div className="bg-white border border-emerald-200 rounded-lg p-4 mb-4 text-sm text-gray-700 leading-relaxed">
+                    <p>
+                      أتعهد أنا الموقّع أدناه بالمحافظة التامة على سرية المعلومات والبيانات المتعلقة بجميع المشاريع التي أطلع عليها من خلال هذه المنصة، وأقر بأن هذه المعلومات ذات طابع سري وملكية فكرية خاصة بأصحابها.
+                    </p>
+                    <p className="mt-2">
+                      وأتعهد بعدم إفشاء أي معلومات أو بيانات لأي طرف ثالث، وعدم استغلالها أو توظيفها لأي غرض تجاري أو شخصي دون الحصول على إذن صريح ومكتوب من صاحب المشروع.
+                    </p>
+                    <p className="mt-2">
+                      وأدرك أن أي مخالفة لهذا التعهد تعرّضني للمسؤولية القانونية وفق الأنظمة المعمول بها.
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      id="acceptInvestorPledge"
+                      checked={acceptedInvestorPledge}
+                      onChange={(e) => setAcceptedInvestorPledge(e.target.checked)}
+                      className="mt-1 w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
+                    />
+                    <label htmlFor="acceptInvestorPledge" className="text-sm text-gray-700 font-medium">
+                      أقر بقراءة هذا التعهد والموافقة على جميع بنوده وشروطه
+                    </label>
+                  </div>
+                </motion.div>
+              </>
+            )}
+
             {/* Terms and Conditions Checkbox */}
             <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
               <input
@@ -843,8 +940,10 @@ export const RegisterPage: React.FC = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              disabled={loading || !acceptedTerms}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-xl font-medium hover:shadow-lg transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
+              disabled={loading || !acceptedTerms || (formData.role === 'investor' && !acceptedInvestorPledge)}
+              className={`w-full text-white py-3 rounded-xl font-medium hover:shadow-lg transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed bg-gradient-to-r ${
+                formData.role === 'investor' ? 'from-emerald-500 to-teal-600' : 'from-blue-500 to-blue-600'
+              }`}
             >
               {loading ? 'جاري إنشاء الحساب...' : 'إنشاء حساب'}
             </motion.button>

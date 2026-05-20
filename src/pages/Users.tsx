@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users as UsersIcon, Search, Filter, Plus, MoveVertical as MoreVertical, CreditCard as Edit, Trash2, Mail, Phone, MapPin, Calendar, Award, BookOpen, GraduationCap, Building, Shield, Eye, UserPlus, CircleAlert as AlertCircle, CircleCheck as CheckCircle, School, Briefcase, X, UserCheck, UserX, Download, FileSpreadsheet, SquareCheck as CheckSquare, Square, CircleUser as UserCircle2, FileText } from 'lucide-react';
+import { Users as UsersIcon, Search, Filter, Plus, MoveVertical as MoreVertical, CreditCard as Edit, Trash2, Mail, Phone, MapPin, Calendar, Award, BookOpen, GraduationCap, Building, Shield, Eye, UserPlus, CircleAlert as AlertCircle, CircleCheck as CheckCircle, School, Briefcase, X, UserCheck, UserX, Download, FileSpreadsheet, SquareCheck as CheckSquare, Square, CircleUser as UserCircle2, FileText, TrendingUp } from 'lucide-react';
 import { useUsers } from '../hooks/useUsers';
 import { useAuth } from '../contexts/AuthContext';
 import { formatDate, formatRelativeTime } from '../utils/dateUtils';
@@ -12,8 +12,9 @@ const userRoles = [
   { id: 'all', name: 'جميع المستخدمين' },
   { id: 'student', name: 'طلاب', icon: GraduationCap, color: 'bg-blue-500' },
   { id: 'teacher', name: 'معلمين/مشرفين', icon: BookOpen, color: 'bg-green-500' },
-  { id: 'school', name: 'مؤسسات تعليمية', icon: Building, color: 'bg-purple-500' },
+  { id: 'school', name: 'مؤسسات تعليمية', icon: Building, color: 'bg-blue-700' },
   { id: 'consultant', name: 'مستشارين', icon: Briefcase, color: 'bg-orange-500' },
+  { id: 'investor', name: 'مستثمرين', icon: TrendingUp, color: 'bg-emerald-500' },
   { id: 'admin', name: 'مديرين', icon: Shield, color: 'bg-red-500' },
 ];
 

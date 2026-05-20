@@ -98,7 +98,8 @@
         "teacher": "معلم",
         "school": "مؤسسة تعليمية",
         "admin": "مدير",
-        "consultant": "مستشار"
+        "consultant": "مستشار",
+        "investor": "مستثمر"
     },
     "header": {
         "searchProjects": "البحث في المشاريع...",

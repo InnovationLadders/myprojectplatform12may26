@@ -19,9 +19,9 @@ export interface Notification {
   title: string;
   message: string;
   time: string;
-  type: 'message' | 'consultation' | 'project' | 'system';
+  type: 'message' | 'consultation' | 'project' | 'system' | 'investor';
   read: boolean;
-  relatedId?: string; // ID of related project, consultation, etc.
+  relatedId?: string;
   createdAt: Date;
 }
 
@@ -61,6 +61,10 @@ export const useNotifications = () => {
         // 4. Get overdue project notifications
         const overdueNotifications = await getOverdueProjectNotifications();
         allNotifications.push(...overdueNotifications);
+
+        // 5. Get investor notifications from the dedicated notifications collection
+        const investorNotifications = await getInvestorNotifications();
+        allNotifications.push(...investorNotifications);
 
         // Sort notifications by creation time (newest first)
         allNotifications.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
@@ -330,6 +334,41 @@ export const useNotifications = () => {
         console.error('Error getting overdue project notifications:', err);
       }
 
+      return notifications;
+    };
+
+    // Get investor-related notifications from the notifications collection
+    const getInvestorNotifications = async (): Promise<Notification[]> => {
+      const notifications: Notification[] = [];
+      try {
+        const q = query(
+          collection(db, 'notifications'),
+          where('recipient_id', '==', user.id),
+          where('type', '==', 'investor')
+        );
+        const snapshot = await getDocs(q);
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+        snapshot.docs.forEach(notifDoc => {
+          const data = notifDoc.data();
+          const createdAt = data.created_at?.toDate() || new Date();
+          if (createdAt > sevenDaysAgo) {
+            notifications.push({
+              id: `investor_notif_${notifDoc.id}`,
+              title: data.title || 'إشعار استثماري',
+              message: data.message || '',
+              time: formatRelativeTime(createdAt.toISOString()),
+              type: 'investor',
+              read: data.read || false,
+              relatedId: data.related_id,
+              createdAt,
+            });
+          }
+        });
+      } catch (err) {
+        console.error('Error getting investor notifications:', err);
+      }
       return notifications;
     };
 

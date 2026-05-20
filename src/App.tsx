@@ -27,6 +27,8 @@ const Projects = lazy(() => import('./pages/Projects').then(m => ({ default: m.P
 const ProjectDetails = lazy(() => import('./pages/ProjectDetails'));
 const CreateProject = lazy(() => import('./pages/CreateProject').then(m => ({ default: m.CreateProject })));
 const ProjectIdeas = lazy(() => import('./pages/ProjectIdeas').then(m => ({ default: m.ProjectIdeas })));
+const InvestorRequests = lazy(() => import('./pages/InvestorRequests').then(m => ({ default: m.InvestorRequests })));
+const MyInvestorRequests = lazy(() => import('./pages/MyInvestorRequests').then(m => ({ default: m.MyInvestorRequests })));
 
 const LoadingSpinner = () => (
   <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -101,10 +103,9 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: strin
     console.log('🚫 ProtectedRoute: User role not allowed', {
       userRole: user.role,
       allowedRoles,
-      redirectingTo: '/projects'
+      redirectingTo: user.role === 'investor' ? '/gallery' : '/projects'
     });
-    // Redirect to projects page - main landing page for all authenticated users
-    return <Navigate to="/projects" />;
+    return <Navigate to={user.role === 'investor' ? '/gallery' : '/projects'} />;
   }
 
   console.log('✅ ProtectedRoute: Access granted, rendering layout with children');
@@ -140,12 +141,12 @@ const AppRoutes: React.FC = () => {
 
   return (
     <Routes>
-      {/* Landing Page - accessible if not authenticated, redirects to /projects if authenticated */}
-      <Route path="/" element={user ? <Navigate to="/projects" /> : <LandingPage />} />
+      {/* Landing Page - accessible if not authenticated, redirects based on role if authenticated */}
+      <Route path="/" element={user ? <Navigate to={user.role === 'investor' ? '/gallery' : '/projects'} /> : <LandingPage />} />
 
-      {/* Authentication Routes - accessible if not authenticated, redirects to /projects if authenticated */}
-      <Route path="/login" element={user ? <Navigate to="/projects" /> : <LoginPage />} />
-      <Route path="/register" element={user ? <Navigate to="/projects" /> : <RegisterPage />} />
+      {/* Authentication Routes - accessible if not authenticated, redirects based on role if authenticated */}
+      <Route path="/login" element={user ? <Navigate to={user.role === 'investor' ? '/gallery' : '/projects'} /> : <LoginPage />} />
+      <Route path="/register" element={user ? <Navigate to={user.role === 'investor' ? '/gallery' : '/projects'} /> : <RegisterPage />} />
 
       {/* Email verification and password reset handler */}
       <Route path="/auth/action" element={<AuthActionHandler />} />
@@ -243,6 +244,10 @@ const AppRoutes: React.FC = () => {
       
       {/* Settings */}
       <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+
+      {/* Investor routes */}
+      <Route path="/investor-requests" element={<ProtectedRoute allowedRoles={['school', 'admin']}><InvestorRequests /></ProtectedRoute>} />
+      <Route path="/my-investor-requests" element={<ProtectedRoute allowedRoles={['investor']}><MyInvestorRequests /></ProtectedRoute>} />
 
       {/* Debug page for developers */}
       <Route path="/debug-user" element={<ProtectedRoute><DebugUser /></ProtectedRoute>} />

@@ -65,6 +65,8 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
         return '⚠️';
       case 'message':
         return '💬';
+      case 'investor':
+        return '📈';
       case 'system':
       default:
         return 'ℹ️';
@@ -214,6 +216,9 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                             setShowNotificationsDropdown(false);
                           } else if (notification.type === 'project' && notification.relatedId) {
                             navigate(`/projects/${notification.relatedId}`);
+                            setShowNotificationsDropdown(false);
+                          } else if (notification.type === 'investor') {
+                            navigate('/my-investor-requests');
                             setShowNotificationsDropdown(false);
                           }
                         }}

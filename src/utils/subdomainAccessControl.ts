@@ -45,6 +45,13 @@ export const validateSubdomainAccess = (
     };
   }
 
+  if (user.role === 'investor') {
+    return {
+      allowed: true,
+      reason: 'المستثمر لديه صلاحية الوصول إلى المنصة الرئيسية'
+    };
+  }
+
   if (!user.school_id) {
     return {
       allowed: false,

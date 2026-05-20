@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { GalleryVertical as GalleryIcon, Search, Filter, Plus, Eye, Heart, Star, Play, Award, Users, Calendar, School, Tag, TriangleAlert as AlertTriangle, Pencil as Edit, Trash2, MoveVertical as MoreVertical, X, Globe, Lock, EyeOff } from 'lucide-react';
+import { GalleryVertical as GalleryIcon, Search, Filter, Plus, Eye, Heart, Star, Play, Award, Users, Calendar, School, Tag, TriangleAlert as AlertTriangle, Pencil as Edit, Trash2, MoveVertical as MoreVertical, X, Globe, Lock, EyeOff, TrendingUp } from 'lucide-react';
 import { useGallery } from '../hooks/useGallery';
 import { useAuth } from '../contexts/AuthContext';
 import { useSchoolBranding } from '../contexts/SchoolBrandingContext';
 import { formatDate } from '../utils/dateUtils';
 import { AddProjectModal } from '../components/Gallery/AddProjectModal';
-import { DeleteConfirmationModal } from '../components/ProjectIdeas/DeleteConfirmationModal'; // Re-use generic delete modal
+import { DeleteConfirmationModal } from '../components/ProjectIdeas/DeleteConfirmationModal';
+import { InvestorInterestModal } from '../components/Investor/InvestorInterestModal';
 
 export const Gallery: React.FC = () => {
   const { user } = useAuth();
@@ -21,8 +22,8 @@ export const Gallery: React.FC = () => {
     hasUser: !!user
   });
 
-  // للمشرفين، نعرض جميع المشاريع حتى عبر subdomain
-  const effectiveSchoolId = user?.role === 'admin' ? null : schoolId;
+  // للمشرفين والمستثمرين، نعرض جميع المشاريع العامة حتى عبر subdomain
+  const effectiveSchoolId = (user?.role === 'admin' || user?.role === 'investor') ? null : schoolId;
 
   const { projects, loading, error, incrementViews, incrementLikes, fetchGalleryProjects, deleteGalleryProject, toggleProjectVisibility } = useGallery(effectiveSchoolId, user?.id, user?.role);
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -40,6 +41,8 @@ export const Gallery: React.FC = () => {
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<GalleryProject | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showInterestModal, setShowInterestModal] = useState(false);
+  const [interestProject, setInterestProject] = useState<{ id: string; title: string; schoolId: string; school: string } | null>(null);
 
   const categories = [
     { id: 'all', name: 'جميع المشاريع' },
@@ -590,17 +593,19 @@ export const Gallery: React.FC = () => {
                   </div>
                 )}
 
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => handleLikeProject(project.id)}
-                    className={`flex-1 sm:flex-none p-2.5 rounded-lg transition-colors ${
-                      likedProjects.includes(project.id)
-                        ? 'bg-red-100 text-red-600'
-                        : 'bg-gray-100 text-gray-600 hover:bg-red-100 hover:text-red-600'
-                    }`}
-                  >
-                    <Heart className="w-4 h-4 mx-auto" />
-                  </button>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {user?.role !== 'investor' && (
+                    <button
+                      onClick={() => handleLikeProject(project.id)}
+                      className={`flex-1 sm:flex-none p-2.5 rounded-lg transition-colors ${
+                        likedProjects.includes(project.id)
+                          ? 'bg-red-100 text-red-600'
+                          : 'bg-gray-100 text-gray-600 hover:bg-red-100 hover:text-red-600'
+                      }`}
+                    >
+                      <Heart className="w-4 h-4 mx-auto" />
+                    </button>
+                  )}
 
                   {project.mediaType === 'youtube' && project.youtubeUrl && (
                     <a
@@ -611,6 +616,19 @@ export const Gallery: React.FC = () => {
                     >
                       <Play className="w-4 h-4 mx-auto" />
                     </a>
+                  )}
+
+                  {user?.role === 'investor' && (
+                    <button
+                      onClick={() => {
+                        setInterestProject({ id: project.id, title: project.title, schoolId: project.schoolId, school: project.school });
+                        setShowInterestModal(true);
+                      }}
+                      className="flex-1 sm:flex-none px-3 md:px-4 py-2.5 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors text-xs md:text-sm font-medium flex items-center justify-center gap-2 whitespace-nowrap"
+                    >
+                      <TrendingUp className="w-4 h-4" />
+                      <span>تسجيل الاهتمام</span>
+                    </button>
                   )}
 
                   <button
@@ -838,17 +856,33 @@ export const Gallery: React.FC = () => {
                   </div>
 
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                    <button
-                      onClick={() => handleLikeProject(selectedProject.id)}
-                      className={`px-4 md:px-6 py-2.5 md:py-2 rounded-lg md:rounded-xl transition-colors flex items-center justify-center gap-2 text-sm md:text-base ${
-                        likedProjects.includes(selectedProject.id)
-                          ? 'bg-red-500 text-white'
-                          : 'bg-red-100 text-red-600 hover:bg-red-500 hover:text-white'
-                      }`}
-                    >
-                      <Heart className="w-4 h-4 md:w-5 md:h-5" />
-                      إعجاب
-                    </button>
+                    {user?.role !== 'investor' && (
+                      <button
+                        onClick={() => handleLikeProject(selectedProject.id)}
+                        className={`px-4 md:px-6 py-2.5 md:py-2 rounded-lg md:rounded-xl transition-colors flex items-center justify-center gap-2 text-sm md:text-base ${
+                          likedProjects.includes(selectedProject.id)
+                            ? 'bg-red-500 text-white'
+                            : 'bg-red-100 text-red-600 hover:bg-red-500 hover:text-white'
+                        }`}
+                      >
+                        <Heart className="w-4 h-4 md:w-5 md:h-5" />
+                        إعجاب
+                      </button>
+                    )}
+
+                    {user?.role === 'investor' && (
+                      <button
+                        onClick={() => {
+                          setSelectedProject(null);
+                          setInterestProject({ id: selectedProject.id, title: selectedProject.title, schoolId: selectedProject.schoolId, school: selectedProject.school });
+                          setShowInterestModal(true);
+                        }}
+                        className="px-4 md:px-6 py-2.5 md:py-2 bg-emerald-500 text-white rounded-lg md:rounded-xl hover:bg-emerald-600 transition-colors flex items-center justify-center gap-2 text-sm md:text-base font-medium"
+                      >
+                        <TrendingUp className="w-4 h-4 md:w-5 md:h-5" />
+                        تسجيل الاهتمام
+                      </button>
+                    )}
 
                     {selectedProject.mediaType === 'youtube' && selectedProject.youtubeUrl && (
                       <a
@@ -908,6 +942,18 @@ export const Gallery: React.FC = () => {
           onConfirm={confirmDeleteProject}
           title={projectToDelete.title}
           isDeleting={isDeleting}
+        />
+      )}
+
+      {/* Investor Interest Modal */}
+      {interestProject && (
+        <InvestorInterestModal
+          isOpen={showInterestModal}
+          onClose={() => { setShowInterestModal(false); setInterestProject(null); }}
+          projectId={interestProject.id}
+          projectTitle={interestProject.title}
+          schoolId={interestProject.schoolId}
+          schoolName={interestProject.school}
         />
       )}
     </>

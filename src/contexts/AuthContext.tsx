@@ -21,7 +21,7 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  role: 'student' | 'teacher' | 'school' | 'admin' | 'consultant';
+  role: 'student' | 'teacher' | 'school' | 'admin' | 'consultant' | 'investor';
   avatar?: string;
   phone?: string;
   bio?: string;
@@ -48,6 +48,9 @@ export interface User {
   subdomain?: string;
   logo_url?: string;
   custom_domain?: string;
+  company_name?: string;
+  investment_interests?: string;
+  agreed_to_investor_pledge?: boolean;
 }
 
 interface AuthContextType {
@@ -111,7 +114,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
           const parsed = JSON.parse(cachedProfile);
           // Validate cached profile has valid role
-          const validRoles = ['student', 'teacher', 'school', 'admin', 'consultant'];
+          const validRoles = ['student', 'teacher', 'school', 'admin', 'consultant', 'investor'];
           if (parsed.id === firebaseUser.uid &&
               Date.now() - parsed.cachedAt < 5 * 60 * 1000 &&
               parsed.role &&
@@ -177,7 +180,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }
 
             // Validate role is one of the expected values
-            const validRoles = ['student', 'teacher', 'school', 'admin', 'consultant'];
+            const validRoles = ['student', 'teacher', 'school', 'admin', 'consultant', 'investor'];
             if (!validRoles.includes(userData.role)) {
               console.error('🚨 CRITICAL ERROR: Invalid user role:', userData.role);
               console.error('🚨 Expected one of:', validRoles);
@@ -199,7 +202,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             if (firebaseUser.emailVerified && userData.status === 'pending_verification') {
               let resolvedStatus = 'active';
 
-              if (userData.role === 'school' || userData.role === 'consultant' || userData.role === 'teacher') {
+              if (userData.role === 'school' || userData.role === 'consultant' || userData.role === 'teacher' || userData.role === 'investor') {
                 resolvedStatus = 'pending';
               } else if (userData.role === 'student' && userData.school_id) {
                 try {
@@ -275,6 +278,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               hourly_rate: userData.hourly_rate,
               rating: userData.rating,
               reviews_count: userData.reviews_count,
+              company_name: userData.company_name,
+              investment_interests: userData.investment_interests,
+              agreed_to_investor_pledge: userData.agreed_to_investor_pledge,
               cachedAt: Date.now()
             };
             sessionStorage.setItem('userProfile', JSON.stringify(userProfile));
@@ -594,6 +600,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           reviews_count: 0
         };
       }
+
+      // Add investor-specific fields if the role is 'investor'
+      if (userData.role === 'investor') {
+        if (DEBUG_AUTH) console.log('💰 إضافة حقول خاصة بالمستثمر...');
+        newUserData = {
+          ...newUserData,
+          company_name: userData.company_name ?? null,
+          investment_interests: userData.investment_interests ?? null,
+          agreed_to_investor_pledge: userData.agreed_to_investor_pledge ?? false
+        };
+      }
       
       if (DEBUG_AUTH) console.log('🔍 فحص القيم غير المعرفة (undefined)...');
       // Final validation: ensure no undefined values
@@ -630,7 +647,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.log('🔍 التحقق النهائي من الحقول الحرجة:', {
           name_valid: !!newUserData.name && newUserData.name !== '',
           email_valid: !!newUserData.email && newUserData.email !== '',
-          role_valid: !!newUserData.role && ['student', 'teacher', 'school', 'admin', 'consultant'].includes(newUserData.role),
+          role_valid: !!newUserData.role && ['student', 'teacher', 'school', 'admin', 'consultant', 'investor'].includes(newUserData.role),
           school_id_valid: newUserData.school_id === null || (typeof newUserData.school_id === 'string' && newUserData.school_id !== ''),
           status_valid: !!newUserData.status && ['active', 'pending'].includes(newUserData.status),
           no_undefined_values: !Object.values(newUserData).includes(undefined)
