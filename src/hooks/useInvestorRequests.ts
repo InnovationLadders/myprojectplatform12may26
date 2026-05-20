@@ -9,7 +9,6 @@ import {
   updateDoc,
   doc,
   serverTimestamp,
-  orderBy,
   getDoc
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
@@ -46,19 +45,16 @@ export const useInvestorRequests = () => {
       if (user.role === 'investor') {
         q = query(
           collection(db, 'investor_interest_requests'),
-          where('investor_id', '==', user.id),
-          orderBy('created_at', 'desc')
+          where('investor_id', '==', user.id)
         );
       } else if (user.role === 'school') {
         q = query(
           collection(db, 'investor_interest_requests'),
-          where('school_id', '==', user.id),
-          orderBy('created_at', 'desc')
+          where('school_id', '==', user.id)
         );
       } else if (user.role === 'admin') {
         q = query(
-          collection(db, 'investor_interest_requests'),
-          orderBy('created_at', 'desc')
+          collection(db, 'investor_interest_requests')
         );
       } else {
         setLoading(false);
@@ -85,6 +81,7 @@ export const useInvestorRequests = () => {
         };
       });
 
+      data.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
       setRequests(data);
     } catch (err) {
       console.error('Error fetching investor requests:', err);
