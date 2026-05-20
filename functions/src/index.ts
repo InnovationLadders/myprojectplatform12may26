@@ -1,4 +1,4 @@
-import * as functions from "firebase-functions";
+import { onCall, HttpsError } from "firebase-functions/v2/https";
 import * as nodemailer from "nodemailer";
 
 interface EmailPayload {
@@ -88,17 +88,24 @@ const buildStudentActivatedHtml = (p: EmailPayload): string => `
 </html>
 `;
 
-export const sendNotificationEmail = functions
-  .region("us-central1")
-  .runWith({ secrets: ["GMAIL_APP_PASSWORD"] })
-  .https.onCall(async (data: EmailPayload) => {
+// إعداد الدالة متوافقة مع الجيل الثاني (V2) وتحديد المنطقة والسر الآمن كمصفوفة خيارات
+export const sendNotificationEmail = onCall(
+  {
+    region: "us-central1", // المنطقة المستقرة التي تم الرفع إليها
+    secrets: ["GMAIL_APP_PASSWORD"], // تمرير السر المشفر من سيكرت مانجر
+  },
+  async (request) => {
+    // في الجيل الثاني، يتم استقبال البيانات عبر request.data
+    const data = request.data as EmailPayload;
+
     if (!data.to_email || !data.type) {
-      throw new functions.https.HttpsError(
+      throw new HttpsError(
         "invalid-argument",
         "Missing required fields: to_email, type"
       );
     }
 
+    // إعداد خدمة النقل والاتصال مع بريد Gmail وقراءة السر من متغير البيئة
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
@@ -127,4 +134,5 @@ export const sendNotificationEmail = functions
     });
 
     return { success: true };
-  });
+  }
+);
