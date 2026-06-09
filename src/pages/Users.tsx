@@ -7,6 +7,7 @@ import { formatDate, formatRelativeTime } from '../utils/dateUtils';
 import { UserFormModal } from '../components/UserManagement/UserFormModal';
 import { AvatarDisplay } from '../components/Common/AvatarDisplay';
 import * as XLSX from 'xlsx';
+import { sendStudentActivatedEmail } from '../services/emailService';
 
 const userRoles = [
   { id: 'all', name: 'جميع المستخدمين' },
@@ -149,6 +150,16 @@ const Users: React.FC = () => {
       await activateUser(userId);
       setSuccessMessage('تم تفعيل المستخدم بنجاح');
       setTimeout(() => setSuccessMessage(null), 3000);
+
+      // Email: notify the user that their account has been activated
+      const activatedUser = users.find(u => u.id === userId);
+      if (activatedUser?.email) {
+        sendStudentActivatedEmail({
+          userEmail: activatedUser.email,
+          userName: activatedUser.name || '',
+          schoolName: activatedUser.school || '',
+        }).catch(() => {});
+      }
     } catch (error) {
       console.error('Error activating user:', error);
       alert('حدث خطأ في تفعيل المستخدم');

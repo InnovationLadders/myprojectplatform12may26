@@ -3,6 +3,11 @@ import { db } from '../lib/firebase';
 import { collection, getDocs, query, where, addDoc, updateDoc, doc, Timestamp, serverTimestamp, getDoc } from 'firebase/firestore';
 import { useAuth } from '../contexts/AuthContext';
 import { getConsultants, ConsultantDisplay } from '../services/consultantService';
+import {
+  sendConsultationRequestedEmail,
+  sendConsultationAcceptedEmail,
+  sendConsultationCompletedEmail,
+} from '../services/emailService';
 
 export type Consultant = ConsultantDisplay;
 
@@ -202,10 +207,35 @@ export const useConsultations = () => {
       
       // Add the document to Firestore
       const docRef = await addDoc(consultationRef, newConsultation);
-      
+
+      // Email: notify the assigned consultant (if any) about the new request
+      if (newConsultation.mentor_id) {
+        try {
+          const mentorDoc = await getDoc(doc(db, 'users', newConsultation.mentor_id));
+          if (mentorDoc.exists()) {
+            const mentorData = mentorDoc.data();
+            if (mentorData.email) {
+              const studentDoc = await getDoc(doc(db, 'users', user.id));
+              const studentName = studentDoc.exists() ? studentDoc.data().name : user.name;
+              await sendConsultationRequestedEmail({
+                consultantEmail: mentorData.email,
+                consultantName: mentorData.name || '',
+                studentName,
+                topic: consultationData.topic || '',
+                type: consultationData.type,
+                method: consultationData.method,
+                preferredDate: consultationData.preferredDate,
+              });
+            }
+          }
+        } catch {
+          // non-critical
+        }
+      }
+
       // Refresh the consultations list
       await fetchConsultations();
-      
+
       return { id: docRef.id, ...newConsultation };
     } catch (err) {
       console.error('Error creating consultation:', err);
@@ -233,7 +263,30 @@ export const useConsultations = () => {
       
       // Update the document in Firestore
       await updateDoc(consultationRef, updateData);
-      
+
+      // Email: notify student when consultation is completed
+      if (updates.status === 'completed') {
+        try {
+          const consultationDoc = await getDoc(consultationRef);
+          if (consultationDoc.exists()) {
+            const cData = consultationDoc.data();
+            const studentDoc = await getDoc(doc(db, 'users', cData.student_id));
+            if (studentDoc.exists()) {
+              const studentData = studentDoc.data();
+              if (studentData.email) {
+                await sendConsultationCompletedEmail({
+                  studentEmail: studentData.email,
+                  studentName: studentData.name || '',
+                  topic: cData.topic || '',
+                });
+              }
+            }
+          }
+        } catch {
+          // non-critical
+        }
+      }
+
       // Refresh the consultations list
       await fetchConsultations();
     } catch (err) {
@@ -244,27 +297,45 @@ export const useConsultations = () => {
 
   const acceptConsultation = async (id: string, scheduledDate?: string) => {
     if (!user) throw new Error('يجب تسجيل الدخول أولاً');
-    
+
     try {
-      // Create a reference to the consultation document
       const consultationRef = doc(db, 'consultations', id);
-      
-      // Prepare the data to be updated
+      const consultationDoc = await getDoc(consultationRef);
+
       const updateData: any = {
         mentor_id: user.id,
         status: 'scheduled',
         updated_at: serverTimestamp()
       };
-      
-      // Add scheduled date if provided
+
       if (scheduledDate) {
         updateData.scheduled_at = Timestamp.fromDate(new Date(scheduledDate));
       }
-      
-      // Update the document in Firestore
+
       await updateDoc(consultationRef, updateData);
-      
-      // Refresh the consultations list
+
+      // Email: notify student that their consultation was accepted
+      if (consultationDoc.exists()) {
+        try {
+          const cData = consultationDoc.data();
+          const studentDoc = await getDoc(doc(db, 'users', cData.student_id));
+          if (studentDoc.exists()) {
+            const studentData = studentDoc.data();
+            if (studentData.email) {
+              await sendConsultationAcceptedEmail({
+                studentEmail: studentData.email,
+                studentName: studentData.name || '',
+                consultantName: user.name,
+                topic: cData.topic || '',
+                scheduledDate: scheduledDate,
+              });
+            }
+          }
+        } catch {
+          // non-critical
+        }
+      }
+
       await fetchConsultations();
     } catch (err) {
       console.error('Error accepting consultation:', err);

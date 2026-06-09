@@ -16,6 +16,7 @@ import {
   onSnapshot,
   Unsubscribe,
 } from 'firebase/firestore';
+import { sendAchievementUnlockedEmail } from './emailService';
 
 export interface StudentPoints {
   userId: string;
@@ -530,6 +531,27 @@ const checkAndAwardAchievements = async (studentId: string): Promise<void> => {
     if (newAchievements.length > 0) {
       for (const achievement of newAchievements) {
         await addDoc(collection(db, 'student_achievements'), achievement);
+      }
+
+      // Email: notify the student about each new achievement
+      try {
+        const userDoc = await getDoc(doc(db, 'users', studentId));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          if (userData.email) {
+            for (const achievement of newAchievements) {
+              await sendAchievementUnlockedEmail({
+                userEmail: userData.email,
+                userName: userData.name || '',
+                achievementType: achievement.achievementType,
+                achievementPoints: achievement.pointsAtUnlock,
+                totalPoints: points.totalPoints,
+              });
+            }
+          }
+        }
+      } catch {
+        // non-critical
       }
     }
   } catch (error) {

@@ -12,6 +12,10 @@ import {
   getDoc
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import {
+  sendInvestorRequestNewEmail,
+  sendInvestorRequestStatusEmail,
+} from '../services/emailService';
 
 export interface InvestorInterestRequest {
   id: string;
@@ -118,6 +122,26 @@ export const useInvestorRequests = () => {
     // Send in-platform notifications
     await sendNewRequestNotifications(docRef.id, params.project_title, params.school_id);
 
+    // Email: notify school admin and platform admins about the new investor request
+    try {
+      const schoolDoc = await getDoc(doc(db, 'users', params.school_id));
+      if (schoolDoc.exists()) {
+        const schoolData = schoolDoc.data();
+        if (schoolData.email) {
+          await sendInvestorRequestNewEmail({
+            recipientEmail: schoolData.email,
+            recipientName: schoolData.name || 'مسؤول المؤسسة',
+            investorName: user.name,
+            investorCompany: user.company_name,
+            projectTitle: params.project_title,
+            investorNotes: params.investor_notes,
+          });
+        }
+      }
+    } catch {
+      // non-critical
+    }
+
     await fetchRequests();
     return docRef.id;
   };
@@ -175,7 +199,7 @@ export const useInvestorRequests = () => {
       updated_at: serverTimestamp(),
     });
 
-    // Notify the investor
+    // Notify the investor (in-platform notification)
     const data = requestDoc.data();
     const statusLabel = status === 'in_progress' ? 'تحت المعالجة' : 'مغلق';
     try {
@@ -190,6 +214,25 @@ export const useInvestorRequests = () => {
       });
     } catch (err) {
       console.warn('Failed to send investor notification:', err);
+    }
+
+    // Email: notify investor about status change
+    try {
+      const investorDoc = await getDoc(doc(db, 'users', data.investor_id));
+      if (investorDoc.exists()) {
+        const investorData = investorDoc.data();
+        if (investorData.email) {
+          await sendInvestorRequestStatusEmail({
+            investorEmail: investorData.email,
+            investorName: investorData.name || data.investor_name || '',
+            projectTitle: data.project_title || '',
+            status,
+            adminNotes: admin_notes,
+          });
+        }
+      }
+    } catch {
+      // non-critical
     }
 
     await fetchRequests();
