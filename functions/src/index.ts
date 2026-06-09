@@ -1,5 +1,8 @@
 import * as functions from "firebase-functions/v1";
+import { defineSecret } from "firebase-functions/params";
 import { Resend } from "resend";
+
+const resendApiKey = defineSecret("RESEND_API_KEY");
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -296,8 +299,8 @@ function buildHtml(p: EmailPayload): { subject: string; html: string } {
 // ─── Cloud Function ───────────────────────────────────────────────────────────
 
 export const sendNotificationEmail = functions
-  .region("us-central1")
-  .runWith({ secrets: ["RESEND_API_KEY"] })
+  .region("me-central2")
+  .runWith({ secrets: [resendApiKey] })
   .https.onCall(async (data: EmailPayload) => {
     if (!data.to_email || !data.type) {
       throw new functions.https.HttpsError(
@@ -306,7 +309,7 @@ export const sendNotificationEmail = functions
       );
     }
 
-    const apiKey = process.env.RESEND_API_KEY;
+    const apiKey = resendApiKey.value();
     if (!apiKey) {
       throw new functions.https.HttpsError(
         "failed-precondition",
@@ -315,7 +318,7 @@ export const sendNotificationEmail = functions
     }
 
     const resend = new Resend(apiKey);
-    const fromEmail = process.env.FROM_EMAIL || "noreply@mashroui.com";
+    const fromEmail = "noreply@mashroui.com";
 
     const { subject, html } = buildHtml(data);
 
