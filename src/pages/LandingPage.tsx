@@ -138,7 +138,7 @@ export const LandingPage: React.FC = () => {
         <div
           className="absolute inset-0 w-full h-full"
           style={{
-            backgroundImage: 'url("/images1-copy.jpg")',
+            backgroundImage: 'url("/CarProject1_(2).jpg")',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -182,17 +182,17 @@ export const LandingPage: React.FC = () => {
 
           <div className="flex items-center justify-center gap-6 mb-6 bg-white bg-opacity-10 backdrop-blur py-4 px-8 rounded-2xl inline-block mx-auto">
             <img
-              src="/STEAM-Education_logo-copy.jpg"
+              src="/STEAMEducationlogo.jpg"
               alt="STEAM Education - Science Technology Engineering Arts Mathematics"
               className="h-20 rounded-lg shadow-xl border-2 border-white border-opacity-20"
             />
             <img
-              src="/image-copy.png"
+              src="/mashrouilogo.png"
               alt={t('appName')}
               className="h-24 drop-shadow-2xl"
             />
             <img
-              src="/PBL-logo-copy.jpg"
+              src="/PBLlogo.jpg"
               alt="Project-based Learning Logo"
               className="h-20 rounded-lg shadow-xl border-2 border-white border-opacity-20"
             />
@@ -255,28 +255,28 @@ export const LandingPage: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="relative overflow-hidden rounded-lg shadow-md group">
             <img
-              src="/images1-copy.jpg"
+              src="/im7.jpg"
               alt="Biomedical Research and Laboratory Science Project"
               className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
             />
           </div>
           <div className="relative overflow-hidden rounded-lg shadow-md group">
             <img
-              src="/images1-copy-copy.jpg"
+              src="/im5.jpg"
               alt="Engineering Vehicle Design Project"
               className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
             />
           </div>
           <div className="relative overflow-hidden rounded-lg shadow-md group">
             <img
-              src="/image-copy.png"
+              src="/im3.jpg"
               alt="Laboratory Research and Scientific Analysis Project"
               className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
             />
           </div>
           <div className="relative overflow-hidden rounded-lg shadow-md group">
             <img
-              src="/image-copy-copy.png"
+              src="/images1hero.jpg"
               alt="Collaborative STEM Laboratory Project"
               className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
             />
@@ -513,7 +513,7 @@ export const LandingPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
               <img
-                src="/mashroui-logo.png"
+                src="/mashrouilogo.png"
                 alt={t('appName')}
                 className="h-12 mb-4"
               />
