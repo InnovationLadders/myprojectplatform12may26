@@ -273,6 +273,11 @@
   
   "landingPage": {
     "welcomeMessage": "Our Future Scientists.",
+    "featuredVideos": {
+      "badge": "Student Projects",
+      "title": "Featured Projects",
+      "description": "Explore student creativity through these outstanding projects"
+    },
     "stats": {
       "students": "Registered Students",
       "projects": "Completed Projects",

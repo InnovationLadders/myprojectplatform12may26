@@ -4,25 +4,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSchoolBranding } from '../contexts/SchoolBrandingContext';
 import { useFeaturedVideos } from '../hooks/useFeaturedVideos';
-import {
-  Lightbulb,
-  Users,
-  MessageCircle,
-  ShoppingCart,
-  Bot,
-  GalleryVertical,
-  Shield,
-  ArrowLeft,
-  Star,
-  Award,
-  BookOpen,
-  CheckCircle,
-  DollarSign,
-  Truck,
-  Globe,
-  Target,
-  Play
-} from 'lucide-react';
+import { Lightbulb, Users, MessageCircle, ShoppingCart, Bot, GalleryVertical, Shield, ArrowLeft, Star, Award, BookOpen, CircleCheck as CheckCircle, DollarSign, Truck, Globe, Target, Play } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -156,7 +138,7 @@ export const LandingPage: React.FC = () => {
         <div
           className="absolute inset-0 w-full h-full"
           style={{
-            backgroundImage: 'url("/CarProject1.jpg")',
+            backgroundImage: 'url("/images1-copy.jpg")',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -200,17 +182,17 @@ export const LandingPage: React.FC = () => {
 
           <div className="flex items-center justify-center gap-6 mb-6 bg-white bg-opacity-10 backdrop-blur py-4 px-8 rounded-2xl inline-block mx-auto">
             <img
-              src="/STEAM-Education_logo.jpg"
+              src="/STEAM-Education_logo-copy.jpg"
               alt="STEAM Education - Science Technology Engineering Arts Mathematics"
               className="h-20 rounded-lg shadow-xl border-2 border-white border-opacity-20"
             />
             <img
-              src="/mashroui-logo.png"
+              src="/image-copy.png"
               alt={t('appName')}
               className="h-24 drop-shadow-2xl"
             />
             <img
-              src="/PBL-logo.jpg"
+              src="/PBL-logo-copy.jpg"
               alt="Project-based Learning Logo"
               className="h-20 rounded-lg shadow-xl border-2 border-white border-opacity-20"
             />
@@ -273,28 +255,28 @@ export const LandingPage: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="relative overflow-hidden rounded-lg shadow-md group">
             <img
-              src="/im7.jpg"
+              src="/images1-copy.jpg"
               alt="Biomedical Research and Laboratory Science Project"
               className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
             />
           </div>
           <div className="relative overflow-hidden rounded-lg shadow-md group">
             <img
-              src="/images.jpg"
+              src="/images1-copy-copy.jpg"
               alt="Engineering Vehicle Design Project"
               className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
             />
           </div>
           <div className="relative overflow-hidden rounded-lg shadow-md group">
             <img
-              src="/im5.jpg"
+              src="/image-copy.png"
               alt="Laboratory Research and Scientific Analysis Project"
               className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
             />
           </div>
           <div className="relative overflow-hidden rounded-lg shadow-md group">
             <img
-              src="/im3.jpg"
+              src="/image-copy-copy.png"
               alt="Collaborative STEM Laboratory Project"
               className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
             />
@@ -315,13 +297,13 @@ export const LandingPage: React.FC = () => {
             >
               <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
                 <Play className="w-4 h-4" />
-                مشاريع الطلاب
+                {t('landingPage.featuredVideos.badge')}
               </div>
               <h2 className="text-4xl font-bold text-gray-800">
-                مشاريع مميزة
+                {t('landingPage.featuredVideos.title')}
               </h2>
               <p className="text-gray-500 mt-3 max-w-xl mx-auto">
-                اكتشف إبداعات الطلاب من خلال هذه المشاريع المميزة
+                {t('landingPage.featuredVideos.description')}
               </p>
             </motion.div>
 

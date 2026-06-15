@@ -252,6 +252,11 @@
     },
     "landingPage": {
         "welcomeMessage": "علماء المستقبل",
+        "featuredVideos": {
+            "badge": "مشاريع الطلاب",
+            "title": "مشاريع مميزة",
+            "description": "اكتشف إبداعات الطلاب من خلال هذه المشاريع المميزة"
+        },
         "stats": {
             "students": "طالب مسجل",
             "projects": "مشروع منجز",
