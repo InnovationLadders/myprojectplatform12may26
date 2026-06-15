@@ -321,7 +321,7 @@ export const LandingPage: React.FC = () => {
                 مشاريع مميزة
               </h2>
               <p className="text-gray-500 mt-3 max-w-xl mx-auto">
-                اكتشف إبداعات طلابنا من خلال هذه المشاريع المميزة
+                اكتشف إبداعات الطلاب من خلال هذه المشاريع المميزة
               </p>
             </motion.div>
 
