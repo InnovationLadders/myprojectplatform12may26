@@ -138,7 +138,7 @@ export const LandingPage: React.FC = () => {
         <div
           className="absolute inset-0 w-full h-full"
           style={{
-            backgroundImage: 'url("/CarProject1_(2).jpg")',
+            backgroundImage: 'url("/car-project-hero.jpg")',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
