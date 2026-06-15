@@ -135,6 +135,12 @@ service cloud.firestore {
       );
     }
     
+    match /landing_featured_videos/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
     match /summer_program_registrations/{registrationId} {
       allow create: if true; // Anyone can register for summer program
       allow read, update, delete: if request.auth != null &&

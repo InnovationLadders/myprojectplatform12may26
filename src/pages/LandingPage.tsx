@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSchoolBranding } from '../contexts/SchoolBrandingContext';
+import { useFeaturedVideos } from '../hooks/useFeaturedVideos';
 import {
   Lightbulb,
   Users,
@@ -19,12 +20,14 @@ import {
   DollarSign,
   Truck,
   Globe,
-  Target
+  Target,
+  Play
 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { schoolName, logoUrl, loading: brandingLoading } = useSchoolBranding();
+  const { featuredVideos } = useFeaturedVideos();
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   
   const changeLanguage = (lng: string) => {
@@ -245,15 +248,15 @@ export const LandingPage: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="bg-white p-6 rounded-lg shadow-sm text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">100+</div>
+              <div className="text-3xl font-bold text-blue-600 mb-2">300+</div>
               <div className="text-gray-600">{t('landingPage.stats.students')}</div>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm text-center">
-              <div className="text-3xl font-bold text-green-600 mb-2">25+</div>
+              <div className="text-3xl font-bold text-green-600 mb-2">50+</div>
               <div className="text-gray-600">{t('landingPage.stats.projects')}</div>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm text-center">
-              <div className="text-3xl font-bold text-purple-600 mb-2">20+</div>
+              <div className="text-3xl font-bold text-purple-600 mb-2">100+</div>
               <div className="text-gray-600">{t('landingPage.stats.teachers')}</div>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm text-center">
@@ -299,6 +302,70 @@ export const LandingPage: React.FC = () => {
         </div>
         </div>
       </div>
+
+      {/* Featured Videos Section */}
+      {featuredVideos.length > 0 && (
+        <div className="py-16 px-4 bg-gray-50">
+          <div className="max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-12"
+            >
+              <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+                <Play className="w-4 h-4" />
+                مشاريع الطلاب
+              </div>
+              <h2 className="text-4xl font-bold text-gray-800">
+                مشاريع مميزة
+              </h2>
+              <p className="text-gray-500 mt-3 max-w-xl mx-auto">
+                اكتشف إبداعات طلابنا من خلال هذه المشاريع المميزة
+              </p>
+            </motion.div>
+
+            <div className={`grid gap-8 ${featuredVideos.length === 1 ? 'grid-cols-1 max-w-xl mx-auto' : featuredVideos.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-3'}`}>
+              {featuredVideos.map((video, index) => (
+                <motion.div
+                  key={video.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.15 }}
+                  className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 group"
+                >
+                  <div className="aspect-video bg-gray-900 relative overflow-hidden">
+                    {video.mediaType === 'youtube' && video.youtubeUrl ? (
+                      <iframe
+                        src={video.youtubeUrl}
+                        className="w-full h-full"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        title={video.title}
+                      />
+                    ) : (
+                      <video
+                        src={video.mediaUrl}
+                        className="w-full h-full object-cover"
+                        controls
+                        preload="metadata"
+                      />
+                    )}
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-bold text-gray-800 text-lg leading-snug mb-2 group-hover:text-blue-600 transition-colors">
+                      {video.title}
+                    </h3>
+                    {video.description && (
+                      <p className="text-gray-500 text-sm line-clamp-2">{video.description}</p>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Features Section */}
       <div className="py-16 px-4 bg-gray-50">

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { LayoutDashboard, Users, BookOpen, Lightbulb, Video, Calendar, ChartBar as BarChart3, Settings, School, TrendingUp, Award, Clock, CircleCheck as CheckCircle, TriangleAlert as AlertTriangle, Database, Building, Wrench } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, Lightbulb, Video, Calendar, ChartBar as BarChart3, Settings, School, TrendingUp, Award, Clock, CircleCheck as CheckCircle, TriangleAlert as AlertTriangle, Database, Building, Wrench, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ClasseraIntegration } from '../../components/Admin/ClasseraIntegration';
 
@@ -29,6 +29,7 @@ export const AdminDashboard: React.FC = () => {
     { id: 'projects', name: 'إدارة المشاريع', icon: BookOpen },
     { id: 'ideas', name: 'أفكار المشاريع', icon: Lightbulb },
     { id: 'videos', name: 'الفيديوهات التعليمية', icon: Video },
+    { id: 'featured-videos', name: 'فيديوهات الصفحة الرئيسية', icon: Play },
     { id: 'summer-program', name: 'البرنامج الصيفي', icon: Calendar },
     { id: 'school-customization', name: 'تخصيص المؤسسات', icon: Building },
     // Hidden until service is ready
@@ -306,6 +307,21 @@ export const AdminDashboard: React.FC = () => {
                 className="px-6 py-2 bg-indigo-500 text-white rounded-xl hover:bg-indigo-600 transition-colors"
               >
                 إدارة الفيديوهات
+              </Link>
+            </div>
+          )}
+
+          {/* Featured Videos Tab */}
+          {activeTab === 'featured-videos' && (
+            <div className="text-center py-8">
+              <Play className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">فيديوهات الصفحة الرئيسية</h3>
+              <p className="text-gray-600 mb-4">اختر 3 فيديوهات من معرض المشاريع لعرضها للزوار في الصفحة الرئيسية</p>
+              <Link
+                to="/admin/manage-featured-videos"
+                className="px-6 py-2 bg-indigo-500 text-white rounded-xl hover:bg-indigo-600 transition-colors"
+              >
+                إدارة الفيديوهات المميزة
               </Link>
             </div>
           )}

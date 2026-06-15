@@ -240,6 +240,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/admin/fix-entrepreneurship-data" element={<ProtectedRoute allowedRoles={['admin']}><FixEntrepreneurshipData /></ProtectedRoute>} />
       <Route path="/admin/fix-tools" element={<ProtectedRoute allowedRoles={['admin']}><AdminFixTools /></ProtectedRoute>} />
       <Route path="/admin/migrate-to-dammam" element={<ProtectedRoute allowedRoles={['admin']}><MigrateToNewDatabase /></ProtectedRoute>} />
+      <Route path="/admin/manage-featured-videos" element={<ProtectedRoute allowedRoles={['admin']}><ManageFeaturedVideos /></ProtectedRoute>} />
       <Route path="/users" element={<ProtectedRoute allowedRoles={['admin', 'school']}><Users /></ProtectedRoute>} />
       
       {/* Settings */}
@@ -311,6 +312,7 @@ import AdminFixTools from './pages/admin/AdminFixTools';
 import { ManageSchoolCustomization } from './pages/admin/ManageSchoolCustomization';
 import MigrateProjectIdeas from './pages/admin/MigrateProjectIdeas';
 import MigrateToNewDatabase from './pages/admin/MigrateToNewDatabase';
+import ManageFeaturedVideos from './pages/admin/ManageFeaturedVideos';
 import { SearchResultsPage } from './pages/SearchResultsPage';
 import StudentRewards from './pages/StudentRewards';
 import PointsDetails from './pages/PointsDetails';
