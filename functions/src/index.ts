@@ -1,8 +1,12 @@
 import * as functions from "firebase-functions/v1";
 import { defineSecret } from "firebase-functions/params";
-import { Resend } from "resend";
+import * as nodemailer from "nodemailer";
 
-const resendApiKey = defineSecret("RESEND_API_KEY");
+const smtpHost = defineSecret("SMTP_HOST");
+const smtpPort = defineSecret("SMTP_PORT");
+const smtpUser = defineSecret("SMTP_USER");
+const smtpPassword = defineSecret("SMTP_PASSWORD");
+const smtpFromEmail = defineSecret("SMTP_FROM_EMAIL");
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -300,7 +304,7 @@ function buildHtml(p: EmailPayload): { subject: string; html: string } {
 
 export const sendNotificationEmail = functions
   .region("me-central2")
-  .runWith({ secrets: [resendApiKey] })
+  .runWith({ secrets: [smtpHost, smtpPort, smtpUser, smtpPassword, smtpFromEmail] })
   .https.onCall(async (data: EmailPayload) => {
     if (!data.to_email || !data.type) {
       throw new functions.https.HttpsError(
@@ -309,29 +313,41 @@ export const sendNotificationEmail = functions
       );
     }
 
-    const apiKey = resendApiKey.value();
-    if (!apiKey) {
+    const host = smtpHost.value();
+    const port = parseInt(smtpPort.value() || "587");
+    const user = smtpUser.value();
+    const password = smtpPassword.value();
+    const fromEmail = smtpFromEmail.value();
+
+    if (!host || !port || !user || !password || !fromEmail) {
       throw new functions.https.HttpsError(
         "failed-precondition",
-        "RESEND_API_KEY secret is not configured"
+        "SMTP secrets are not configured"
       );
     }
 
-    const resend = new Resend(apiKey);
-    const fromEmail = "noreply@mashroui.com";
+    const transporter = nodemailer.createTransport({
+      host: host,
+      port: port,
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: user,
+        pass: password,
+      },
+    });
 
     const { subject, html } = buildHtml(data);
 
-    const { error } = await resend.emails.send({
-      from: `منصة مشروعي <${fromEmail}>`,
-      to: data.to_email,
-      subject,
-      html,
-    });
-
-    if (error) {
-      console.error("Resend error:", error);
-      throw new functions.https.HttpsError("internal", error.message);
+    try {
+      await transporter.sendMail({
+        from: `منصة مشروعي <${fromEmail}>`,
+        to: data.to_email,
+        subject,
+        html,
+      });
+    } catch (error) {
+      console.error("SMTP error:", error);
+      throw new functions.https.HttpsError("internal", "Failed to send email");
     }
 
     return { success: true };
