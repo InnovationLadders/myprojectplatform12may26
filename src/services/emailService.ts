@@ -10,8 +10,17 @@ const appUrl = typeof window !== 'undefined'
 
 const callSendEmail = async (payload: Record<string, unknown>): Promise<void> => {
   try {
+    console.log('[emailService] Attempting to send email:', {
+      type: payload.type,
+      to_email: payload.to_email,
+      to_name: payload.to_name,
+      timestamp: new Date().toISOString()
+    });
+
     const sendEmail = httpsCallable(functions, 'sendNotificationEmail');
-    await sendEmail(payload);
+    const result = await sendEmail(payload);
+
+    console.log('[emailService] Email function call successful:', result);
 
     // Log success to Firestore for audit trail
     await addDoc(collection(db, 'email_notifications'), {
@@ -22,14 +31,23 @@ const callSendEmail = async (payload: Record<string, unknown>): Promise<void> =>
     });
   } catch (error) {
     console.error('[emailService] Failed to send email:', error);
+    console.error('[emailService] Error details:', {
+      message: error instanceof Error ? error.message : String(error),
+      code: (error as any).code,
+      details: (error as any).details,
+      timestamp: new Date().toISOString()
+    });
 
     await addDoc(collection(db, 'email_notifications'), {
       type: payload.type,
       to_email: payload.to_email,
       status: 'failed',
       error: error instanceof Error ? error.message : String(error),
+      error_code: (error as any).code,
       sentAt: serverTimestamp(),
-    }).catch(() => {});
+    }).catch((logError) => {
+      console.error('[emailService] Failed to log error to Firestore:', logError);
+    });
   }
 };
 
@@ -96,6 +114,8 @@ export const sendProjectCreatedNotification = async (params: {
   projectId: string;
   projectTitle: string;
   projectDescription: string;
+  category?: string;
+  difficulty?: string;
   teacherName: string;
   dueDate?: string;
   teamMembers: Array<{ name: string; email: string; role: string }>;
