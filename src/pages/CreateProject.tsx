@@ -868,5 +868,3 @@ export const CreateProject: React.FC = () => {
   );
 };
 
-// Import missing component
-import { GraduationCap } from 'lucide-react';

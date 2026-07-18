@@ -1,12 +1,5 @@
 import * as functions from "firebase-functions/v1";
-import { defineSecret } from "firebase-functions/params";
 import * as nodemailer from "nodemailer";
-
-const smtpHost = defineSecret("SMTP_HOST");
-const smtpPort = defineSecret("SMTP_PORT");
-const smtpUser = defineSecret("SMTP_USER");
-const smtpPassword = defineSecret("SMTP_PASSWORD");
-const smtpFromEmail = defineSecret("SMTP_FROM_EMAIL");
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -303,28 +296,29 @@ function buildHtml(p: EmailPayload): { subject: string; html: string } {
 // ─── Cloud Function ───────────────────────────────────────────────────────────
 
 export const sendNotificationEmail = functions
-  .region("me-central2")
-  .runWith({ secrets: [smtpHost, smtpPort, smtpUser, smtpPassword, smtpFromEmail] })
   .https.onCall(async (data: EmailPayload) => {
+    console.log("sendNotificationEmail called with:", {
+      type: data.type,
+      to_email: data.to_email,
+      to_name: data.to_name,
+      timestamp: new Date().toISOString()
+    });
+
     if (!data.to_email || !data.type) {
+      console.error("Missing required fields:", { to_email: data.to_email, type: data.type });
       throw new functions.https.HttpsError(
         "invalid-argument",
         "Missing required fields: to_email, type"
       );
     }
 
-    const host = smtpHost.value();
-    const port = parseInt(smtpPort.value() || "587");
-    const user = smtpUser.value();
-    const password = smtpPassword.value();
-    const fromEmail = smtpFromEmail.value();
+    const host = "smtp.gmail.com";
+    const port = 587;
+    const user = "myprojectplatform.noreply@gmail.com";
+    const password = "llyfkczsldsguukh";
+    const fromEmail = "myprojectplatform.noreply@gmail.com";
 
-    if (!host || !port || !user || !password || !fromEmail) {
-      throw new functions.https.HttpsError(
-        "failed-precondition",
-        "SMTP secrets are not configured"
-      );
-    }
+    console.log("Creating SMTP transporter with:", { host, port, user });
 
     const transporter = nodemailer.createTransport({
       host: host,
@@ -336,19 +330,32 @@ export const sendNotificationEmail = functions
       },
     });
 
+    // Verify SMTP connection
+    try {
+      console.log("Verifying SMTP connection...");
+      await transporter.verify();
+      console.log("SMTP connection verified successfully");
+    } catch (verifyError) {
+      console.error("SMTP verification failed:", verifyError);
+      throw new functions.https.HttpsError("internal", "SMTP connection failed");
+    }
+
     const { subject, html } = buildHtml(data);
 
+    console.log("Sending email with subject:", subject);
+
     try {
-      await transporter.sendMail({
+      const info = await transporter.sendMail({
         from: `منصة مشروعي <${fromEmail}>`,
         to: data.to_email,
         subject,
         html,
       });
+      console.log("Email sent successfully:", info.messageId);
     } catch (error) {
       console.error("SMTP error:", error);
-      throw new functions.https.HttpsError("internal", "Failed to send email");
+      throw new functions.https.HttpsError("internal", "Failed to send email: " + (error as Error).message);
     }
 
-    return { success: true };
+    return { success: true, messageId: "sent" };
   });
