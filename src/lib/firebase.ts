@@ -980,10 +980,16 @@ export const addStudentToProject = async ({ project_id, student_id, role, create
   status?: string;
 }) => {
   try {
+    // Fetch project data to get teacher_id and school_id
+    const projectDoc = await getDoc(firestoreDoc(db, 'projects', project_id));
+    const projectData = projectDoc.exists() ? projectDoc.data() : {};
+
     const docRef = await addDoc(collection(db, 'project_students'), {
       project_id,
       student_id,
       role,
+      teacher_id: projectData.teacher_id || null,
+      school_id: projectData.school_id || null,
       created_at: created_at ? Timestamp.fromDate(new Date(created_at)) : serverTimestamp(),
       status: status || 'active'
     });
