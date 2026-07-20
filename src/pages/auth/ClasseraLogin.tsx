@@ -76,7 +76,7 @@ export const ClasseraLogin: React.FC = () => {
           >
             <div className="flex items-center justify-center lg:justify-start gap-4 mb-6">
               <img 
-                src="/mashroui-logo.png" 
+                src="/mashrouilogo.png" 
                 alt="مشروعي" 
                 className="h-16 w-auto"
               />

@@ -139,7 +139,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMinimized, 
             <div className={`flex items-center gap-3 ${isMinimized ? 'justify-center' : ''}`}>
               <div className="w-16 h-16 rounded-xl flex items-center justify-center overflow-hidden">
                 <img 
-                  src="/mashroui-logo.png" 
+                  src="/mashrouilogo.png" 
                   alt={t('appName')} 
                   className="w-full h-full object-contain"
                 />

@@ -128,7 +128,7 @@ export const SummerProgramEnrollment: React.FC = () => {
         <div className="mb-8 text-center">
           <Link to="/" className="inline-block mb-6">
             <img 
-              src="/mashroui-logo.png" 
+              src="/mashrouilogo.png" 
               alt={t('appName')} 
               className="h-32 w-auto"
             />

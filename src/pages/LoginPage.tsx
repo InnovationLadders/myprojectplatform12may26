@@ -95,7 +95,7 @@ export const LoginPage: React.FC = () => {
               className="w-48 h-48 rounded-2xl flex items-center justify-center mx-auto mb-4 overflow-hidden"
             >
               <img
-                src={logoUrl || "/mashroui-logo.png"}
+                src={logoUrl || "/mashrouilogo.png"}
                 alt={schoolName || t('appName')}
                 className={`w-full h-full ${logoUrl ? 'object-cover' : 'object-contain'}`}
               />
