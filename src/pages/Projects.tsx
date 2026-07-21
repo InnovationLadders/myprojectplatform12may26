@@ -64,7 +64,7 @@ export const Projects: React.FC = () => {
 
         const schoolsList = snapshot.docs.map(doc => ({
           id: doc.id,
-          name: doc.data().name || doc.data().email || 'مؤسسة تعليمية'
+          name: doc.data().name || doc.data().email || t('projects.defaultSchoolName')
         }));
 
         setSchools(schoolsList);
@@ -235,23 +235,23 @@ export const Projects: React.FC = () => {
   };
 
   const handleArchiveProject = async (id: string) => {
-    if (window.confirm('هل أنت متأكد من أرشفة هذا المشروع؟')) {
+    if (window.confirm(t('projects.confirmArchive'))) {
       try {
         await archiveProject(id);
       } catch (error) {
         console.error('Error archiving project:', error);
-        alert('حدث خطأ أثناء أرشفة المشروع');
+        alert(t('projects.archiveError'));
       }
     }
   };
 
   const handleDeleteProject = async (id: string) => {
-    if (window.confirm('هل أنت متأكد من حذف هذا المشروع؟ هذا الإجراء لا يمكن التراجع عنه.')) {
+    if (window.confirm(t('projects.confirmDelete'))) {
       try {
         await deleteProject(id);
       } catch (error) {
         console.error('Error deleting project:', error);
-        alert('حدث خطأ أثناء حذف المشروع');
+        alert(t('projects.deleteError'));
       }
     }
   };
@@ -458,19 +458,19 @@ export const Projects: React.FC = () => {
                     <Link
                       to={`/projects/${project.id}?tab=evaluation`}
                       className="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors flex items-center gap-1.5 text-xs font-medium"
-                      title={t('projects.actions.evaluation', 'التقييم')}
+                      title={t('projects.actions.evaluation')}
                     >
                       <Award className="w-4 h-4" />
-                      <span>{t('projects.actions.evaluation', 'التقييم')}</span>
+                      <span>{t('projects.actions.evaluation')}</span>
                     </Link>
 
                     <Link
                       to={`/projects/${project.id}?tab=chat`}
                       className="px-3 py-1.5 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors flex items-center gap-1.5 text-xs font-medium"
-                      title={t('projects.actions.chat', 'المحادثة')}
+                      title={t('projects.actions.chat')}
                     >
                       <MessageCircle className="w-4 h-4" />
-                      <span>{t('projects.actions.chat', 'المحادثة')}</span>
+                      <span>{t('projects.actions.chat')}</span>
                     </Link>
                   </div>
                 </div>
@@ -535,7 +535,7 @@ export const Projects: React.FC = () => {
             <div className="mb-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-gray-700">{t('common.progress')}</span>
-                <span className="text-sm font-medium text-gray-700">نسبة الإنجاز: {getProjectProgress(project.id)}/10</span>
+                <span className="text-sm font-medium text-gray-700">{t('projects.progressLabel')}: {t('projects.progressOf10', { value: getProjectProgress(project.id) })}</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div

@@ -84,10 +84,10 @@ export const Settings: React.FC = () => {
     { id: 'appearance', name: t('settings.sections.appearance'), icon: Palette },
     { id: 'language', name: t('settings.sections.language'), icon: Globe },
     { id: 'data', name: t('settings.sections.data'), icon: Database },
-    ...(isAdmin ? [{ id: 'admin-migration', name: 'ترحيل البيانات (إدارة)', icon: RefreshCw }] : []),
+    ...(isAdmin ? [{ id: 'admin-migration', name: t('settings.sections.adminMigration'), icon: RefreshCw }] : []),
     ...(isSchool ? [
-      { id: 'institution-settings', name: 'إعدادات القبول', icon: UserCheck },
-      { id: 'ranking-service', name: 'خدمة الترتيب', icon: BarChart2 },
+      { id: 'institution-settings', name: t('settings.sections.institutionSettings'), icon: UserCheck },
+      { id: 'ranking-service', name: t('settings.sections.rankingService'), icon: BarChart2 },
     ] : []),
   ];
 
@@ -157,22 +157,22 @@ export const Settings: React.FC = () => {
 
     // Validate password fields
     if (!formData.currentPassword) {
-      setPasswordError('يرجى إدخال كلمة المرور الحالية');
+      setPasswordError(t('settings.errors.currentPasswordRequired'));
       return;
     }
 
     if (!formData.newPassword) {
-      setPasswordError('يرجى إدخال كلمة المرور الجديدة');
+      setPasswordError(t('settings.errors.newPasswordRequired'));
       return;
     }
 
     if (formData.newPassword.length < 6) {
-      setPasswordError('يجب أن تكون كلمة المرور الجديدة 6 أحرف على الأقل');
+      setPasswordError(t('settings.errors.newPasswordMinLength'));
       return;
     }
 
     if (formData.newPassword !== formData.confirmPassword) {
-      setPasswordError('كلمة المرور الجديدة وتأكيد كلمة المرور غير متطابقتين');
+      setPasswordError(t('settings.errors.passwordsNotMatch'));
       return;
     }
 
@@ -203,7 +203,7 @@ export const Settings: React.FC = () => {
       }
     } catch (error) {
       console.error('Error updating password:', error);
-      setPasswordError(error instanceof Error ? error.message : 'حدث خطأ أثناء تحديث كلمة المرور');
+      setPasswordError(error instanceof Error ? error.message : t('settings.errors.passwordUpdateFailed'));
     } finally {
       setIsUpdatingPassword(false);
     }
@@ -256,11 +256,11 @@ export const Settings: React.FC = () => {
           setMigrationSuccess(null);
         }, 5000);
       } else {
-        setMigrationError(`تم تحديث ${result.updated} من ${result.total} مستشارين. حدثت بعض الأخطاء.`);
+        setMigrationError(t('settings.migration.partialSuccess', { updated: result.updated, total: result.total }));
       }
     } catch (error) {
       console.error('Error migrating consultant rates:', error);
-      setMigrationError(error instanceof Error ? error.message : 'حدث خطأ أثناء ترحيل البيانات');
+      setMigrationError(error instanceof Error ? error.message : t('settings.errors.migrationFailed'));
     } finally {
       setIsMigrating(false);
     }
@@ -274,13 +274,13 @@ export const Settings: React.FC = () => {
 
     const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
-      setAvatarError('حجم الملف كبير جداً. الحد الأقصى 5 ميجابايت');
+      setAvatarError(t('settings.errors.fileTooLarge'));
       return;
     }
 
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!allowedTypes.includes(file.type)) {
-      setAvatarError('نوع الملف غير مدعوم. الرجاء استخدام JPG, PNG, GIF أو WebP');
+      setAvatarError(t('settings.errors.unsupportedFileType'));
       return;
     }
 
@@ -311,7 +311,7 @@ export const Settings: React.FC = () => {
         },
         (error) => {
           console.error('Error uploading avatar:', error);
-          setAvatarError('حدث خطأ أثناء رفع الصورة');
+          setAvatarError(t('settings.errors.uploadFailed'));
           setIsUploadingAvatar(false);
         },
         async () => {
@@ -340,7 +340,7 @@ export const Settings: React.FC = () => {
       );
     } catch (error) {
       console.error('Error uploading avatar:', error);
-      setAvatarError('حدث خطأ أثناء رفع الصورة');
+      setAvatarError(t('settings.errors.uploadFailed'));
       setIsUploadingAvatar(false);
     }
   };
@@ -364,7 +364,7 @@ export const Settings: React.FC = () => {
       window.location.reload();
     } catch (error) {
       console.error('Error removing avatar:', error);
-      setAvatarError('حدث خطأ أثناء حذف الصورة');
+      setAvatarError(t('settings.errors.removeFailed'));
       setIsUploadingAvatar(false);
     }
   };
@@ -493,7 +493,7 @@ export const Settings: React.FC = () => {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-semibold text-gray-800">{t('settings.profile.profilePicture')}</h3>
-                    <p className="text-gray-600 text-sm mb-2">JPG, PNG, GIF أو WebP. الحد الأقصى 5 ميجابايت</p>
+                    <p className="text-gray-600 text-sm mb-2">{t('settings.errors.fileTooLarge')}</p>
 
                     {avatarError && (
                       <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-lg text-sm mb-2">
@@ -504,7 +504,7 @@ export const Settings: React.FC = () => {
                     {selectedFile && (
                       <div className="mb-2">
                         <div className="flex items-center gap-2 text-sm text-gray-600 mb-1">
-                          <span>جاري الرفع: {Math.round(uploadProgress)}%</span>
+                          <span>{t('settings.messages.uploading')}: {Math.round(uploadProgress)}%</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
@@ -524,14 +524,14 @@ export const Settings: React.FC = () => {
                             className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                           >
                             <Upload className="w-4 h-4" />
-                            {isUploadingAvatar ? 'جاري الرفع...' : 'رفع الصورة'}
+                            {isUploadingAvatar ? t('settings.messages.uploading') : t('settings.messages.uploadImage')}
                           </button>
                           <button
                             onClick={handleCancelUpload}
                             disabled={isUploadingAvatar}
                             className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm disabled:opacity-50"
                           >
-                            إلغاء
+                            {t('settings.messages.cancel')}
                           </button>
                         </>
                       ) : (
@@ -724,7 +724,7 @@ export const Settings: React.FC = () => {
                 {passwordSuccess && (
                   <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center gap-2">
                     <CheckCircle className="w-5 h-5" />
-                    <span>تم تحديث كلمة المرور بنجاح</span>
+                    <span>{t('settings.messages.passwordUpdated')}</span>
                   </div>
                 )}
 
@@ -774,7 +774,7 @@ export const Settings: React.FC = () => {
                         className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         disabled={isUpdatingPassword}
                       />
-                      <p className="text-xs text-gray-500 mt-1">يجب أن تكون 6 أحرف على الأقل</p>
+                      <p className="text-xs text-gray-500 mt-1">{t('settings.errors.newPasswordMinLength')}</p>
                     </div>
 
                     <div>
@@ -798,7 +798,7 @@ export const Settings: React.FC = () => {
                       {isUpdatingPassword ? (
                         <>
                           <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                          جاري التحديث...
+                          {t('settings.messages.updating')}
                         </>
                       ) : (
                         <>
@@ -1049,9 +1049,9 @@ export const Settings: React.FC = () => {
                     <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <Database className="w-8 h-8 text-gray-400" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-800 mb-2">إدارة البيانات</h3>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">{t('settings.data.studentDataTitle')}</h3>
                     <p className="text-gray-600">
-                      لا تتوفر خيارات إدارة البيانات للطلاب. يرجى التواصل مع المعلم/المشرف أو مدير المؤسسة تعليمية للمساعدة.
+                      {t('settings.data.studentDataDesc')}
                     </p>
                   </div>
                 )}
@@ -1063,7 +1063,7 @@ export const Settings: React.FC = () => {
               <div className="space-y-6">
                 <div className="flex items-center gap-4 mb-6">
                   <RefreshCw className="w-6 h-6 text-purple-600" />
-                  <h2 className="text-2xl font-bold text-gray-800">ترحيل البيانات (إدارة)</h2>
+                  <h2 className="text-2xl font-bold text-gray-800">{t('settings.migration.title')}</h2>
                 </div>
 
                 {migrationSuccess && (
@@ -1085,16 +1085,15 @@ export const Settings: React.FC = () => {
                   <div className="flex items-start gap-3">
                     <RefreshCw className="w-6 h-6 text-purple-600 mt-1" />
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-purple-800 mb-2">تحديث أسعار المستشارين إلى 0 ريال</h3>
+                      <h3 className="text-lg font-semibold text-purple-800 mb-2">{t('settings.migration.consultantRatesTitle')}</h3>
                       <p className="text-purple-700 mb-4">
-                        هذه العملية ستقوم بتحديث أسعار الساعة لجميع المستشارين في النظام إلى 0 ريال (مجاني).
-                        سيتم تحديث جميع سجلات المستشارين الموجودة في قاعدة البيانات.
+                        {t('settings.migration.consultantRatesDesc')}
                       </p>
                       <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
                         <div className="flex items-start gap-2">
                           <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" />
                           <div className="text-sm text-yellow-800">
-                            <strong>ملاحظة:</strong> هذه العملية لا يمكن التراجع عنها. سيتم تحديث جميع المستشارين الحاليين والجدد بسعر 0 ريال/ساعة.
+                            {t('settings.migration.consultantRatesWarning')}
                           </div>
                         </div>
                       </div>
@@ -1106,12 +1105,12 @@ export const Settings: React.FC = () => {
                         {isMigrating ? (
                           <>
                             <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                            جاري تحديث البيانات...
+                            {t('settings.migration.updating')}
                           </>
                         ) : (
                           <>
                             <RefreshCw className="w-5 h-5" />
-                            تحديث أسعار المستشارين
+                            {t('settings.migration.updateRatesButton')}
                           </>
                         )}
                       </button>
@@ -1126,23 +1125,22 @@ export const Settings: React.FC = () => {
               <div className="space-y-6">
                 <div className="flex items-center gap-4 mb-6">
                   <UserCheck className="w-6 h-6 text-blue-600" />
-                  <h2 className="text-2xl font-bold text-gray-800">إعدادات القبول</h2>
+                  <h2 className="text-2xl font-bold text-gray-800">{t('settings.institution.title')}</h2>
                 </div>
 
                 {approvalSuccess && (
                   <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center gap-2">
                     <CheckCircle className="w-5 h-5" />
-                    <span>تم حفظ الإعداد بنجاح</span>
+                    <span>{t('settings.institution.saveSuccess')}</span>
                   </div>
                 )}
 
                 <div className="border border-gray-200 rounded-xl p-6 space-y-4">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-800">اشتراط الموافقة على الطلاب الجدد</h3>
+                      <h3 className="text-lg font-semibold text-gray-800">{t('settings.institution.approvalTitle')}</h3>
                       <p className="text-sm text-gray-600 mt-1">
-                        عند التفعيل، سيبقى الطلاب الجدد المنتسبون لجهتك في حالة "قيد المراجعة" بعد تأكيد بريدهم الإلكتروني،
-                        وذلك حتى تتم الموافقة عليهم يدوياً من خلال صفحة إدارة المستخدمين.
+                        {t('settings.institution.approvalDesc')}
                       </p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer flex-shrink-0 mt-1">
@@ -1162,9 +1160,9 @@ export const Settings: React.FC = () => {
                       <div className="flex items-start gap-3">
                         <CheckCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
                         <div>
-                          <p className="text-sm font-medium text-blue-800">الموافقة اليدوية مفعّلة</p>
+                          <p className="text-sm font-medium text-blue-800">{t('settings.institution.approvalEnabled')}</p>
                           <p className="text-sm text-blue-700 mt-1">
-                            الطلاب الجدد من جهتك سيحتاجون إلى موافقتك من صفحة "إدارة المستخدمين" قبل أن يتمكنوا من الوصول للمنصة.
+                            {t('settings.institution.approvalEnabledDesc')}
                           </p>
                         </div>
                       </div>
@@ -1172,9 +1170,9 @@ export const Settings: React.FC = () => {
                       <div className="flex items-start gap-3">
                         <CheckCircle className="w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0" />
                         <div>
-                          <p className="text-sm font-medium text-gray-700">التفعيل التلقائي مفعّل (الوضع الافتراضي)</p>
+                          <p className="text-sm font-medium text-gray-700">{t('settings.institution.autoEnabled')}</p>
                           <p className="text-sm text-gray-600 mt-1">
-                            الطلاب الجدد يتم تفعيلهم تلقائياً بمجرد تأكيد بريدهم الإلكتروني.
+                            {t('settings.institution.autoEnabledDesc')}
                           </p>
                         </div>
                       </div>
@@ -1183,11 +1181,11 @@ export const Settings: React.FC = () => {
                 </div>
 
                 <div className="border border-gray-100 rounded-xl p-5 bg-gray-50">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-2">كيفية الموافقة على الطلاب</h4>
+                  <h4 className="text-sm font-semibold text-gray-700 mb-2">{t('settings.institution.howToTitle')}</h4>
                   <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside">
-                    <li>انتقل إلى صفحة "إدارة المستخدمين" من القائمة الجانبية</li>
-                    <li>ستظهر تنبيهات للطلاب المنتظرين للموافقة</li>
-                    <li>انقر على "تفعيل" بجانب اسم الطالب للموافقة عليه</li>
+                    <li>{t('settings.institution.howToStep1')}</li>
+                    <li>{t('settings.institution.howToStep2')}</li>
+                    <li>{t('settings.institution.howToStep3')}</li>
                   </ol>
                 </div>
               </div>
@@ -1198,23 +1196,22 @@ export const Settings: React.FC = () => {
               <div className="space-y-6">
                 <div className="flex items-center gap-4 mb-6">
                   <BarChart2 className="w-6 h-6 text-blue-600" />
-                  <h2 className="text-2xl font-bold text-gray-800">خدمة الترتيب</h2>
+                  <h2 className="text-2xl font-bold text-gray-800">{t('settings.ranking.title')}</h2>
                 </div>
 
                 {rankingSuccess && (
                   <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center gap-2">
                     <CheckCircle className="w-5 h-5" />
-                    <span>تم حفظ الإعداد بنجاح</span>
+                    <span>{t('settings.ranking.enabled')}</span>
                   </div>
                 )}
 
                 <div className="border border-gray-200 rounded-xl p-6 space-y-5">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-800">عرض ترتيب الطلاب</h3>
+                      <h3 className="text-lg font-semibold text-gray-800">{t('settings.ranking.displayTitle')}</h3>
                       <p className="text-sm text-gray-600 mt-1">
-                        عند التفعيل، يرى كل طالب في مؤسستك ترتيبه بين زملائه على الصفحة الرئيسية بناءً على نقاطه المكتسبة،
-                        مع عرض قائمة بالطلاب المحيطين به في الترتيب.
+                        {t('settings.ranking.displayDesc')}
                       </p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer flex-shrink-0 mt-1">
@@ -1234,10 +1231,9 @@ export const Settings: React.FC = () => {
                       <div className="flex items-start gap-3">
                         <CheckCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
                         <div>
-                          <p className="text-sm font-medium text-blue-800">خدمة الترتيب مفعّلة</p>
+                          <p className="text-sm font-medium text-blue-800">{t('settings.ranking.enabled')}</p>
                           <p className="text-sm text-blue-700 mt-1">
-                            طلاب مؤسستك يرون ترتيبهم الحالي وقائمة بأقرب المنافسين على الصفحة الرئيسية.
-                            يتحدث الترتيب فورياً عند تغيير النقاط.
+                            {t('settings.ranking.enabledDesc')}
                           </p>
                         </div>
                       </div>
@@ -1245,9 +1241,9 @@ export const Settings: React.FC = () => {
                       <div className="flex items-start gap-3">
                         <ToggleLeft className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
                         <div>
-                          <p className="text-sm font-medium text-gray-700">الخدمة معطّلة (الوضع الافتراضي)</p>
+                          <p className="text-sm font-medium text-gray-700">{t('settings.ranking.disabled')}</p>
                           <p className="text-sm text-gray-600 mt-1">
-                            لن يرى الطلاب قائمة الترتيب على الصفحة الرئيسية.
+                            {t('settings.ranking.disabledDesc')}
                           </p>
                         </div>
                       </div>
@@ -1256,10 +1252,9 @@ export const Settings: React.FC = () => {
                 </div>
 
                 <div className="border border-gray-100 rounded-xl p-5 bg-gray-50">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-2">ملاحظة</h4>
+                  <h4 className="text-sm font-semibold text-gray-700 mb-2">{t('settings.ranking.noteTitle')}</h4>
                   <p className="text-sm text-gray-600">
-                    الترتيب يشمل فقط طلاب مؤسستك. لا يرى الطلاب ترتيباً مقارناً بطلاب مؤسسات أخرى.
-                    الخدمة تعمل بشكل مستقل لكل مؤسسة.
+                    {t('settings.ranking.noteDesc')}
                   </p>
                 </div>
               </div>

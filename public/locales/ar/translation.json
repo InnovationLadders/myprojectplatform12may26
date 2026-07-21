@@ -810,7 +810,15 @@
         },
         "noProjects": "لا توجد مشاريع",
         "startCreating": "ابدأ بإنشاء مشروعك الأول أو جرب تغيير معايير البحث",
-        "createNewProject": "إنشاء مشروع جديد"
+        "createNewProject": "إنشاء مشروع جديد",
+        "confirmArchive": "هل أنت متأكد من أرشفة هذا المشروع؟",
+        "confirmDelete": "هل أنت متأكد من حذف هذا المشروع؟ هذا الإجراء لا يمكن التراجع عنه.",
+        "archiveError": "حدث خطأ أثناء أرشفة المشروع",
+        "deleteError": "حدث خطأ أثناء حذف المشروع",
+        "progressLabel": "نسبة الإنجاز",
+        "progressOf10": "{{value}}/10",
+        "completedTasks": "مهام مكتملة",
+        "defaultSchoolName": "مؤسسة تعليمية"
     },
     "projectIdeas": {
         "title": "أفكار المشاريع",
@@ -1120,12 +1128,31 @@
             "appearance": "المظهر",
             "language": "اللغة والمنطقة",
             "data": "البيانات والنسخ الاحتياطي",
+            "adminMigration": "ترحيل البيانات (إدارة)",
             "institutionSettings": "إعدادات القبول",
             "rankingService": "خدمة الترتيب"
         },
         "errors": {
             "loginRequired": "يجب تسجيل الدخول لحفظ الإعدادات",
-            "saveFailed": "حدث خطأ في حفظ الإعدادات"
+            "saveFailed": "حدث خطأ في حفظ الإعدادات",
+            "currentPasswordRequired": "يرجى إدخال كلمة المرور الحالية",
+            "newPasswordRequired": "يرجى إدخال كلمة المرور الجديدة",
+            "newPasswordMinLength": "يجب أن تكون كلمة المرور الجديدة 6 أحرف على الأقل",
+            "passwordsNotMatch": "كلمة المرور الجديدة وتأكيد كلمة المرور غير متطابقتين",
+            "passwordUpdateFailed": "حدث خطأ أثناء تحديث كلمة المرور",
+            "fileTooLarge": "حجم الملف كبير جداً. الحد الأقصى 5 ميجابايت",
+            "unsupportedFileType": "نوع الملف غير مدعوم. الرجاء استخدام JPG, PNG, GIF أو WebP",
+            "uploadFailed": "حدث خطأ أثناء رفع الصورة",
+            "removeFailed": "حدث خطأ أثناء حذف الصورة",
+            "migrationFailed": "حدث خطأ أثناء ترحيل البيانات"
+        },
+        "messages": {
+            "passwordUpdated": "تم تحديث كلمة المرور بنجاح",
+            "updating": "جاري التحديث...",
+            "uploading": "جاري الرفع...",
+            "uploadImage": "رفع الصورة",
+            "cancel": "إلغاء",
+            "saving": "جاري الحفظ..."
         },
         "profile": {
             "title": "الملف الشخصي",
@@ -1217,7 +1244,43 @@
             "importDataDesc": "استيراد البيانات من ملف سابق",
             "deleteAccount": "حذف الحساب",
             "deleteAccountWarning": "حذف الحساب نهائياً سيؤدي إلى فقدان جميع البيانات والمشاريع. هذا الإجراء لا يمكن التراجع عنه.",
-            "permanentlyDeleteAccount": "حذف الحساب نهائياً"
+            "permanentlyDeleteAccount": "حذف الحساب نهائياً",
+            "studentDataTitle": "إدارة البيانات",
+            "studentDataDesc": "لا تتوفر خيارات إدارة البيانات للطلاب. يرجى التواصل مع المعلم/المشرف أو مدير المؤسسة التعليمية للمساعدة."
+        },
+        "migration": {
+            "title": "ترحيل البيانات (إدارة)",
+            "consultantRatesTitle": "تحديث أسعار المستشارين إلى 0 ريال",
+            "consultantRatesDesc": "هذه العملية ستقوم بتحديث أسعار الساعة لجميع المستشارين في النظام إلى 0 ريال (مجاني). سيتم تحديث جميع سجلات المستشارين الموجودة في قاعدة البيانات.",
+            "consultantRatesWarning": "ملاحظة: هذه العملية لا يمكن التراجع عنها. سيتم تحديث جميع المستشارين الحاليين والجدد بسعر 0 ريال/ساعة.",
+            "updateRatesButton": "تحديث أسعار المستشارين",
+            "updating": "جاري تحديث البيانات...",
+            "partialSuccess": "تم تحديث {{updated}} من {{total}} مستشار. حدثت بعض الأخطاء."
+        },
+        "institution": {
+            "title": "إعدادات القبول",
+            "approvalTitle": "اشتراط الموافقة على الطلاب الجدد",
+            "approvalDesc": "عند التفعيل، سيبقى الطلاب الجدد المنتسبون لجهتك في حالة \"قيد المراجعة\" بعد تأكيد بريدهم الإلكتروني، وذلك حتى تتم الموافقة عليهم يدوياً من خلال صفحة إدارة المستخدمين.",
+            "approvalEnabled": "الموافقة اليدوية مفعّلة",
+            "approvalEnabledDesc": "الطلاب الجدد من جهتك سيحتاجون إلى موافقتك من صفحة \"إدارة المستخدمين\" قبل أن يتمكنوا من الوصول للمنصة.",
+            "autoEnabled": "التفعيل التلقائي مفعّل (الوضع الافتراضي)",
+            "autoEnabledDesc": "الطلاب الجدد يتم تفعيلهم تلقائياً بمجرد تأكيد بريدهم الإلكتروني.",
+            "howToTitle": "كيفية الموافقة على الطلاب",
+            "howToStep1": "انتقل إلى صفحة \"إدارة المستخدمين\" من القائمة الجانبية",
+            "howToStep2": "ستظهر تنبيهات للطلاب المنتظرين للموافقة",
+            "howToStep3": "انقر على \"تفعيل\" بجانب اسم الطالب للموافقة عليه",
+            "saveSuccess": "تم حفظ الإعداد بنجاح"
+        },
+        "ranking": {
+            "title": "خدمة الترتيب",
+            "displayTitle": "عرض ترتيب الطلاب",
+            "displayDesc": "عند التفعيل، يرى كل طالب في مؤسستك ترتيبه بين زملائه على الصفحة الرئيسية بناءً على نقاطه المكتسبة، مع عرض قائمة بالطلاب المحيطين به في الترتيب.",
+            "enabled": "خدمة الترتيب مفعّلة",
+            "enabledDesc": "طلاب مؤسستك يرون ترتيبهم الحالي وقائمة بأقرب المنافسين على الصفحة الرئيسية. يتحدث الترتيب فورياً عند تغيير النقاط.",
+            "disabled": "الخدمة معطّلة (الوضع الافتراضي)",
+            "disabledDesc": "لن يرى الطلاب قائمة الترتيب على الصفحة الرئيسية.",
+            "noteTitle": "ملاحظة",
+            "noteDesc": "الترتيب يشمل فقط طلاب مؤسستك. لا يرى الطلاب ترتيباً مقارناً بطلاب مؤسسات أخرى. الخدمة تعمل بشكل مستقل لكل مؤسسة."
         }
     },
     "createProject": {
@@ -1568,8 +1631,8 @@
             "phonePlaceholder": "أدخل رقم هاتفك",
             "city": "المدينة",
             "cityPlaceholder": "أدخل المدينة",
-            "school": "المؤسسة تعليمية، ، البرنامج",
-            "selectSchool": "اختر المؤسسة تعليمية، ، البرنامج",
+            "school": "المؤسسة التعليمية / البرنامج",
+            "selectSchool": "اختر المؤسسة التعليمية / البرنامج",
             "grade": "المرحلة الدراسية",
             "selectGrade": "اختر المرحلة الدراسية",
             "subject": "المادة/التخصص",
@@ -1593,10 +1656,38 @@
             "investmentInterestsPlaceholder": "مثال: التقنية، الذكاء الاصطناعي، ريادة الأعمال، الطاقة المتجددة..."
         },
         "accountType": "نوع الحساب",
+        "createAccountTitle": "إنشاء حساب جديد",
         "joinPlatform": "انضم إلى منصة مشروعي",
+        "roleStudent": "طالب",
+        "roleTeacher": "معلم/مشرف",
+        "roleConsultant": "مستشار",
+        "roleSchool": "مؤسسة تعليمية",
+        "roleInvestor": "مستثمر",
+        "fullName": "الاسم الكامل",
+        "fullNamePlaceholder": "أدخل اسمك الكامل",
+        "nameExample": "مثال: مؤسسة تعليمية ابن النفيس | جامعة الملك سعود",
+        "email": "البريد الإلكتروني",
+        "emailPlaceholder": "أدخل بريدك الإلكتروني",
+        "emailAccepted": "البريد الإلكتروني مقبول",
+        "password": "كلمة المرور",
+        "passwordPlaceholder": "أدخل كلمة المرور",
+        "confirmPassword": "تأكيد كلمة المرور",
+        "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور",
+        "phone": "رقم الهاتف",
+        "city": "المدينة",
+        "cityPlaceholder": "أدخل المدينة",
+        "institutionProgram": "المؤسسة التعليمية / البرنامج",
+        "selectInstitutionProgram": "اختر المؤسسة التعليمية / البرنامج",
+        "subject": "المادة/التخصص",
+        "optional": "اختياري",
+        "creatingAccount": "جاري إنشاء الحساب...",
+        "createAccountButton": "إنشاء حساب",
+        "mustAgreeInvestorPledge": "يجب الموافقة على تعهد المستثمر للمتابعة",
+        "passwordMinLength": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+        "emailDomainRequired": "يجب أن ينتهي البريد الإلكتروني بأحد النطاقات التالية: {{domains}}",
         "aboutYourself": "أخبرنا عنك: مجالات المهارات والتخصص والهوايات التي تجيدها",
         "aboutYourselfPlaceholder": "مثال: البرمجة، التصميم، الروبوتات، الرسم، الرياضة...",
-        "aboutYourselfHint": "Tell us about yourself: Areas of skills, specialties, and hobbies",
+        "aboutYourselfHint": "أخبرنا عنك: مجالات المهارات والتخصص والهوايات التي تجيدها",
         "gender": "الجنس",
         "male": "ذكر",
         "female": "أنثى",
@@ -1693,13 +1784,90 @@
             "projectsByCategory": "المشاريع حسب الفئة",
             "progressDistribution": "توزيع التقدم"
         },
+        "charts": {
+            "projectsTrend": "تطور المشاريع الشهرية",
+            "categoryDistribution": "توزيع المشاريع حسب الفئة",
+            "progressDistribution": "توزيع نسب الإنجاز"
+        },
+        "metrics": {
+            "totalProjects": "إجمالي المشاريع",
+            "activeProjects": "المشاريع النشطة",
+            "averageProgress": "متوسط نسبة الإنجاز",
+            "averageRating": "متوسط التقييم",
+            "weightedRating": "متوسط التقييم الموزون",
+            "completionRate": "معدل إكمال المشاريع"
+        },
+        "categories": {
+            "stem": "العلوم والتقنية",
+            "entrepreneurship": "ريادة الأعمال",
+            "volunteer": "التطوع",
+            "ethics": "الأخلاق"
+        },
+        "statuses": {
+            "completed": "مكتمل",
+            "active": "نشط",
+            "draft": "مسودة",
+            "archived": "مؤرشف"
+        },
         "performance": {
             "progressDistribution": "توزيع نسبة الإنجاز",
             "averageProgress": "متوسط نسبة الإنجاز",
             "averageRating": "متوسط الدرجة الموزونة",
             "completionRate": "معدل إنجاز المشاريع",
             "outOf": "من أصل",
-            "fromTotal": "من"
+            "fromTotal": "من",
+            "outOf10": "من 10 درجات"
+        },
+        "tables": {
+            "projectsTitle": "تقرير المشاريع التفصيلي",
+            "projectsSearch": "البحث في المشاريع...",
+            "projectsExport": "تقرير_المشاريع",
+            "studentsTitle": "تقرير الطلاب التفصيلي",
+            "studentsSearch": "البحث في الطلاب...",
+            "studentsExport": "تقرير_الطلاب",
+            "teachersTitle": "تقرير المعلمين/المشرفين التفصيلي",
+            "teachersSearch": "البحث في المعلمين/المشرفين...",
+            "teachersExport": "تقرير_المعلمين_المشرفين",
+            "schoolsTitle": "تقرير المؤسسات التعليمية التفصيلي",
+            "schoolsSearch": "البحث في المؤسسات التعليمية...",
+            "schoolsExport": "تقرير_المؤسسات_التعليمية"
+        },
+        "summary": {
+            "totalStudents": "إجمالي الطلاب",
+            "totalTeachers": "إجمالي المعلمين/المشرفين",
+            "totalSchools": "إجمالي المؤسسات التعليمية"
+        },
+        "export": {
+            "projectTitle": "عنوان المشروع",
+            "description": "الوصف",
+            "category": "الفئة",
+            "status": "الحالة",
+            "progress": "نسبة الإنجاز",
+            "weightedScore": "الدرجة الموزونة",
+            "supervisor": "المعلم/المشرف المشرف",
+            "school": "المؤسسة التعليمية",
+            "studentsCount": "عدد الطلاب",
+            "createdAt": "تاريخ الإنشاء",
+            "deadline": "الموعد النهائي",
+            "notSpecified": "غير محدد",
+            "studentName": "اسم الطالب",
+            "email": "البريد الإلكتروني",
+            "grade": "المرحلة الدراسية",
+            "projectsCount": "عدد المشاريع",
+            "completedProjects": "المشاريع المكتملة",
+            "averageRating": "متوسط التقييم",
+            "totalScore": "مجموع درجات الإنجاز",
+            "teacherName": "اسم المعلم/المشرف",
+            "subject": "التخصص",
+            "teachersCount": "عدد المعلمين/المشرفين",
+            "completionRate": "معدل الإنجاز",
+            "sheets": {
+                "projects": "المشاريع",
+                "students": "الطلاب",
+                "teachers": "المعلمين",
+                "schools": "المؤسسات التعليمية"
+            },
+            "fileName": "تقرير_شامل"
         },
         "exportError": "حدث خطأ أثناء تصدير البيانات",
         "noData": "لا توجد بيانات متاحة",

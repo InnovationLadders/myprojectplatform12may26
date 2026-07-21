@@ -261,80 +261,80 @@ export const Reports: React.FC = () => {
       // Export projects
       if (reportsData.projects.length > 0) {
         const projectsData = reportsData.projects.map(project => ({
-          'عنوان المشروع': project.title,
-          'الوصف': project.description,
-          'الفئة': project.category === 'stem' ? 'العلوم والتقنية' : 
-                   project.category === 'entrepreneurship' ? 'ريادة الأعمال' :
-                   project.category === 'volunteer' ? 'التطوع' :
-                   project.category === 'ethics' ? 'الأخلاق' : project.category,
-          'الحالة': project.status === 'completed' ? 'مكتمل' :
-                   project.status === 'active' ? 'نشط' :
-                   project.status === 'draft' ? 'مسودة' : 'مؤرشف',
-          'نسبة الإنجاز': `${project.progress}/10`,
-          'الدرجة الموزونة': project.weighted_score.toFixed(2),
-          'المعلم/المشرف المشرف': project.teacher_name,
-          'المؤسسة تعليمية': project.school_name,
-          'عدد الطلاب': project.students_count,
-          'تاريخ الإنشاء': formatDate(project.created_at),
-          'الموعد النهائي': project.due_date ? formatDate(project.due_date) : 'غير محدد'
+          [t('reports.export.projectTitle')]: project.title,
+          [t('reports.export.description')]: project.description,
+          [t('reports.export.category')]: project.category === 'stem' ? t('reports.categories.stem') :
+                   project.category === 'entrepreneurship' ? t('reports.categories.entrepreneurship') :
+                   project.category === 'volunteer' ? t('reports.categories.volunteer') :
+                   project.category === 'ethics' ? t('reports.categories.ethics') : project.category,
+          [t('reports.export.status')]: project.status === 'completed' ? t('reports.statuses.completed') :
+                   project.status === 'active' ? t('reports.statuses.active') :
+                   project.status === 'draft' ? t('reports.statuses.draft') : t('reports.statuses.archived'),
+          [t('reports.export.progress')]: `${project.progress}/10`,
+          [t('reports.export.weightedScore')]: project.weighted_score.toFixed(2),
+          [t('reports.export.supervisor')]: project.teacher_name,
+          [t('reports.export.school')]: project.school_name,
+          [t('reports.export.studentsCount')]: project.students_count,
+          [t('reports.export.createdAt')]: formatDate(project.created_at),
+          [t('reports.export.deadline')]: project.due_date ? formatDate(project.due_date) : t('reports.export.notSpecified')
         }));
         
         const projectsWorksheet = XLSX.utils.json_to_sheet(projectsData);
-        XLSX.utils.book_append_sheet(workbook, projectsWorksheet, 'المشاريع');
+        XLSX.utils.book_append_sheet(workbook, projectsWorksheet, t('reports.export.sheets.projects'));
       }
 
       // Export students (if available)
       if (reportsData.students.length > 0) {
         const studentsData = reportsData.students.map(student => ({
-          'اسم الطالب': student.name,
-          'البريد الإلكتروني': student.email,
-          'المرحلة الدراسية': student.grade,
-          'المؤسسة تعليمية': student.school_name,
-          'عدد المشاريع': student.projects_count,
-          'المشاريع المكتملة': student.completed_projects,
-          'متوسط التقييم': student.average_rating.toFixed(1),
-          'مجموع درجات الإنجاز': student.total_evaluation_score.toFixed(1)
+          [t('reports.export.studentName')]: student.name,
+          [t('reports.export.email')]: student.email,
+          [t('reports.export.grade')]: student.grade,
+          [t('reports.export.school')]: student.school_name,
+          [t('reports.export.projectsCount')]: student.projects_count,
+          [t('reports.export.completedProjects')]: student.completed_projects,
+          [t('reports.export.averageRating')]: student.average_rating.toFixed(1),
+          [t('reports.export.totalScore')]: student.total_evaluation_score.toFixed(1)
         }));
         
         const studentsWorksheet = XLSX.utils.json_to_sheet(studentsData);
-        XLSX.utils.book_append_sheet(workbook, studentsWorksheet, 'الطلاب');
+        XLSX.utils.book_append_sheet(workbook, studentsWorksheet, t('reports.export.sheets.students'));
       }
 
       // Export teachers (if available)
       if (reportsData.teachers.length > 0) {
         const teachersData = reportsData.teachers.map(teacher => ({
-          'اسم المعلم/المشرف': teacher.name,
-          'البريد الإلكتروني': teacher.email,
-          'التخصص': teacher.subject,
-          'المؤسسة تعليمية': teacher.school_name,
-          'عدد المشاريع': teacher.projects_count,
-          'المشاريع المكتملة': teacher.completed_projects,
-          'عدد الطلاب': teacher.students_count,
-          'متوسط تقييم المشاريع': teacher.average_project_rating.toFixed(1)
+          [t('reports.export.teacherName')]: teacher.name,
+          [t('reports.export.email')]: teacher.email,
+          [t('reports.export.subject')]: teacher.subject,
+          [t('reports.export.school')]: teacher.school_name,
+          [t('reports.export.projectsCount')]: teacher.projects_count,
+          [t('reports.export.completedProjects')]: teacher.completed_projects,
+          [t('reports.export.studentsCount')]: teacher.students_count,
+          [t('reports.export.averageRating')]: teacher.average_project_rating.toFixed(1)
         }));
         
         const teachersWorksheet = XLSX.utils.json_to_sheet(teachersData);
-        XLSX.utils.book_append_sheet(workbook, teachersWorksheet, 'المعلمين');
+        XLSX.utils.book_append_sheet(workbook, teachersWorksheet, t('reports.export.sheets.teachers'));
       }
 
       // Export schools (if available)
       if (reportsData.schools.length > 0) {
         const schoolsData = reportsData.schools.map(school => ({
-          'اسم المؤسسة تعليمية': school.name,
-          'البريد الإلكتروني': school.email,
-          'عدد المشاريع': school.projects_count,
-          'عدد المعلمين/المشرفين': school.teachers_count,
-          'عدد الطلاب': school.students_count,
-          'معدل الإنجاز': `${school.completion_rate.toFixed(1)}%`,
-          'متوسط التقييم': school.average_rating.toFixed(1)
+          [t('reports.export.school')]: school.name,
+          [t('reports.export.email')]: school.email,
+          [t('reports.export.projectsCount')]: school.projects_count,
+          [t('reports.export.teachersCount')]: school.teachers_count,
+          [t('reports.export.studentsCount')]: school.students_count,
+          [t('reports.export.completionRate')]: `${school.completion_rate.toFixed(1)}%`,
+          [t('reports.export.averageRating')]: school.average_rating.toFixed(1)
         }));
         
         const schoolsWorksheet = XLSX.utils.json_to_sheet(schoolsData);
-        XLSX.utils.book_append_sheet(workbook, schoolsWorksheet, 'المؤسسات التعليمية');
+        XLSX.utils.book_append_sheet(workbook, schoolsWorksheet, t('reports.export.sheets.schools'));
       }
 
       // Generate Excel file
-      XLSX.writeFile(workbook, `تقرير_شامل_${new Date().toISOString().split('T')[0]}.xlsx`);
+      XLSX.writeFile(workbook, `${t('reports.export.fileName')}_${new Date().toISOString().split('T')[0]}.xlsx`);
     } catch (error) {
       console.error('Error exporting data:', error);
       alert(t('reports.exportError'));
@@ -457,7 +457,7 @@ export const Reports: React.FC = () => {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
               {[
                 {
-                  title: 'إجمالي المشاريع',
+                  title: t('reports.metrics.totalProjects'),
                   value: reportsData.totalProjects.toString(),
                   change: '+12%',
                   trend: 'up',
@@ -465,7 +465,7 @@ export const Reports: React.FC = () => {
                   color: 'from-blue-500 to-blue-600'
                 },
                 {
-                  title: 'المشاريع النشطة',
+                  title: t('reports.metrics.activeProjects'),
                   value: reportsData.activeProjects.toString(),
                   change: '+8%',
                   trend: 'up',
@@ -473,7 +473,7 @@ export const Reports: React.FC = () => {
                   color: 'from-green-500 to-green-600'
                 },
                 {
-                  title: 'متوسط نسبة الإنجاز',
+                  title: t('reports.metrics.averageProgress'),
                   value: `${reportsData.averageProgress.toFixed(1)}/10`,
                   change: '+5%',
                   trend: 'up',
@@ -481,7 +481,7 @@ export const Reports: React.FC = () => {
                   color: 'from-purple-500 to-purple-600'
                 },
                 {
-                  title: 'متوسط التقييم',
+                  title: t('reports.metrics.averageRating'),
                   value: reportsData.averageRating.toFixed(1),
                   change: '+0.2',
                   trend: 'up',
@@ -517,7 +517,7 @@ export const Reports: React.FC = () => {
             <div className="grid lg:grid-cols-2 gap-6">
               {/* Projects Chart */}
               <div className="bg-white border border-gray-200 rounded-2xl p-6">
-                <h3 className="text-lg font-bold text-gray-800 mb-4">تطور المشاريع الشهرية</h3>
+                <h3 className="text-lg font-bold text-gray-800 mb-4">{t('reports.charts.projectsTrend')}</h3>
                 <ResponsiveContainer width="100%" height={300}>
                   <AreaChart data={reportsData.monthlyProgress}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -532,7 +532,7 @@ export const Reports: React.FC = () => {
 
               {/* Categories Pie Chart */}
               <div className="bg-white border border-gray-200 rounded-2xl p-6">
-                <h3 className="text-lg font-bold text-gray-800 mb-4">توزيع المشاريع حسب الفئة</h3>
+                <h3 className="text-lg font-bold text-gray-800 mb-4">{t('reports.charts.categoryDistribution')}</h3>
                 <ResponsiveContainer width="100%" height={300}>
                   <RechartsPieChart>
                     <Pie
@@ -560,9 +560,9 @@ export const Reports: React.FC = () => {
           <ReportTable
             data={reportsData.projects}
             columns={projectColumns}
-            title="تقرير المشاريع التفصيلي"
-            searchPlaceholder="البحث في المشاريع..."
-            exportFileName="تقرير_المشاريع"
+            title={t('reports.tables.projectsTitle')}
+            searchPlaceholder={t('reports.tables.projectsSearch')}
+            exportFileName={t('reports.tables.projectsExport')}
           />
         )}
 
@@ -571,9 +571,9 @@ export const Reports: React.FC = () => {
           <ReportTable
             data={reportsData.students}
             columns={studentColumns}
-            title="تقرير الطلاب التفصيلي"
-            searchPlaceholder="البحث في الطلاب..."
-            exportFileName="تقرير_الطلاب"
+            title={t('reports.tables.studentsTitle')}
+            searchPlaceholder={t('reports.tables.studentsSearch')}
+            exportFileName={t('reports.tables.studentsExport')}
           />
         )}
 
@@ -582,9 +582,9 @@ export const Reports: React.FC = () => {
           <ReportTable
             data={reportsData.teachers}
             columns={teacherColumns}
-            title="تقرير المعلمين/المشرفين التفصيلي"
-            searchPlaceholder="البحث في المعلمين/المشرفين..."
-            exportFileName="تقرير_المعلمين_المشرفين"
+            title={t('reports.tables.teachersTitle')}
+            searchPlaceholder={t('reports.tables.teachersSearch')}
+            exportFileName={t('reports.tables.teachersExport')}
           />
         )}
 
@@ -593,9 +593,9 @@ export const Reports: React.FC = () => {
           <ReportTable
             data={reportsData.schools}
             columns={schoolColumns}
-            title="تقرير المؤسسات التعليمية التفصيلي"
-            searchPlaceholder="البحث في المؤسسات التعليمية..."
-            exportFileName="تقرير_المؤسسات_التعليمية"
+            title={t('reports.tables.schoolsTitle')}
+            searchPlaceholder={t('reports.tables.schoolsSearch')}
+            exportFileName={t('reports.tables.schoolsExport')}
           />
         )}
 
@@ -603,7 +603,7 @@ export const Reports: React.FC = () => {
         {selectedReport === 'performance' && (
           <div className="space-y-6">
             <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="text-lg font-bold text-gray-800 mb-4">توزيع نسب الإنجاز</h3>
+              <h3 className="text-lg font-bold text-gray-800 mb-4">{t('reports.charts.progressDistribution')}</h3>
               <ResponsiveContainer width="100%" height={400}>
                 <BarChart data={reportsData.progressDistribution}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -621,8 +621,8 @@ export const Reports: React.FC = () => {
                   <TrendingUp className="w-8 h-8 text-blue-600" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">{reportsData.averageProgress.toFixed(1)}</h3>
-                <p className="text-gray-600">متوسط نسبة الإنجاز</p>
-                <p className="text-blue-600 text-sm mt-1">من 10 درجات</p>
+                <p className="text-gray-600">{t('reports.metrics.averageProgress')}</p>
+                <p className="text-blue-600 text-sm mt-1">{t('reports.performance.outOf10')}</p>
               </div>
               
               <div className="bg-white border border-gray-200 rounded-2xl p-6 text-center">
@@ -630,8 +630,8 @@ export const Reports: React.FC = () => {
                   <Award className="w-8 h-8 text-green-600" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">{reportsData.averageRating.toFixed(1)}</h3>
-                <p className="text-gray-600">متوسط التقييم الموزون</p>
-                <p className="text-green-600 text-sm mt-1">من 10 درجات</p>
+                <p className="text-gray-600">{t('reports.metrics.weightedRating')}</p>
+                <p className="text-green-600 text-sm mt-1">{t('reports.performance.outOf10')}</p>
               </div>
               
               <div className="bg-white border border-gray-200 rounded-2xl p-6 text-center">
@@ -642,8 +642,8 @@ export const Reports: React.FC = () => {
                   {reportsData.totalProjects > 0 ? 
                     ((reportsData.completedProjects / reportsData.totalProjects) * 100).toFixed(1) : 0}%
                 </h3>
-                <p className="text-gray-600">معدل إكمال المشاريع</p>
-                <p className="text-yellow-600 text-sm mt-1">{reportsData.completedProjects} من {reportsData.totalProjects}</p>
+                <p className="text-gray-600">{t('reports.metrics.completionRate')}</p>
+                <p className="text-yellow-600 text-sm mt-1">{reportsData.completedProjects} {t('reports.performance.outOf')} {reportsData.totalProjects}</p>
               </div>
             </div>
           </div>
@@ -663,7 +663,7 @@ export const Reports: React.FC = () => {
               <BookOpen className="w-8 h-8 text-blue-600" />
             </div>
             <h3 className="text-2xl font-bold text-gray-800 mb-2">{reportsData.projects.length}</h3>
-            <p className="text-gray-600">إجمالي المشاريع</p>
+            <p className="text-gray-600">{t('reports.metrics.totalProjects')}</p>
           </div>
           
           <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
@@ -671,7 +671,7 @@ export const Reports: React.FC = () => {
               <Users className="w-8 h-8 text-green-600" />
             </div>
             <h3 className="text-2xl font-bold text-gray-800 mb-2">{reportsData.students.length}</h3>
-            <p className="text-gray-600">إجمالي الطلاب</p>
+            <p className="text-gray-600">{t('reports.summary.totalStudents')}</p>
           </div>
           
           <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
@@ -679,7 +679,7 @@ export const Reports: React.FC = () => {
               <BookOpen className="w-8 h-8 text-purple-600" />
             </div>
             <h3 className="text-2xl font-bold text-gray-800 mb-2">{reportsData.teachers.length}</h3>
-            <p className="text-gray-600">إجمالي المعلمين/المشرفين</p>
+            <p className="text-gray-600">{t('reports.summary.totalTeachers')}</p>
           </div>
           
           {user?.role === 'admin' && (
@@ -688,7 +688,7 @@ export const Reports: React.FC = () => {
                 <School className="w-8 h-8 text-yellow-600" />
               </div>
               <h3 className="text-2xl font-bold text-gray-800 mb-2">{reportsData.schools.length}</h3>
-              <p className="text-gray-600">إجمالي المؤسسات التعليمية</p>
+              <p className="text-gray-600">{t('reports.summary.totalSchools')}</p>
             </div>
           )}
         </motion.div>

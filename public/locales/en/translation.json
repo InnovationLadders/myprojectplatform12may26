@@ -838,7 +838,15 @@
     },
     "noProjects": "No projects",
     "startCreating": "Start by creating your first project or try changing search criteria",
-    "createNewProject": "Create New Project"
+    "createNewProject": "Create New Project",
+    "confirmArchive": "Are you sure you want to archive this project?",
+    "confirmDelete": "Are you sure you want to delete this project? This action cannot be undone.",
+    "archiveError": "An error occurred while archiving the project",
+    "deleteError": "An error occurred while deleting the project",
+    "progressLabel": "Progress",
+    "progressOf10": "{{value}}/10",
+    "completedTasks": "Completed tasks",
+    "defaultSchoolName": "Educational Institution"
   },
   
   "projectIdeas": {
@@ -1153,12 +1161,31 @@
       "appearance": "Appearance",
       "language": "Language & Region",
       "data": "Data & Backup",
+      "adminMigration": "Data Migration (Admin)",
       "institutionSettings": "Admission Settings",
       "rankingService": "Ranking Service"
     },
     "errors": {
       "loginRequired": "You must be logged in to save settings",
-      "saveFailed": "Error saving settings"
+      "saveFailed": "Error saving settings",
+      "currentPasswordRequired": "Please enter your current password",
+      "newPasswordRequired": "Please enter your new password",
+      "newPasswordMinLength": "New password must be at least 6 characters",
+      "passwordsNotMatch": "New password and confirmation do not match",
+      "passwordUpdateFailed": "An error occurred while updating the password",
+      "fileTooLarge": "File size is too large. Maximum 5MB",
+      "unsupportedFileType": "Unsupported file type. Please use JPG, PNG, GIF, or WebP",
+      "uploadFailed": "An error occurred while uploading the image",
+      "removeFailed": "An error occurred while removing the image",
+      "migrationFailed": "An error occurred while migrating data"
+    },
+    "messages": {
+      "passwordUpdated": "Password updated successfully",
+      "updating": "Updating...",
+      "uploading": "Uploading...",
+      "uploadImage": "Upload Image",
+      "cancel": "Cancel",
+      "saving": "Saving..."
     },
     "profile": {
       "title": "Profile",
@@ -1250,7 +1277,43 @@
       "importDataDesc": "Import data from a previous file",
       "deleteAccount": "Delete Account",
       "deleteAccountWarning": "Permanently deleting your account will result in losing all data and projects. This action cannot be undone.",
-      "permanentlyDeleteAccount": "Permanently Delete Account"
+      "permanentlyDeleteAccount": "Permanently Delete Account",
+      "studentDataTitle": "Data Management",
+      "studentDataDesc": "Data management options are not available for students. Please contact your teacher/supervisor or institution administrator for assistance."
+    },
+    "migration": {
+      "title": "Data Migration (Admin)",
+      "consultantRatesTitle": "Update Consultant Rates to 0 SAR",
+      "consultantRatesDesc": "This operation will update the hourly rates for all consultants in the system to 0 SAR (free). All existing consultant records in the database will be updated.",
+      "consultantRatesWarning": "Note: This operation cannot be undone. All current and new consultants will be updated to 0 SAR/hour.",
+      "updateRatesButton": "Update Consultant Rates",
+      "updating": "Updating data...",
+      "partialSuccess": "Updated {{updated}} of {{total}} consultants. Some errors occurred."
+    },
+    "institution": {
+      "title": "Admission Settings",
+      "approvalTitle": "Require Approval for New Students",
+      "approvalDesc": "When enabled, new students joining your institution will remain in \"pending review\" status after confirming their email, until you manually approve them through the User Management page.",
+      "approvalEnabled": "Manual Approval Enabled",
+      "approvalEnabledDesc": "New students from your institution will need your approval from the \"User Management\" page before they can access the platform.",
+      "autoEnabled": "Automatic Activation Enabled (Default)",
+      "autoEnabledDesc": "New students are automatically activated once they confirm their email.",
+      "howToTitle": "How to Approve Students",
+      "howToStep1": "Go to the \"User Management\" page from the sidebar",
+      "howToStep2": "Alerts will appear for students awaiting approval",
+      "howToStep3": "Click \"Activate\" next to a student's name to approve them",
+      "saveSuccess": "Setting saved successfully"
+    },
+    "ranking": {
+      "title": "Ranking Service",
+      "displayTitle": "Show Student Ranking",
+      "displayDesc": "When enabled, each student in your institution sees their rank among peers on the home page based on earned points, along with a list of nearby students in the ranking.",
+      "enabled": "Ranking Service Enabled",
+      "enabledDesc": "Your institution's students see their current rank and a list of nearest competitors on the home page. The ranking updates instantly when points change.",
+      "disabled": "Service Disabled (Default)",
+      "disabledDesc": "Students will not see the ranking list on the home page.",
+      "noteTitle": "Note",
+      "noteDesc": "Ranking includes only your institution's students. Students do not see a ranking compared to students from other institutions. The service operates independently for each institution."
     }
   },
   
@@ -1634,7 +1697,35 @@
       "investmentInterestsPlaceholder": "e.g. Technology, AI, Entrepreneurship, Renewable Energy..."
     },
     "accountType": "Account Type",
+    "createAccountTitle": "Create New Account",
     "joinPlatform": "Join Mashroui Platform",
+    "roleStudent": "Student",
+    "roleTeacher": "Teacher / Supervisor",
+    "roleConsultant": "Consultant",
+    "roleSchool": "Educational Institution",
+    "roleInvestor": "Investor",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "nameExample": "Example: Ibn Alnafees School | King Saud University",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "emailAccepted": "Email is accepted",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Re-enter your password",
+    "phone": "Phone Number",
+    "city": "City",
+    "cityPlaceholder": "Enter your city",
+    "institutionProgram": "Educational Institution / Program",
+    "selectInstitutionProgram": "Select Educational Institution / Program",
+    "subject": "Subject",
+    "optional": "Optional",
+    "creatingAccount": "Creating account...",
+    "createAccountButton": "Create Account",
+    "mustAgreeInvestorPledge": "You must agree to the investor pledge to continue",
+    "passwordMinLength": "Password must be at least 6 characters",
+    "emailDomainRequired": "Email must end with one of the following domains: {{domains}}",
     "aboutYourself": "Tell us about yourself: Areas of skills, specialties, and hobbies you excel at",
     "aboutYourselfPlaceholder": "e.g. Programming, Design, Robotics, Drawing, Sports...",
     "aboutYourselfHint": "Tell us about yourself: Areas of skills, specialties, and hobbies",
@@ -1668,32 +1759,6 @@
     "passwordsNotMatch": "Passwords do not match",
     "accountCreationError": "An error occurred while creating the account",
     "schoolPlaceholder": "Enter the educational institution name"
-  },
-
-  "reports": {
-    "overview": "Overview",
-    "projectReports": "Project Reports",
-    "schoolReports": "Educational Institution Reports",
-    "userReports": "User Reports",
-    "performanceReports": "Performance Reports",
-    "teacherReports": "Teacher Reports",
-    "studentReports": "Student Reports",
-    "projectTitle": "Project Title",
-    "category": "Category",
-    "status": "Status",
-    "completed": "Completed",
-    "active": "Active",
-    "draft": "Draft",
-    "archived": "Archived",
-    "progress": "Progress",
-    "deadline": "Deadline",
-    "teacher": "Teacher",
-    "school": "Educational Institution",
-    "completionDate": "Completion Date",
-    "notCompleted": "Not Completed",
-    "exportToExcel": "Export to Excel",
-    "exportToPDF": "Export to PDF",
-    "noData": "No data available"
   },
 
   "pointsDetails": {
@@ -1878,13 +1943,90 @@
       "projectsByCategory": "Projects by Category",
       "progressDistribution": "Progress Distribution"
     },
+    "charts": {
+      "projectsTrend": "Monthly Projects Trend",
+      "categoryDistribution": "Projects by Category",
+      "progressDistribution": "Progress Distribution"
+    },
+    "metrics": {
+      "totalProjects": "Total Projects",
+      "activeProjects": "Active Projects",
+      "averageProgress": "Average Progress",
+      "averageRating": "Average Rating",
+      "weightedRating": "Average Weighted Rating",
+      "completionRate": "Project Completion Rate"
+    },
+    "categories": {
+      "stem": "Science & Technology",
+      "entrepreneurship": "Entrepreneurship",
+      "volunteer": "Volunteer",
+      "ethics": "Ethics"
+    },
+    "statuses": {
+      "completed": "Completed",
+      "active": "Active",
+      "draft": "Draft",
+      "archived": "Archived"
+    },
     "performance": {
       "progressDistribution": "Progress Distribution",
       "averageProgress": "Average Progress",
       "averageRating": "Average Weighted Rating",
       "completionRate": "Project Completion Rate",
       "outOf": "out of",
-      "fromTotal": "from"
+      "fromTotal": "from",
+      "outOf10": "out of 10 points"
+    },
+    "tables": {
+      "projectsTitle": "Detailed Projects Report",
+      "projectsSearch": "Search projects...",
+      "projectsExport": "projects_report",
+      "studentsTitle": "Detailed Students Report",
+      "studentsSearch": "Search students...",
+      "studentsExport": "students_report",
+      "teachersTitle": "Detailed Teachers/Supervisors Report",
+      "teachersSearch": "Search teachers/supervisors...",
+      "teachersExport": "teachers_supervisors_report",
+      "schoolsTitle": "Detailed Educational Institutions Report",
+      "schoolsSearch": "Search educational institutions...",
+      "schoolsExport": "educational_institutions_report"
+    },
+    "summary": {
+      "totalStudents": "Total Students",
+      "totalTeachers": "Total Teachers/Supervisors",
+      "totalSchools": "Total Educational Institutions"
+    },
+    "export": {
+      "projectTitle": "Project Title",
+      "description": "Description",
+      "category": "Category",
+      "status": "Status",
+      "progress": "Progress",
+      "weightedScore": "Weighted Score",
+      "supervisor": "Supervisor Teacher",
+      "school": "Educational Institution",
+      "studentsCount": "Number of Students",
+      "createdAt": "Creation Date",
+      "deadline": "Deadline",
+      "notSpecified": "Not specified",
+      "studentName": "Student Name",
+      "email": "Email",
+      "grade": "Grade",
+      "projectsCount": "Number of Projects",
+      "completedProjects": "Completed Projects",
+      "averageRating": "Average Rating",
+      "totalScore": "Total Achievement Score",
+      "teacherName": "Teacher Name",
+      "subject": "Subject",
+      "teachersCount": "Number of Teachers",
+      "completionRate": "Completion Rate",
+      "sheets": {
+        "projects": "Projects",
+        "students": "Students",
+        "teachers": "Teachers",
+        "schools": "Educational Institutions"
+      },
+      "fileName": "comprehensive_report"
     },
     "exportError": "An error occurred while exporting data",
     "noData": "No data available",
