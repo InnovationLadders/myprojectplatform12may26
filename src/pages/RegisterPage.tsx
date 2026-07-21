@@ -9,8 +9,10 @@ import { useSchoolBranding } from '../contexts/SchoolBrandingContext';
 import { getSchoolDomainSettings, extractDomain, testEmailAgainstDomains } from '../utils/domainValidation';
 import DomainValidationInfo from '../components/Common/DomainValidationInfo';
 import { GRADES } from '../constants/grades';
+import { useTranslation } from 'react-i18next';
 
 export const RegisterPage: React.FC = () => {
+  const { t } = useTranslation();
   const { register } = useAuth();
   const { schoolId: subdomainSchoolId, schoolName: subdomainSchoolName, logoUrl } = useSchoolBranding();
   const [formData, setFormData] = useState({
@@ -174,7 +176,7 @@ export const RegisterPage: React.FC = () => {
     setEmailDomainValid(isValid);
 
     if (!isValid && formData.email.includes('@')) {
-      setDomainValidationMessage(`البريد الإلكتروني يجب أن ينتهي بأحد النطاقات التالية: ${allowedDomains.join('، ')}`);
+      setDomainValidationMessage(`${t('register.emailDomainRequired')}: ${allowedDomains.join(', ')}`);
     } else {
       setDomainValidationMessage('');
     }
@@ -210,22 +212,22 @@ export const RegisterPage: React.FC = () => {
     setError('');
 
     if (!acceptedTerms) {
-      setError('يجب الموافقة على شروط الاستخدام وسياسة الخصوصية');
+      setError(t('register.termsRequired'));
       return;
     }
 
     if (formData.role === 'investor' && !acceptedInvestorPledge) {
-      setError('يجب الموافقة على تعهد المستثمر للمتابعة');
+      setError(t('register.mustAgreeInvestorPledge'));
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError('كلمات المرور غير متطابقة');
+      setError(t('register.passwordsNotMatch'));
       return;
     }
 
     if (formData.password.length < 6) {
-      setError('يجب أن تكون كلمة المرور 6 أحرف على الأقل');
+      setError(t('register.passwordMinLength'));
       return;
     }
 
@@ -262,7 +264,7 @@ export const RegisterPage: React.FC = () => {
       // No need to navigate here - the ProtectedRoute in App.tsx will handle redirection
       // based on the user's status after registration
     } catch (err: any) {
-      setError('حدث خطأ في إنشاء الحساب');
+      setError(t('register.accountCreationError'));
     } finally {
       setLoading(false);
     }
@@ -287,12 +289,12 @@ export const RegisterPage: React.FC = () => {
             >
               <img
                 src={logoUrl || "/mashrouilogo.png"}
-                alt={subdomainSchoolName || "مشروعي"}
+                alt={subdomainSchoolName || "Mashroui"}
                 className={`w-full h-full ${logoUrl ? 'object-cover' : 'object-contain'}`}
               />
             </motion.div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">إنشاء حساب جديد</h1>
-            <p className="text-gray-600">انضم إلى منصة مشروعي</p>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">{t('register.createAccountTitle')}</h1>
+            <p className="text-gray-600">{t('register.joinPlatform')}</p>
           </div>
 
           {error && (
@@ -306,7 +308,7 @@ export const RegisterPage: React.FC = () => {
             {/* Role Selection - Moved to the top */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                نوع الحساب
+                {t('register.accountType')}
               </label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 <label className={`flex items-center justify-center gap-2 p-4 border rounded-xl cursor-pointer transition-colors ${
@@ -321,7 +323,7 @@ export const RegisterPage: React.FC = () => {
                     className="sr-only"
                   />
                   <GraduationCap className="w-5 h-5" />
-                  <span className="font-medium">طالب</span>
+                  <span className="font-medium">{t('register.roleStudent')}</span>
                 </label>
                 <label className={`flex items-center justify-center gap-2 p-4 border rounded-xl cursor-pointer transition-colors ${
                   formData.role === 'teacher' ? 'bg-blue-50 border-blue-500 text-blue-700' : 'border-gray-300 hover:bg-gray-50'
@@ -335,7 +337,7 @@ export const RegisterPage: React.FC = () => {
                     className="sr-only"
                   />
                   <BookOpen className="w-5 h-5" />
-                  <span className="font-medium">معلم\مشرف</span>
+                  <span className="font-medium">{t('register.roleTeacher')}</span>
                 </label>
                 <label className={`flex items-center justify-center gap-2 p-4 border rounded-xl cursor-pointer transition-colors ${
                   formData.role === 'consultant' ? 'bg-blue-50 border-blue-500 text-blue-700' : 'border-gray-300 hover:bg-gray-50'
@@ -349,7 +351,7 @@ export const RegisterPage: React.FC = () => {
                     className="sr-only"
                   />
                   <Briefcase className="w-5 h-5" />
-                  <span className="font-medium">مستشار</span>
+                  <span className="font-medium">{t('register.roleConsultant')}</span>
                 </label>
                 <label className={`flex items-center justify-center gap-2 p-4 border rounded-xl cursor-pointer transition-colors ${
                   formData.role === 'school' ? 'bg-blue-50 border-blue-500 text-blue-700' : 'border-gray-300 hover:bg-gray-50'
@@ -363,7 +365,7 @@ export const RegisterPage: React.FC = () => {
                     className="sr-only"
                   />
                   <Building className="w-5 h-5" />
-                  <span className="font-medium">مؤسسة تعليمية</span>
+                  <span className="font-medium">{t('register.roleSchool')}</span>
                 </label>
                 <label className={`flex items-center justify-center gap-2 p-4 border rounded-xl cursor-pointer transition-colors col-span-2 md:col-span-2 ${
                   formData.role === 'investor' ? 'bg-emerald-50 border-emerald-500 text-emerald-700' : 'border-gray-300 hover:bg-gray-50'
@@ -377,7 +379,7 @@ export const RegisterPage: React.FC = () => {
                     className="sr-only"
                   />
                   <TrendingUp className="w-5 h-5" />
-                  <span className="font-medium">مستثمر</span>
+                  <span className="font-medium">{t('register.roleInvestor')}</span>
                 </label>
               </div>
             </div>
@@ -386,7 +388,7 @@ export const RegisterPage: React.FC = () => {
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  الاسم الكامل
+                  {t('register.fullName')}
                 </label>
                 <div className="relative">
                   <User className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -395,18 +397,18 @@ export const RegisterPage: React.FC = () => {
                     value={formData.name}
                     onChange={(e) => handleInputChange('name', e.target.value)}
                     className="w-full pr-12 pl-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder={formData.role === 'school' ? 'ادخل اسم المؤسسة التعليمية' : 'أدخل اسمك الكامل'}
+                    placeholder={formData.role === 'school' ? t('register.schoolPlaceholder') : t('register.fullNamePlaceholder')}
                     required
                   />
                   {formData.role === 'school' && (
-                    <p className="text-xs text-gray-500 mt-1">مثال: مؤسسة تعليمية ابن النفيس | جامعة الملك سعود | Example: Ibn Alnafees School | King Saud University</p>
+                    <p className="text-xs text-gray-500 mt-1">{t('register.nameExample')}</p>
                   )}
                 </div>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  البريد الإلكتروني
+                  {t('register.email')}
                 </label>
                 <div className="relative">
                   <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -421,7 +423,7 @@ export const RegisterPage: React.FC = () => {
                         ? 'border-green-500 pl-12 focus:ring-green-500'
                         : 'border-gray-300 pl-4 focus:ring-blue-500'
                     }`}
-                    placeholder="أدخل بريدك الإلكتروني"
+                    placeholder={t('register.emailPlaceholder')}
                     required
                   />
                   {emailDomainValid === true && (
@@ -440,14 +442,14 @@ export const RegisterPage: React.FC = () => {
                 {emailDomainValid === true && (
                   <p className="mt-2 text-sm text-green-600 flex items-center gap-1">
                     <CheckCircle className="w-4 h-4" />
-                    <span>✓ البريد الإلكتروني مقبول</span>
+                    <span>✓ {t('register.emailAccepted')}</span>
                   </p>
                 )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  كلمة المرور
+                  {t('register.password')}
                 </label>
                 <div className="relative">
                   <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -456,7 +458,7 @@ export const RegisterPage: React.FC = () => {
                     value={formData.password}
                     onChange={(e) => handleInputChange('password', e.target.value)}
                     className="w-full pr-12 pl-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="أدخل كلمة المرور"
+                    placeholder={t('register.passwordPlaceholder')}
                     required
                   />
                   <button
@@ -471,7 +473,7 @@ export const RegisterPage: React.FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  تأكيد كلمة المرور
+                  {t('register.confirmPassword')}
                 </label>
                 <div className="relative">
                   <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -480,7 +482,7 @@ export const RegisterPage: React.FC = () => {
                     value={formData.confirmPassword}
                     onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
                     className="w-full pr-12 pl-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="أعد إدخال كلمة المرور"
+                    placeholder={t('register.confirmPasswordPlaceholder')}
                     required
                   />
                 </div>
@@ -489,7 +491,7 @@ export const RegisterPage: React.FC = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                رقم الهاتف
+                {t('register.phone')}
               </label>
               <div className="relative">
                 <Phone className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -505,7 +507,7 @@ export const RegisterPage: React.FC = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                المدينة
+                {t('register.city')}
               </label>
               <div className="relative">
                 <input
@@ -513,7 +515,7 @@ export const RegisterPage: React.FC = () => {
                   value={formData.city}
                   onChange={(e) => handleInputChange('city', e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="أدخل المدينة"
+                  placeholder={t('register.cityPlaceholder')}
                 />
               </div>
             </div>
@@ -522,23 +524,23 @@ export const RegisterPage: React.FC = () => {
             {formData.role !== 'school' && formData.role !== 'investor' && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  أخبرنا عنك: مجالات المهارات والتخصص والهوايات التي تجيدها
+                  {t('register.aboutYourself')}
                 </label>
                 <textarea
                   value={formData.aboutYourself}
                   onChange={(e) => handleInputChange('aboutYourself', e.target.value)}
                   rows={3}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  placeholder="مثال: البرمجة، التصميم، الروبوتات، الرسم، الرياضة..."
+                  placeholder={t('register.aboutYourselfPlaceholder')}
                 />
-                <p className="text-xs text-gray-500 mt-1">Tell us about yourself: Areas of skills, specialties, and hobbies</p>
+                <p className="text-xs text-gray-500 mt-1">{t('register.aboutYourselfHint')}</p>
               </div>
             )}
 
             {/* Gender */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                الجنس
+                {t('register.gender')}
               </label>
               <div className="grid grid-cols-2 gap-3">
                 <label className={`flex items-center justify-center gap-2 p-4 border rounded-xl cursor-pointer transition-colors ${
@@ -553,7 +555,7 @@ export const RegisterPage: React.FC = () => {
                     className="sr-only"
                   />
                   <User className="w-5 h-5" />
-                  <span className="font-medium">ذكر</span>
+                  <span className="font-medium">{t('register.male')}</span>
                 </label>
                 <label className={`flex items-center justify-center gap-2 p-4 border rounded-xl cursor-pointer transition-colors ${
                   formData.gender === 'female' ? 'bg-blue-50 border-blue-500 text-blue-700' : 'border-gray-300 hover:bg-gray-50'
@@ -567,7 +569,7 @@ export const RegisterPage: React.FC = () => {
                     className="sr-only"
                   />
                   <User className="w-5 h-5" />
-                  <span className="font-medium">أنثى</span>
+                  <span className="font-medium">{t('register.female')}</span>
                 </label>
               </div>
             </div>
@@ -577,7 +579,7 @@ export const RegisterPage: React.FC = () => {
               <>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    المؤسسة تعليمية، ، البرنامج
+                    {t('register.institutionProgram')}
                   </label>
                   <div className="relative">
                     <Building className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -588,10 +590,10 @@ export const RegisterPage: React.FC = () => {
                       required
                       disabled={isSubdomainRegistration}
                     >
-                      <option value="">اختر المؤسسة تعليمية، ، البرنامج</option>
-                      {schoolsLoading && <option disabled>جاري تحميل المؤسسات التعليمية...</option>}
+                      <option value="">{t('register.selectInstitutionProgram')}</option>
+                      {schoolsLoading && <option disabled>{t('register.schoolLoading')}</option>}
                       {!schoolsLoading && schools.length === 0 && (
-                        <option disabled>لا توجد مؤسسات تعليمية متاحة</option>
+                        <option disabled>{t('register.noSchoolsAvailable')}</option>
                       )}
                       {!schoolsLoading && schools.map(school => (
                         <option key={school.id} value={school.id}>{school.name}</option>
@@ -600,7 +602,7 @@ export const RegisterPage: React.FC = () => {
                   </div>
                   {isSubdomainRegistration && (
                     <p className="mt-2 text-sm text-blue-600">
-                      التسجيل في: {subdomainSchoolName}
+                      {t('register.registeringAt')} {subdomainSchoolName}
                     </p>
                   )}
                 </div>
@@ -621,7 +623,7 @@ export const RegisterPage: React.FC = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    المرحلة/المستوى الدراسي *
+                    {t('register.gradeLevel')}
                   </label>
                   <div className="relative">
                     <GraduationCap className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -631,7 +633,7 @@ export const RegisterPage: React.FC = () => {
                       className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
                       required
                     >
-                      <option value="">اختر المرحلة/المستوى</option>
+                      <option value="">{t('register.selectGradeLevel')}</option>
                       {GRADES.map((grade) => (
                         <option key={grade.value} value={grade.value}>
                           {grade.label}
@@ -647,7 +649,7 @@ export const RegisterPage: React.FC = () => {
             {(formData.role === 'student' || formData.role === 'teacher') && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  رقم التعريف الخاص بك   (ID, رقمك الوظيفي, رقم العضوية )
+                  {t('register.schoolIdNumber')}
                 </label>
                 <div className="relative">
                   <input
@@ -655,7 +657,7 @@ export const RegisterPage: React.FC = () => {
                     value={formData.schoolIdNumber}
                     onChange={(e) => handleInputChange('schoolIdNumber', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="أدخل رقم التعريف الخاص بك  "
+                    placeholder={t('register.schoolIdNumberPlaceholder')}
                 //    required // Make it required
                   />
                 </div>
@@ -667,7 +669,7 @@ export const RegisterPage: React.FC = () => {
               <>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    المؤسسة تعليمية، ، البرنامج
+                    {t('register.institutionProgram')}
                   </label>
                   <div className="relative">
                     <Building className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -678,10 +680,10 @@ export const RegisterPage: React.FC = () => {
                       required
                       disabled={isSubdomainRegistration}
                     >
-                      <option value="">اختر المؤسسة تعليمية، ، البرنامج</option>
-                      {schoolsLoading && <option disabled>جاري تحميل المؤسسات التعليمية...</option>}
+                      <option value="">{t('register.selectInstitutionProgram')}</option>
+                      {schoolsLoading && <option disabled>{t('register.schoolLoading')}</option>}
                       {!schoolsLoading && schools.length === 0 && (
-                        <option disabled>لا توجد مؤسسات تعليمية متاحة</option>
+                        <option disabled>{t('register.noSchoolsAvailable')}</option>
                       )}
                       {!schoolsLoading && schools.map(school => (
                         <option key={school.id} value={school.id}>{school.name}</option>
@@ -690,7 +692,7 @@ export const RegisterPage: React.FC = () => {
                   </div>
                   {isSubdomainRegistration && (
                     <p className="mt-2 text-sm text-blue-600">
-                      التسجيل في: {subdomainSchoolName}
+                      {t('register.registeringAt')} {subdomainSchoolName}
                     </p>
                   )}
                 </div>
@@ -711,7 +713,7 @@ export const RegisterPage: React.FC = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    التخصص
+                    {t('register.subject')}
                   </label>
                   <div className="relative">
                     <BookOpen className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -720,7 +722,7 @@ export const RegisterPage: React.FC = () => {
                       value={formData.subject}
                       onChange={(e) => handleInputChange('subject', e.target.value)}
                       className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="مثال: الرياضيات، العلوم، الهندسة المدنية ، اللغة العربية"
+                      placeholder={t('register.subjectPlaceholder')}
                     />
                   </div>
                 </div>
@@ -732,20 +734,20 @@ export const RegisterPage: React.FC = () => {
               <>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    نبذة مهنية
+                    {t('register.professionalBio')}
                   </label>
                   <textarea
                     value={formData.bio}
                     onChange={(e) => handleInputChange('bio', e.target.value)}
                     rows={3}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="اكتب نبذة مختصرة عن خبرتك المهنية..."
+                    placeholder={t('register.professionalBioPlaceholder')}
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    التخصصات
+                    {t('register.specializations')}
                   </label>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                     {specializations.map((specialization) => (
@@ -769,14 +771,14 @@ export const RegisterPage: React.FC = () => {
                   {formData.specializations.includes('أخرى') && (
                     <div className="mt-4">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        حدد التخصص الآخر
+                        {t('register.otherSpecialization')}
                       </label>
                       <input
                         type="text"
                         value={formData.otherSpecialization}
                         onChange={(e) => handleInputChange('otherSpecialization', e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="اكتب تخصصك..."
+                        placeholder={t('register.otherSpecializationPlaceholder')}
                         required={formData.specializations.includes('أخرى')}
                       />
                     </div>
@@ -786,7 +788,7 @@ export const RegisterPage: React.FC = () => {
                 <div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      سنوات الخبرة
+                      {t('register.yearsOfExperience')}
                     </label>
                     <div className="relative">
                       <Award className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -795,7 +797,7 @@ export const RegisterPage: React.FC = () => {
                         value={formData.experience_years}
                         onChange={(e) => handleInputChange('experience_years', parseInt(e.target.value) || 0)}
                         className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="عدد سنوات الخبرة"
+                        placeholder={t('register.yearsOfExperiencePlaceholder')}
                         min="0"
                       />
                     </div>
@@ -804,7 +806,7 @@ export const RegisterPage: React.FC = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    اللغات
+                    {t('register.languages')}
                   </label>
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
                     {availableLanguages.map((language) => (
@@ -831,14 +833,14 @@ export const RegisterPage: React.FC = () => {
             {formData.role === 'school' && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  معلومات المؤسسة التعليمية
+                  {t('register.institutionInfo')}
                 </label>
                 <textarea
                   value={formData.bio}
                   onChange={(e) => handleInputChange('bio', e.target.value)}
                   rows={3}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="اكتب نبذة مختصرة عن المؤسسة التعليمية..."
+                  placeholder={t('register.institutionInfoPlaceholder')}
                 />
               </div>
             )}
@@ -848,7 +850,7 @@ export const RegisterPage: React.FC = () => {
               <>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    اسم الشركة <span className="text-gray-400 font-normal">(اختياري)</span>
+                    {t('register.investorPledge.companyName')} <span className="text-gray-400 font-normal">({t('register.optional')})</span>
                   </label>
                   <div className="relative">
                     <Building className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -857,14 +859,14 @@ export const RegisterPage: React.FC = () => {
                       value={formData.company_name}
                       onChange={(e) => handleInputChange('company_name', e.target.value)}
                       className="w-full pr-12 pl-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                      placeholder="أدخل اسم الشركة إن وجدت"
+                      placeholder={t('register.investorPledge.companyNamePlaceholder')}
                     />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    مجالات الاهتمام الاستثماري
+                    {t('register.investorPledge.investmentInterests')}
                   </label>
                   <div className="relative">
                     <TrendingUp className="absolute right-3 top-3 w-5 h-5 text-gray-400" />
@@ -873,7 +875,7 @@ export const RegisterPage: React.FC = () => {
                       onChange={(e) => handleInputChange('investment_interests', e.target.value)}
                       rows={3}
                       className="w-full pr-12 pl-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none"
-                      placeholder="مثال: التقنية، الذكاء الاصطناعي، ريادة الأعمال، الطاقة المتجددة..."
+                      placeholder={t('register.investorPledge.investmentInterestsPlaceholder')}
                     />
                   </div>
                 </div>
@@ -886,17 +888,17 @@ export const RegisterPage: React.FC = () => {
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <FileText className="w-5 h-5 text-emerald-700 flex-shrink-0" />
-                    <h3 className="font-bold text-emerald-800 text-base">تعهد المستثمر</h3>
+                    <h3 className="font-bold text-emerald-800 text-base">{t('register.investorPledge.title')}</h3>
                   </div>
                   <div className="bg-white border border-emerald-200 rounded-lg p-4 mb-4 text-sm text-gray-700 leading-relaxed">
                     <p>
-                      أتعهد أنا الموقّع أدناه بالمحافظة التامة على سرية المعلومات والبيانات المتعلقة بجميع المشاريع التي أطلع عليها من خلال هذه المنصة، وأقر بأن هذه المعلومات ذات طابع سري وملكية فكرية خاصة بأصحابها.
+                      {t('register.investorPledge.text1')}
                     </p>
                     <p className="mt-2">
-                      وأتعهد بعدم إفشاء أي معلومات أو بيانات لأي طرف ثالث، وعدم استغلالها أو توظيفها لأي غرض تجاري أو شخصي دون الحصول على إذن صريح ومكتوب من صاحب المشروع.
+                      {t('register.investorPledge.text2')}
                     </p>
                     <p className="mt-2">
-                      وأدرك أن أي مخالفة لهذا التعهد تعرّضني للمسؤولية القانونية وفق الأنظمة المعمول بها.
+                      {t('register.investorPledge.text3')}
                     </p>
                   </div>
                   <div className="flex items-start gap-3">
@@ -908,7 +910,7 @@ export const RegisterPage: React.FC = () => {
                       className="mt-1 w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
                     />
                     <label htmlFor="acceptInvestorPledge" className="text-sm text-gray-700 font-medium">
-                      أقر بقراءة هذا التعهد والموافقة على جميع بنوده وشروطه
+                      {t('register.investorPledge.checkbox')}
                     </label>
                   </div>
                 </motion.div>
@@ -925,13 +927,13 @@ export const RegisterPage: React.FC = () => {
                 className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
               />
               <label htmlFor="acceptTerms" className="text-sm text-gray-700">
-                أوافق على{' '}
+                {t('register.termsAgree')}{' '}
                 <Link to="/terms-of-use" target="_blank" className="text-blue-600 hover:text-blue-800 underline">
-                  شروط الاستخدام
+                  {t('register.termsOfUse')}
                 </Link>
-                {' '}و{' '}
+                {' '}{t('register.and')}{' '}
                 <Link to="/privacy-policy" target="_blank" className="text-blue-600 hover:text-blue-800 underline">
-                  سياسة الخصوصية
+                  {t('register.privacyPolicy')}
                 </Link>
               </label>
             </div>
@@ -945,7 +947,7 @@ export const RegisterPage: React.FC = () => {
                 formData.role === 'investor' ? 'from-emerald-500 to-teal-600' : 'from-blue-500 to-blue-600'
               }`}
             >
-              {loading ? 'جاري إنشاء الحساب...' : 'إنشاء حساب'}
+              {loading ? t('register.creatingAccount') : t('register.createAccountButton')}
             </motion.button>
           </form>
 
@@ -955,7 +957,7 @@ export const RegisterPage: React.FC = () => {
               to="/login"
               className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
             >
-              لديك حساب بالفعل؟ تسجيل الدخول
+              {t('register.haveAccount')}
             </Link>
           </div>
         </motion.div>

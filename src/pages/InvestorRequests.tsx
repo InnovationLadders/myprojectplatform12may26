@@ -3,16 +3,12 @@ import { motion } from 'framer-motion';
 import { TrendingUp, Clock, CircleCheck as CheckCircle, Circle as XCircle, ChevronDown, ChevronUp, MessageSquare, Calendar, Search } from 'lucide-react';
 import { useInvestorRequests, InvestorInterestRequest } from '../hooks/useInvestorRequests';
 import { formatDate } from '../utils/dateUtils';
+import { useTranslation } from 'react-i18next';
 
 type StatusFilter = 'all' | 'pending' | 'in_progress' | 'closed';
 
-const statusConfig = {
-  pending: { label: 'قيد الانتظار', icon: Clock, color: 'bg-yellow-100 text-yellow-700 border-yellow-200' },
-  in_progress: { label: 'تحت المعالجة', icon: TrendingUp, color: 'bg-blue-100 text-blue-700 border-blue-200' },
-  closed: { label: 'مغلق', icon: XCircle, color: 'bg-gray-100 text-gray-600 border-gray-200' },
-};
-
 export const InvestorRequests: React.FC = () => {
+  const { t } = useTranslation();
   const { requests, loading, error, updateRequestStatus } = useInvestorRequests();
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -82,22 +78,22 @@ export const InvestorRequests: React.FC = () => {
             <TrendingUp className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold">طلبات المستثمرين</h1>
-            <p className="opacity-90 text-sm mt-0.5">إدارة طلبات الاهتمام بمشاريع مؤسستك</p>
+            <h1 className="text-2xl font-bold">{t('investorRequests.title')}</h1>
+            <p className="opacity-90 text-sm mt-0.5">{t('investorRequests.subtitle')}</p>
           </div>
         </div>
         <div className="grid grid-cols-3 gap-3 text-center">
           <div className="bg-white bg-opacity-10 rounded-xl p-3">
             <div className="text-2xl font-bold">{counts.pending}</div>
-            <div className="text-xs opacity-80">قيد الانتظار</div>
+            <div className="text-xs opacity-80">{t('investorRequests.stats.pending')}</div>
           </div>
           <div className="bg-white bg-opacity-10 rounded-xl p-3">
             <div className="text-2xl font-bold">{counts.in_progress}</div>
-            <div className="text-xs opacity-80">تحت المعالجة</div>
+            <div className="text-xs opacity-80">{t('investorRequests.stats.inProgress')}</div>
           </div>
           <div className="bg-white bg-opacity-10 rounded-xl p-3">
             <div className="text-2xl font-bold">{counts.closed}</div>
-            <div className="text-xs opacity-80">مغلقة</div>
+            <div className="text-xs opacity-80">{t('investorRequests.stats.closed')}</div>
           </div>
         </div>
       </motion.div>
@@ -115,7 +111,7 @@ export const InvestorRequests: React.FC = () => {
             <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="البحث باسم المستثمر أو المشروع..."
+              placeholder={t('investorRequests.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pr-10 pl-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm"
@@ -134,7 +130,7 @@ export const InvestorRequests: React.FC = () => {
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                {status === 'all' ? 'الكل' : statusConfig[status].label}
+                {status === 'all' ? t('investorRequests.statuses.all') : t(`investorRequests.statuses.${status}`)}
                 <span className={`mr-1.5 px-1.5 py-0.5 rounded-full text-xs ${
                   statusFilter === status ? 'bg-white bg-opacity-30 text-white' : 'bg-gray-200 text-gray-500'
                 }`}>
@@ -194,7 +190,7 @@ export const InvestorRequests: React.FC = () => {
                           <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">{req.investor_company}</span>
                         )}
                       </div>
-                      <p className="text-sm text-gray-500 truncate">المشروع: {req.project_title}</p>
+                      <p className="text-sm text-gray-500 truncate">{t('investorRequests.table.projectName')}: {req.project_title}</p>
                       <p className="text-xs text-gray-400 mt-0.5">
                         <Calendar className="w-3 h-3 inline ml-1" />
                         {formatDate(req.created_at)}
@@ -204,7 +200,7 @@ export const InvestorRequests: React.FC = () => {
                   <div className="flex items-center gap-3 flex-shrink-0">
                     <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border ${cfg.color}`}>
                       {React.createElement(cfg.icon, { className: 'w-3 h-3' })}
-                      {cfg.label}
+                      {t(`investorRequests.statuses.${req.status}`)}
                     </span>
                     {isExpanded ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                   </div>
@@ -215,9 +211,9 @@ export const InvestorRequests: React.FC = () => {
                   <div className="border-t border-gray-100 p-5 space-y-4 bg-gray-50">
                     {/* Investor Notes */}
                     <div>
-                      <p className="text-xs font-medium text-gray-500 mb-2">ملاحظات المستثمر</p>
+                      <p className="text-xs font-medium text-gray-500 mb-2">{t('investorRequests.investorNotes')}</p>
                       <div className="bg-white border border-gray-200 rounded-xl p-4 text-sm text-gray-700 leading-relaxed">
-                        {req.investor_notes || <span className="text-gray-400 italic">لا توجد ملاحظات</span>}
+                        {req.investor_notes || <span className="text-gray-400 italic">{t('investorRequests.noNotes')}</span>}
                       </div>
                     </div>
 
@@ -225,7 +221,7 @@ export const InvestorRequests: React.FC = () => {
                     {isEditing ? (
                       <div className="space-y-3">
                         <div>
-                          <label className="text-xs font-medium text-gray-500 mb-2 block">الحالة</label>
+                          <label className="text-xs font-medium text-gray-500 mb-2 block">{t('investorRequests.table.status')}</label>
                           <div className="flex gap-2 flex-wrap">
                             {(['pending', 'in_progress', 'closed'] as const).map(s => (
                               <button
@@ -233,23 +229,23 @@ export const InvestorRequests: React.FC = () => {
                                 onClick={() => setEditStatus(s)}
                                 className={`px-4 py-2 rounded-xl text-sm font-medium border transition-colors ${
                                   editStatus === s
-                                    ? statusConfig[s].color + ' shadow-sm'
+                                    ? 'bg-blue-100 text-blue-700 border-blue-200 shadow-sm'
                                     : 'border-gray-200 text-gray-600 hover:bg-gray-100'
                                 }`}
                               >
-                                {statusConfig[s].label}
+                                {t(`investorRequests.statuses.${s}`)}
                               </button>
                             ))}
                           </div>
                         </div>
                         <div>
-                          <label className="text-xs font-medium text-gray-500 mb-2 block">ملاحظات مدير الاستثمار</label>
+                          <label className="text-xs font-medium text-gray-500 mb-2 block">{t('investorRequests.adminNotes')}</label>
                           <textarea
                             value={editNotes}
                             onChange={(e) => setEditNotes(e.target.value)}
                             rows={3}
                             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none text-sm"
-                            placeholder="أضف ملاحظاتك للمستثمر..."
+                            placeholder={t('investorRequests.adminNotesPlaceholder')}
                           />
                         </div>
                         <div className="flex gap-2">
@@ -259,13 +255,13 @@ export const InvestorRequests: React.FC = () => {
                             className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white py-2.5 rounded-xl text-sm font-medium transition-colors disabled:opacity-70 flex items-center justify-center gap-2"
                           >
                             {saving ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" /> : <CheckCircle className="w-4 h-4" />}
-                            حفظ
+                            {t('common.save')}
                           </button>
                           <button
                             onClick={cancelEdit}
                             className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 rounded-xl text-sm font-medium transition-colors"
                           >
-                            إلغاء
+                            {t('common.cancel')}
                           </button>
                         </div>
                       </div>
@@ -273,7 +269,7 @@ export const InvestorRequests: React.FC = () => {
                       <>
                         {req.admin_notes && (
                           <div>
-                            <p className="text-xs font-medium text-gray-500 mb-2">ملاحظات مدير الاستثمار</p>
+                            <p className="text-xs font-medium text-gray-500 mb-2">{t('investorRequests.adminNotes')}</p>
                             <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-sm text-gray-700 leading-relaxed">
                               {req.admin_notes}
                             </div>
@@ -284,7 +280,7 @@ export const InvestorRequests: React.FC = () => {
                           className="w-full bg-white border-2 border-emerald-200 hover:bg-emerald-50 text-emerald-700 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2"
                         >
                           <MessageSquare className="w-4 h-4" />
-                          {req.admin_notes ? 'تعديل الرد' : 'الرد والتحديث'}
+                          {req.admin_notes ? t('investorRequests.editResponse') : t('investorRequests.respondAndUpdate')}
                         </button>
                       </>
                     )}

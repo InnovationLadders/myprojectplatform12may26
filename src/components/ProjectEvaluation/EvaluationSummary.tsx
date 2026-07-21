@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { ProjectEvaluation } from '../../hooks/useProjectEvaluation';
 import { useTranslation } from 'react-i18next';
+import i18n from '../../i18n';
 
 interface EvaluationSummaryProps {
   evaluation: ProjectEvaluation;
@@ -20,25 +21,40 @@ interface EvaluationSummaryProps {
 
 export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({ 
   evaluation, 
-  teacherName = 'المعلم' 
+  teacherName 
 }) => {
   const { t } = useTranslation();
   
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ar-SA', {
+    const locale = i18n.language?.startsWith('en') ? 'en-US' : 'ar-SA';
+    return new Date(dateString).toLocaleDateString(locale, {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
+      calendar: 'gregory'
     });
   };
 
   const getCriterionIcon = (name: string) => {
-    switch (name) {
-      case 'نسبة الإنجاز': return <Target className="w-4 h-4" />;
-      case 'جودة العمل': return <Award className="w-4 h-4" />;
-      case 'التواصل والتعاون': return <Users className="w-4 h-4" />;
-      case 'الإبداع والابتكار': return <Lightbulb className="w-4 h-4" />;
-      case 'جودة العرض والتوثيق': return <BarChart3 className="w-4 h-4" />;
+    const criterionMap: Record<string, string> = {
+      'نسبة الإنجاز': 'completionRate',
+      'جودة العمل': 'workQuality',
+      'التواصل والتعاون': 'communicationAndCooperation',
+      'الإبداع والابتكار': 'creativityAndInnovation',
+      'جودة العرض والتوثيق': 'presentationAndDocumentation',
+      'Completion Rate': 'completionRate',
+      'Work Quality': 'workQuality',
+      'Communication & Cooperation': 'communicationAndCooperation',
+      'Creativity & Innovation': 'creativityAndInnovation',
+      'Presentation & Documentation Quality': 'presentationAndDocumentation',
+    };
+    const key = criterionMap[name];
+    switch (key) {
+      case 'completionRate': return <Target className="w-4 h-4" />;
+      case 'workQuality': return <Award className="w-4 h-4" />;
+      case 'communicationAndCooperation': return <Users className="w-4 h-4" />;
+      case 'creativityAndInnovation': return <Lightbulb className="w-4 h-4" />;
+      case 'presentationAndDocumentation': return <BarChart3 className="w-4 h-4" />;
       default: return <Star className="w-4 h-4" />;
     }
   };
@@ -52,11 +68,12 @@ export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
   };
 
   const getGradeText = (percentage: number) => {
-    if (percentage >= 90) return 'ممتاز';
-    if (percentage >= 80) return 'جيد جداً';
-    if (percentage >= 70) return 'جيد';
-    if (percentage >= 60) return 'مقبول';
-    return 'ضعيف';
+    const isEnglish = i18n.language?.startsWith('en');
+    if (percentage >= 90) return isEnglish ? 'Excellent' : 'ممتاز';
+    if (percentage >= 80) return isEnglish ? 'Very Good' : 'جيد جداً';
+    if (percentage >= 70) return isEnglish ? 'Good' : 'جيد';
+    if (percentage >= 60) return isEnglish ? 'Acceptable' : 'مقبول';
+    return isEnglish ? 'Weak' : 'ضعيف';
   };
 
   return (
@@ -69,7 +86,7 @@ export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
           <Award className="w-6 h-6 text-blue-600" />
-          ملخص التقييم
+          {t('projectEvaluation.evaluationSummary', 'ملخص التقييم')}
         </h3>
         <div className="text-sm text-gray-500 flex items-center gap-1">
           <Calendar className="w-4 h-4" />
@@ -85,28 +102,44 @@ export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
               total + (criterion.score * criterion.weight), 0
             ).toFixed(2)}/10
           </span>
-          <span className="text-sm text-blue-600">الدرجة الموزونة</span>
+          <span className="text-sm text-blue-600">{t('projectEvaluation.overallScore')}</span>
         </div>
       </div>
 
       {/* Criteria Scores */}
       <div className="space-y-4 mb-6">
-        <h4 className="font-semibold text-gray-800 mb-2">تفاصيل التقييم</h4>
+        <h4 className="font-semibold text-gray-800 mb-2">{t('projectEvaluation.evaluationDetails', 'تفاصيل التقييم')}</h4>
         
-        {evaluation.criteria.map((criterion, index) => (
-          <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-            <div className="flex items-center gap-2">
-              {getCriterionIcon(criterion.name)}
-              <span className="font-medium text-gray-800">{criterion.name}</span>
+        {evaluation.criteria.map((criterion, index) => {
+          const criterionMap: Record<string, string> = {
+            'نسبة الإنجاز': 'completionRate',
+            'جودة العمل': 'workQuality',
+            'التواصل والتعاون': 'communicationAndCooperation',
+            'الإبداع والابتكار': 'creativityAndInnovation',
+            'جودة العرض والتوثيق': 'presentationAndDocumentation',
+            'Completion Rate': 'completionRate',
+            'Work Quality': 'workQuality',
+            'Communication & Cooperation': 'communicationAndCooperation',
+            'Creativity & Innovation': 'creativityAndInnovation',
+            'Presentation & Documentation Quality': 'presentationAndDocumentation',
+          };
+          const key = criterionMap[criterion.name];
+          const translatedName = key ? t(`projectEvaluation.criteriaNames.${key}`, criterion.name) : criterion.name;
+          return (
+            <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-center gap-2">
+                {getCriterionIcon(criterion.name)}
+                <span className="font-medium text-gray-800">{translatedName}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className={`font-bold ${getScoreColor(criterion.score, criterion.maxScore)}`}>
+                  {criterion.score}
+                </span>
+                <span className="text-gray-500">/ {criterion.maxScore}</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1">
-              <span className={`font-bold ${getScoreColor(criterion.score, criterion.maxScore)}`}>
-                {criterion.score}
-              </span>
-              <span className="text-gray-500">/ {criterion.maxScore}</span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Feedback */}
@@ -114,7 +147,7 @@ export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
         <div className="mb-4">
           <h4 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
             <MessageSquare className="w-5 h-5 text-blue-600" />
-            التعليق العام
+            {t('projectEvaluation.generalComment')}
           </h4>
           <div className="bg-gray-50 p-4 rounded-xl">
             <p className="text-gray-700 whitespace-pre-wrap">{evaluation.feedback}</p>
@@ -124,7 +157,7 @@ export const EvaluationSummary: React.FC<EvaluationSummaryProps> = ({
 
       {/* Evaluator */}
       <div className="text-sm text-gray-500 text-left">
-        تم التقييم بواسطة: {teacherName}
+        {t('projectEvaluation.evaluatedBy', 'تم التقييم بواسطة')}: {teacherName || t('common.teacher')}
       </div>
     </motion.div>
   );

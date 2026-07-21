@@ -1,4 +1,13 @@
 import { Timestamp } from 'firebase/firestore';
+import i18n from '../i18n';
+
+const getLocale = (): string => {
+  return i18n.language?.startsWith('en') ? 'en-US' : 'ar-SA';
+};
+
+const getNotSpecified = (): string => {
+  return i18n.language?.startsWith('en') ? 'Not specified' : 'غير محدد';
+};
 
 /**
  * Utility functions for date formatting and manipulation
@@ -53,7 +62,7 @@ export const toDateObject = (dateInput: string | Date | Timestamp | null | undef
  */
 export const formatDate = (dateString: string | Date | Timestamp | null | undefined, options?: Intl.DateTimeFormatOptions): string => {
   const date = toDateObject(dateString);
-  if (!date) return 'غير محدد';
+  if (!date) return getNotSpecified();
   
   const defaultOptions: Intl.DateTimeFormatOptions = {
     year: 'numeric',
@@ -62,7 +71,7 @@ export const formatDate = (dateString: string | Date | Timestamp | null | undefi
     calendar: 'gregory' // Ensure Gregorian calendar is used
   };
   
-  return date.toLocaleDateString('ar-SA', { ...defaultOptions, ...options });
+  return date.toLocaleDateString(getLocale(), { ...defaultOptions, ...options });
 };
 
 /**
@@ -73,7 +82,7 @@ export const formatDate = (dateString: string | Date | Timestamp | null | undefi
  */
 export const formatDateTime = (dateString: string | Date | Timestamp | null | undefined, options?: Intl.DateTimeFormatOptions): string => {
   const date = toDateObject(dateString);
-  if (!date) return 'غير محدد';
+  if (!date) return getNotSpecified();
   
   const defaultOptions: Intl.DateTimeFormatOptions = {
     year: 'numeric',
@@ -84,7 +93,7 @@ export const formatDateTime = (dateString: string | Date | Timestamp | null | un
     calendar: 'gregory' // Ensure Gregorian calendar is used
   };
   
-  return date.toLocaleString('ar-SA', { ...defaultOptions, ...options });
+  return date.toLocaleString(getLocale(), { ...defaultOptions, ...options });
 };
 
 /**
@@ -121,7 +130,7 @@ export const formatTime = (dateString: string | Date | Timestamp | null | undefi
   const date = toDateObject(dateString);
   if (!date) return '';
   
-  return date.toLocaleTimeString('ar-SA', {
+  return date.toLocaleTimeString(getLocale(), {
     hour: '2-digit',
     minute: '2-digit',
     calendar: 'gregory' // Ensure Gregorian calendar is used
@@ -135,35 +144,36 @@ export const formatTime = (dateString: string | Date | Timestamp | null | undefi
  */
 export const formatRelativeTime = (dateString: string | Date | Timestamp | null | undefined): string => {
   const date = toDateObject(dateString);
-  if (!date) return 'غير متوفر';
+  if (!date) return i18n.language?.startsWith('en') ? 'Not available' : 'غير متوفر';
 
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  const isEnglish = i18n.language?.startsWith('en');
 
   if (diffInSeconds < 60) {
-    return 'الآن';
+    return isEnglish ? 'Just now' : 'الآن';
   }
 
   const diffInMinutes = Math.floor(diffInSeconds / 60);
   if (diffInMinutes < 60) {
-    return `منذ ${diffInMinutes} دقيقة`;
+    return isEnglish ? `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''} ago` : `منذ ${diffInMinutes} دقيقة`;
   }
 
   const diffInHours = Math.floor(diffInMinutes / 60);
   if (diffInHours < 24) {
-    return `منذ ${diffInHours} ساعة`;
+    return isEnglish ? `${diffInHours} hour${diffInHours !== 1 ? 's' : ''} ago` : `منذ ${diffInHours} ساعة`;
   }
 
   const diffInDays = Math.floor(diffInHours / 24);
   if (diffInDays < 30) {
-    return `منذ ${diffInDays} يوم`;
+    return isEnglish ? `${diffInDays} day${diffInDays !== 1 ? 's' : ''} ago` : `منذ ${diffInDays} يوم`;
   }
 
   const diffInMonths = Math.floor(diffInDays / 30);
   if (diffInMonths < 12) {
-    return `منذ ${diffInMonths} شهر`;
+    return isEnglish ? `${diffInMonths} month${diffInMonths !== 1 ? 's' : ''} ago` : `منذ ${diffInMonths} شهر`;
   }
 
   const diffInYears = Math.floor(diffInMonths / 12);
-  return `منذ ${diffInYears} سنة`;
+  return isEnglish ? `${diffInYears} year${diffInYears !== 1 ? 's' : ''} ago` : `منذ ${diffInYears} سنة`;
 };

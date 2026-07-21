@@ -8,8 +8,10 @@ import { formatDate } from '../utils/dateUtils';
 import { AddProjectModal } from '../components/Gallery/AddProjectModal';
 import { DeleteConfirmationModal } from '../components/ProjectIdeas/DeleteConfirmationModal';
 import { InvestorInterestModal } from '../components/Investor/InvestorInterestModal';
+import { useTranslation } from 'react-i18next';
 
 export const Gallery: React.FC = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { schoolId, schoolName, logoUrl } = useSchoolBranding();
 
@@ -45,17 +47,17 @@ export const Gallery: React.FC = () => {
   const [interestProject, setInterestProject] = useState<{ id: string; title: string; schoolId: string; school: string } | null>(null);
 
   const categories = [
-    { id: 'all', name: 'جميع المشاريع' },
-    { id: 'stem', name: 'العلوم والتقنية' },
-    { id: 'entrepreneurship', name: 'ريادة الأعمال' },
-    { id: 'volunteer', name: 'التطوع' },
-    { id: 'ethics', name: 'الأخلاق' },
+    { id: 'all', name: t('gallery.allProjects') },
+    { id: 'stem', name: t('gallery.scienceAndTech') },
+    { id: 'entrepreneurship', name: t('gallery.entrepreneurship') },
+    { id: 'volunteer', name: t('gallery.volunteering') },
+    { id: 'ethics', name: t('gallery.ethics') },
   ];
 
   const schools = React.useMemo(() => {
     const uniqueSchools = [...new Set(projects.map(p => p.school))];
     return [
-      { id: 'all', name: 'جميع المؤسسات التعليمية' },
+      { id: 'all', name: t('gallery.allSchools') },
       ...uniqueSchools
         .filter(school => school && school !== 'مؤسسة تعليمية غير معروفة')
         .sort((a, b) => a.localeCompare(b, 'ar'))
@@ -104,10 +106,10 @@ export const Gallery: React.FC = () => {
 
   const getCategoryText = (category: string) => {
     switch (category) {
-      case 'stem': return 'العلوم والتقنية';
-      case 'entrepreneurship': return 'ريادة الأعمال';
-      case 'volunteer': return 'التطوع';
-      case 'ethics': return 'الأخلاق';
+      case 'stem': return t('gallery.scienceAndTech');
+      case 'entrepreneurship': return t('gallery.entrepreneurship');
+      case 'volunteer': return t('gallery.volunteering');
+      case 'ethics': return t('gallery.ethics');
       default: return category;
     }
   };
@@ -163,7 +165,7 @@ export const Gallery: React.FC = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-800 mb-2">حدث خطأ</h2>
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">{t('common.error')}</h2>
           <p className="text-gray-600">{error}</p>
         </div>
       </div>
@@ -195,12 +197,12 @@ export const Gallery: React.FC = () => {
             )}
             <div>
               <h1 className="text-xl md:text-2xl lg:text-3xl font-bold leading-tight">
-                {schoolName ? `معرض مشاريع ${schoolName}` : 'معرض المشاريع'}
+                {schoolName ? t('gallery.titleWithSchool', { schoolName }) : t('gallery.title')}
               </h1>
               <p className="opacity-90 text-sm md:text-base mt-0.5">
                 {schoolName
-                  ? `استكشف المشاريع المميزة والملهمة من ${schoolName}`
-                  : 'استكشف المشاريع المميزة والملهمة من طلابنا'
+                  ? t('gallery.subtitleWithSchool', { schoolName })
+                  : t('gallery.subtitle')
                 }
               </p>
             </div>
@@ -212,7 +214,7 @@ export const Gallery: React.FC = () => {
               className="w-full sm:w-auto bg-white text-pink-600 px-4 md:px-6 py-2.5 md:py-3 rounded-lg md:rounded-xl font-medium hover:bg-opacity-90 transition-all duration-200 flex items-center justify-center gap-2 text-sm md:text-base"
             >
               <Plus className="w-4 h-4 md:w-5 md:h-5" />
-              إضافة مشروع
+              {t('gallery.addProject')}
             </button>
           )}
         </div>
@@ -220,21 +222,21 @@ export const Gallery: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 text-center">
           <div className="bg-white bg-opacity-10 rounded-lg p-2 md:p-3">
             <div className="text-xl md:text-2xl font-bold">{projects.length}</div>
-            <div className="text-xs md:text-sm opacity-80">إجمالي المشاريع</div>
+            <div className="text-xs md:text-sm opacity-80">{t('gallery.totalProjects')}</div>
           </div>
           <div className="bg-white bg-opacity-10 rounded-lg p-2 md:p-3">
             <div className="text-xl md:text-2xl font-bold">{projects.filter(p => p.isPublic === true).length}</div>
-            <div className="text-xs md:text-sm opacity-80">مشاريع عامة</div>
+            <div className="text-xs md:text-sm opacity-80">{t('gallery.publicProjects')}</div>
           </div>
           {(user?.role === 'school' || user?.role === 'admin') && (
             <div className="bg-white bg-opacity-10 rounded-lg p-2 md:p-3">
               <div className="text-xl md:text-2xl font-bold">{projects.filter(p => p.isPublic === false).length}</div>
-              <div className="text-xs md:text-sm opacity-80">مشاريع خاصة</div>
+              <div className="text-xs md:text-sm opacity-80">{t('gallery.privateProjects')}</div>
             </div>
           )}
           <div className="bg-white bg-opacity-10 rounded-lg p-2 md:p-3">
             <div className="text-xl md:text-2xl font-bold">{projects.reduce((sum, p) => sum + p.views, 0).toLocaleString()}</div>
-            <div className="text-xs md:text-sm opacity-80">إجمالي المشاهدات</div>
+            <div className="text-xs md:text-sm opacity-80">{t('gallery.totalViews')}</div>
           </div>
         </div>
       </motion.div>
@@ -252,7 +254,7 @@ export const Gallery: React.FC = () => {
             <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-gray-400" />
             <input
               type="text"
-              placeholder="البحث في المشاريع..."
+              placeholder={t('gallery.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pr-10 md:pr-12 pl-3 md:pl-4 py-2.5 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg md:rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
@@ -265,13 +267,13 @@ export const Gallery: React.FC = () => {
             className="lg:hidden flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors text-sm"
           >
             <Filter className="w-4 h-4" />
-            الفلاتر
+            {t('gallery.filters')}
           </button>
         </div>
 
         {/* Categories */}
         <div className={`${showFilters ? 'block' : 'hidden lg:block'}`}>
-          <h3 className="font-medium text-gray-700 mb-3 text-sm md:text-base">الفئات</h3>
+          <h3 className="font-medium text-gray-700 mb-3 text-sm md:text-base">{t('gallery.categories')}</h3>
           <div className="flex flex-wrap gap-2 mb-4 md:mb-6">
             {categories.map((category) => (
               <button
@@ -293,7 +295,7 @@ export const Gallery: React.FC = () => {
             <div className="mb-4">
               <h3 className="font-medium text-gray-700 mb-3 flex items-center gap-2 text-sm md:text-base">
                 <School className="w-4 h-4" />
-                المؤسسات التعليمية
+                {t('gallery.institutions')}
               </h3>
               <select
                 value={selectedSchool}
@@ -314,7 +316,7 @@ export const Gallery: React.FC = () => {
             <div>
               <h3 className="font-medium text-gray-700 mb-3 flex items-center gap-2 text-sm md:text-base">
                 <Eye className="w-4 h-4" />
-                الرؤية
+                {t('gallery.visibility')}
               </h3>
               <div className="flex flex-wrap gap-2">
                 <button
@@ -325,7 +327,7 @@ export const Gallery: React.FC = () => {
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  الكل
+                  {t('gallery.all')}
                 </button>
                 <button
                   onClick={() => setVisibilityFilter('public')}
@@ -336,7 +338,7 @@ export const Gallery: React.FC = () => {
                   }`}
                 >
                   <Globe className="w-3 h-3" />
-                  عامة
+                  {t('gallery.public')}
                 </button>
                 <button
                   onClick={() => setVisibilityFilter('private')}
@@ -347,7 +349,7 @@ export const Gallery: React.FC = () => {
                   }`}
                 >
                   <Lock className="w-3 h-3" />
-                  خاصة
+                  {t('gallery.private')}
                 </button>
               </div>
             </div>
@@ -358,7 +360,7 @@ export const Gallery: React.FC = () => {
       {/* Results Count */}
       <div className="flex items-center justify-between">
         <p className="text-gray-600">
-          عرض {filteredProjects.length} من أصل {projects.length} مشروع
+          {t('gallery.showing')} {filteredProjects.length} {t('gallery.of')} {projects.length} {t('gallery.project')}
         </p>
       </div>
 
@@ -425,19 +427,19 @@ export const Gallery: React.FC = () => {
                 {project.featured && (
                   <div className="bg-yellow-500 text-white px-2 py-1 rounded-lg text-xs font-medium flex items-center gap-1">
                     <Award className="w-3 h-3" />
-                    مميز
+                    {t('gallery.featured')}
                   </div>
                 )}
                 {project.isPublic === false && (user?.role === 'school' || user?.role === 'admin') && (
                   <div className="bg-orange-500 text-white px-2 py-1 rounded-lg text-xs font-medium flex items-center gap-1">
                     <Lock className="w-3 h-3" />
-                    خاص
+                    {t('gallery.privateBadge')}
                   </div>
                 )}
                 {project.isPublic === true && (user?.role === 'school' || user?.role === 'admin') && (
                   <div className="bg-green-500 text-white px-2 py-1 rounded-lg text-xs font-medium flex items-center gap-1">
                     <Globe className="w-3 h-3" />
-                    عام
+                    {t('gallery.publicBadge')}
                   </div>
                 )}
               </div>
@@ -483,7 +485,7 @@ export const Gallery: React.FC = () => {
               <div className="mb-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Users className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm font-medium text-gray-700">الطلاب المشاركون:</span>
+                  <span className="text-sm font-medium text-gray-700">{t('gallery.participatingStudents')}</span>
                 </div>
                 <div className="flex flex-wrap gap-1">
                   {project.students.slice(0, 3).map((student, idx) => (
@@ -507,7 +509,7 @@ export const Gallery: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <Users className="w-4 h-4" />
-                  <span>المعلم/المشرف المشرف: {project.teacher}</span>
+                  <span>{t('gallery.supervisorTeacher')} {project.teacher}</span>
                 </div>
               </div>
 
@@ -534,7 +536,7 @@ export const Gallery: React.FC = () => {
                 <div className="mb-4">
                   <div className="flex items-center gap-2 mb-2">
                     <Award className="w-4 h-4 text-yellow-500" />
-                    <span className="text-sm font-medium text-gray-700">الجوائز:</span>
+                    <span className="text-sm font-medium text-gray-700">{t('gallery.awards')}</span>
                   </div>
                   <div className="flex flex-wrap gap-1">
                     {project.awards.map((award, idx) => (
@@ -555,7 +557,7 @@ export const Gallery: React.FC = () => {
                       <button
                         onClick={(e) => { e.preventDefault(); handleEditProject(project); }}
                         className="flex-1 sm:flex-none p-2.5 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors"
-                        title="تعديل"
+                        title={t('common.edit')}
                       >
                         <Edit className="w-4 h-4 mx-auto" />
                       </button>
@@ -572,7 +574,7 @@ export const Gallery: React.FC = () => {
                             ? 'bg-green-100 text-green-600 hover:bg-green-200'
                             : 'bg-orange-100 text-orange-600 hover:bg-orange-200'
                         }`}
-                        title={project.isPublic ? 'جعل المشروع خاصاً' : 'جعل المشروع عاماً'}
+                        title={project.isPublic ? t('gallery.makePrivate') : t('gallery.makePublic')}
                       >
                         {project.isPublic ? (
                           <Globe className="w-4 h-4 mx-auto" />
@@ -585,7 +587,7 @@ export const Gallery: React.FC = () => {
                       <button
                         onClick={(e) => { e.preventDefault(); handleDeleteProject(project); }}
                         className="flex-1 sm:flex-none p-2.5 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-colors"
-                        title="حذف"
+                        title={t('common.delete')}
                       >
                         <Trash2 className="w-4 h-4 mx-auto" />
                       </button>
@@ -627,7 +629,7 @@ export const Gallery: React.FC = () => {
                       className="flex-1 sm:flex-none px-3 md:px-4 py-2.5 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors text-xs md:text-sm font-medium flex items-center justify-center gap-2 whitespace-nowrap"
                     >
                       <TrendingUp className="w-4 h-4" />
-                      <span>تسجيل الاهتمام</span>
+                      <span>{t('gallery.registerInterest')}</span>
                     </button>
                   )}
 
@@ -636,8 +638,8 @@ export const Gallery: React.FC = () => {
                     className="flex-1 sm:flex-none px-3 md:px-4 py-2.5 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors text-xs md:text-sm font-medium flex items-center justify-center gap-2 whitespace-nowrap"
                   >
                     <Eye className="w-4 h-4" />
-                    <span className="hidden sm:inline">عرض التفاصيل</span>
-                    <span className="sm:hidden">التفاصيل</span>
+                    <span className="hidden sm:inline">{t('gallery.viewDetails')}</span>
+                    <span className="sm:hidden">{t('gallery.details')}</span>
                   </button>
                 </div>
               </div>
@@ -658,13 +660,13 @@ export const Gallery: React.FC = () => {
           <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <GalleryIcon className="w-12 h-12 text-gray-400" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">لا توجد مشاريع</h3>
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">{t('gallery.noProjects')}</h3>
           <p className="text-gray-600 mb-4">
             {projects.length === 0
               ? schoolName
-                ? `لم يتم إضافة أي مشاريع لمعرض ${schoolName} بعد`
-                : 'لم يتم إضافة أي مشاريع للمعرض بعد'
-              : 'لم يتم العثور على مشاريع تطابق معايير البحث'}
+                ? t('gallery.noProjectsAddedForSchool', { schoolName })
+                : t('gallery.noProjectsAdded')
+              : t('gallery.noProjectsMatch')}
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
             {canAddProject && (
@@ -673,7 +675,7 @@ export const Gallery: React.FC = () => {
                 className="w-full sm:w-auto px-4 md:px-6 py-2.5 md:py-2 bg-pink-500 text-white rounded-lg md:rounded-xl hover:bg-pink-600 transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
               >
                 <Plus className="w-4 h-4" />
-                إضافة مشروع جديد
+                {t('gallery.addNewProject')}
               </button>
             )}
             {projects.length > 0 && (
@@ -685,7 +687,7 @@ export const Gallery: React.FC = () => {
                 }}
                 className="w-full sm:w-auto px-4 md:px-6 py-2.5 md:py-2 border border-gray-300 rounded-lg md:rounded-xl hover:bg-gray-50 transition-colors text-sm md:text-base"
               >
-                إعادة تعيين الفلاتر
+                {t('gallery.resetFilters')}
               </button>
             )}
           </div>
@@ -743,7 +745,7 @@ export const Gallery: React.FC = () => {
                     {selectedProject.featured && (
                       <span className="px-3 py-1 bg-yellow-500 text-white rounded-full text-xs font-medium flex items-center gap-1">
                         <Award className="w-3 h-3" />
-                        مميز
+                        {t('gallery.featured')}
                       </span>
                     )}
                   </div>
@@ -755,12 +757,12 @@ export const Gallery: React.FC = () => {
               <div className="p-6">
                 <div className="grid md:grid-cols-3 gap-6 mb-6">
                   <div className="md:col-span-2">
-                    <h3 className="font-semibold text-gray-800 mb-2">وصف المشروع</h3>
+                    <h3 className="font-semibold text-gray-800 mb-2">{t('gallery.projectDescription')}</h3>
                     <p className="text-gray-600 leading-relaxed mb-4">{selectedProject.description}</p>
                     
                     {/* Students */}
                     <div className="mb-4">
-                      <h4 className="font-medium text-gray-800 mb-2">الطلاب المشاركون:</h4>
+                      <h4 className="font-medium text-gray-800 mb-2">{t('gallery.participatingStudents')}</h4>
                       <div className="flex flex-wrap gap-2">
                         {selectedProject.students.map((student: string, idx: number) => (
                           <span key={idx} className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-lg">
@@ -773,7 +775,7 @@ export const Gallery: React.FC = () => {
                     {/* Tags */}
                     {selectedProject.tags && selectedProject.tags.length > 0 && (
                       <div className="mb-4">
-                        <h4 className="font-medium text-gray-800 mb-2">الكلمات المفتاحية:</h4>
+                        <h4 className="font-medium text-gray-800 mb-2">{t('gallery.keywords')}</h4>
                         <div className="flex flex-wrap gap-2">
                           {selectedProject.tags.map((tag: string, idx: number) => (
                             <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-lg">
@@ -787,7 +789,7 @@ export const Gallery: React.FC = () => {
                     {/* Awards */}
                     {selectedProject.awards && selectedProject.awards.length > 0 && (
                       <div className="mb-4">
-                        <h4 className="font-medium text-gray-800 mb-2">الجوائز والإنجازات:</h4>
+                        <h4 className="font-medium text-gray-800 mb-2">{t('gallery.awards')}</h4>
                         <div className="flex flex-wrap gap-2">
                           {selectedProject.awards.map((award: string, idx: number) => (
                             <span key={idx} className="px-3 py-1 bg-yellow-100 text-yellow-800 text-sm rounded-lg flex items-center gap-1">
@@ -802,26 +804,26 @@ export const Gallery: React.FC = () => {
                   
                   <div>
                     <div className="bg-gray-50 rounded-xl p-4">
-                      <h3 className="font-semibold text-gray-800 mb-3">معلومات المشروع</h3>
+                      <h3 className="font-semibold text-gray-800 mb-3">{t('gallery.projectInfo')}</h3>
                       
                       <div className="space-y-3">
                         <div>
-                          <p className="text-sm text-gray-500">المؤسسة تعليمية</p>
+                          <p className="text-sm text-gray-500">{t('gallery.institution')}</p>
                           <p className="font-medium">{selectedProject.school}</p>
                         </div>
                         
                         <div>
-                          <p className="text-sm text-gray-500">المعلم/المشرف المشرف</p>
+                          <p className="text-sm text-gray-500">{t('gallery.supervisorTeacher')}</p>
                           <p className="font-medium">{selectedProject.teacher}</p>
                         </div>
                         
                         <div>
-                          <p className="text-sm text-gray-500">تاريخ الإكمال</p>
+                          <p className="text-sm text-gray-500">{t('gallery.completionDate')}</p>
                           <p className="font-medium">{formatDate(selectedProject.completedAt)}</p>
                         </div>
                         
                         <div>
-                          <p className="text-sm text-gray-500">التقييم</p>
+                          <p className="text-sm text-gray-500">{t('gallery.rating')}</p>
                           <div className="flex items-center gap-1">
                             <Star className="w-4 h-4 text-yellow-400 fill-current" />
                             <span className="font-medium">{selectedProject.rating}</span>
@@ -829,12 +831,12 @@ export const Gallery: React.FC = () => {
                         </div>
                         
                         <div>
-                          <p className="text-sm text-gray-500">المشاهدات</p>
+                          <p className="text-sm text-gray-500">{t('gallery.viewCount')}</p>
                           <p className="font-medium">{selectedProject.views}</p>
                         </div>
                         
                         <div>
-                          <p className="text-sm text-gray-500">الإعجابات</p>
+                          <p className="text-sm text-gray-500">{t('gallery.likeCount')}</p>
                           <p className="font-medium">{selectedProject.likes}</p>
                         </div>
                       </div>
@@ -847,11 +849,11 @@ export const Gallery: React.FC = () => {
                   <div className="flex items-center justify-center sm:justify-start gap-3 md:gap-4 text-sm md:text-base">
                     <div className="flex items-center gap-1 text-gray-600">
                       <Eye className="w-4 h-4 md:w-5 md:h-5" />
-                      <span>{selectedProject.views} مشاهدة</span>
+                      <span>{selectedProject.views} {t('gallery.viewCount')}</span>
                     </div>
                     <div className="flex items-center gap-1 text-gray-600">
                       <Heart className="w-4 h-4 md:w-5 md:h-5" />
-                      <span>{selectedProject.likes} إعجاب</span>
+                      <span>{selectedProject.likes} {t('gallery.likeCount')}</span>
                     </div>
                   </div>
 
@@ -866,7 +868,7 @@ export const Gallery: React.FC = () => {
                         }`}
                       >
                         <Heart className="w-4 h-4 md:w-5 md:h-5" />
-                        إعجاب
+                        {t('gallery.like')}
                       </button>
                     )}
 
@@ -880,7 +882,7 @@ export const Gallery: React.FC = () => {
                         className="px-4 md:px-6 py-2.5 md:py-2 bg-emerald-500 text-white rounded-lg md:rounded-xl hover:bg-emerald-600 transition-colors flex items-center justify-center gap-2 text-sm md:text-base font-medium"
                       >
                         <TrendingUp className="w-4 h-4 md:w-5 md:h-5" />
-                        تسجيل الاهتمام
+                        {t('gallery.registerInterest')}
                       </button>
                     )}
 
@@ -892,7 +894,7 @@ export const Gallery: React.FC = () => {
                         className="px-4 md:px-6 py-2.5 md:py-2 bg-red-500 text-white rounded-lg md:rounded-xl hover:bg-red-600 transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
                       >
                         <Play className="w-4 h-4 md:w-5 md:h-5" />
-                        مشاهدة على يوتيوب
+                        {t('gallery.watchOnYoutube')}
                       </a>
                     )}
 
@@ -900,7 +902,7 @@ export const Gallery: React.FC = () => {
                       onClick={() => setSelectedProject(null)}
                       className="px-4 md:px-6 py-2.5 md:py-2 border border-gray-300 rounded-lg md:rounded-xl hover:bg-gray-50 transition-colors text-sm md:text-base"
                     >
-                      إغلاق
+                      {t('gallery.close')}
                     </button>
                   </div>
                 </div>
