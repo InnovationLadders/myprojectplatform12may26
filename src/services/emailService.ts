@@ -57,7 +57,11 @@ export interface EmailRecipient {
   email: string;
   name: string;
 }
-
+/**
+ * Fetches user email and name from Firestore by user IDs
+ * @param userIds - Array of user IDs to fetch
+ * @returns Array of email recipients with email and name
+ */
 export const getUsersByIds = async (userIds: string[]): Promise<EmailRecipient[]> => {
   const recipients: EmailRecipient[] = [];
   for (const userId of userIds) {
@@ -75,7 +79,10 @@ export const getUsersByIds = async (userIds: string[]): Promise<EmailRecipient[]
 };
 
 // ─── Admin / Auth notifications ───────────────────────────────────────────────
-
+/**
+ * Sends email notification to admin when a new student requests to join
+ * @param params - Admin and student information
+ */
 export const sendAdminNewStudentEmail = async (params: {
   adminEmail: string;
   adminName: string;
@@ -93,7 +100,10 @@ export const sendAdminNewStudentEmail = async (params: {
     login_url: `${appUrl}/users`,
   });
 };
-
+/**
+ * Sends email notification to student when their account is activated by admin
+ * @param params - Student and school information
+ */
 export const sendStudentActivatedEmail = async (params: {
   userEmail: string;
   userName: string;
@@ -109,7 +119,10 @@ export const sendStudentActivatedEmail = async (params: {
 };
 
 // ─── Project notifications ────────────────────────────────────────────────────
-
+/**
+ * Sends email notification to team members and supervisor when a new project is created
+ * @param params - Project details including team members and supervisor
+ */
 export const sendProjectCreatedNotification = async (params: {
   projectId: string;
   projectTitle: string;
@@ -146,7 +159,10 @@ export const sendProjectCreatedNotification = async (params: {
 };
 
 // ─── Consultation notifications ───────────────────────────────────────────────
-
+/**
+ * Sends email notification to consultant when a student requests a consultation
+ * @param params - Consultation request details
+ */
 export const sendConsultationRequestedEmail = async (params: {
   consultantEmail: string;
   consultantName: string;
@@ -167,7 +183,10 @@ export const sendConsultationRequestedEmail = async (params: {
     consultation_date: params.preferredDate,
   });
 };
-
+/**
+ * Sends email notification to student when their consultation request is accepted
+ * @param params - Consultation acceptance details
+ */
 export const sendConsultationAcceptedEmail = async (params: {
   studentEmail: string;
   studentName: string;
@@ -184,7 +203,10 @@ export const sendConsultationAcceptedEmail = async (params: {
     consultation_date: params.scheduledDate,
   });
 };
-
+/**
+ * Sends email notification to student when a consultation session is completed
+ * @param params - Consultation completion details
+ */
 export const sendConsultationCompletedEmail = async (params: {
   studentEmail: string;
   studentName: string;
@@ -199,7 +221,10 @@ export const sendConsultationCompletedEmail = async (params: {
 };
 
 // ─── Investor notifications ───────────────────────────────────────────────────
-
+/**
+ * Sends email notification when an investor shows interest in a project
+ * @param params - Investor request details
+ */
 export const sendInvestorRequestNewEmail = async (params: {
   recipientEmail: string;
   recipientName: string;
@@ -218,7 +243,10 @@ export const sendInvestorRequestNewEmail = async (params: {
     investor_notes: params.investorNotes,
   });
 };
-
+/**
+ * Sends email notification to investor about status update of their request
+ * @param params - Status update details
+ */
 export const sendInvestorRequestStatusEmail = async (params: {
   investorEmail: string;
   investorName: string;
@@ -237,7 +265,10 @@ export const sendInvestorRequestStatusEmail = async (params: {
 };
 
 // ─── Achievement notifications ────────────────────────────────────────────────
-
+/**
+ * Sends email notification to user when they unlock an achievement
+ * @param params - Achievement details including points
+ */
 export const sendAchievementUnlockedEmail = async (params: {
   userEmail: string;
   userName: string;
@@ -256,7 +287,11 @@ export const sendAchievementUnlockedEmail = async (params: {
 };
 
 // ─── Chat notifications ───────────────────────────────────────────────────────
-
+/**
+ * Checks if this is the first chat message of the day for a project
+ * @param projectId - Project ID to check
+ * @returns True if first message today, false otherwise
+ */
 export const checkIfFirstMessageToday = async (projectId: string): Promise<boolean> => {
   try {
     const projectDoc = await getDoc(firestoreDoc(db, 'projects', projectId));
@@ -281,7 +316,10 @@ export const checkIfFirstMessageToday = async (projectId: string): Promise<boole
     return false;
   }
 };
-
+/**
+ * Updates the last chat notification timestamp for a project
+ * @param projectId - Project ID to update
+ */
 export const updateLastChatNotification = async (projectId: string): Promise<void> => {
   try {
     const projectRef = firestoreDoc(db, 'projects', projectId);
@@ -290,7 +328,10 @@ export const updateLastChatNotification = async (projectId: string): Promise<voi
     console.error('[emailService] updateLastChatNotification failed:', error);
   }
 };
-
+/**
+ * Sends email notification to project members for the first daily chat message
+ * @param params - Chat notification details including recipients
+ */
 export const sendFirstDailyChatNotification = async (params: {
   projectId: string;
   projectTitle: string;
