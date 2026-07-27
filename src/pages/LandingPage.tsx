@@ -11,6 +11,9 @@ export const LandingPage: React.FC = () => {
   const { schoolName, logoUrl, loading: brandingLoading } = useSchoolBranding();
   const { featuredVideos } = useFeaturedVideos();
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
+
+  const isRTL = i18n.language === 'ar';
+  const dir = isRTL ? 'rtl' : 'ltr';
   
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -101,7 +104,7 @@ export const LandingPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" dir={dir}>
       {/* Language Selector - Fixed at Top */}
       <div className="fixed top-4 right-4 z-50">
         <div className="relative">
@@ -180,7 +183,7 @@ export const LandingPage: React.FC = () => {
             </motion.div>
           )}
 
-          <div className="flex items-center justify-center gap-6 mb-6 bg-white bg-opacity-10 backdrop-blur py-4 px-8 rounded-2xl inline-block mx-auto">
+          <div className="flex items-center justify-center gap-6 mb-6 bg-white bg-opacity-10 backdrop-blur py-4 px-8 rounded-2xl inline-block mx-auto" dir={dir}>
             <img
               src="/STEAMEducationlogo.jpg"
               alt="STEAM Education - Science Technology Engineering Arts Mathematics"
@@ -197,16 +200,16 @@ export const LandingPage: React.FC = () => {
               className="h-20 rounded-lg shadow-xl border-2 border-white border-opacity-20"
             />
           </div>
-          <h1 className="text-5xl font-extrabold mb-4 leading-tight drop-shadow-2xl" style={{ textShadow: '0 4px 8px rgba(0,0,0,0.8), 0 2px 4px rgba(0,0,0,0.6)' }}>
+          <h1 className="text-5xl font-extrabold mb-4 leading-tight drop-shadow-2xl" dir={dir} style={{ textShadow: '0 4px 8px rgba(0,0,0,0.8), 0 2px 4px rgba(0,0,0,0.6)' }}>
             <span className="block text-2xl font-semibold mb-2 text-white drop-shadow-2xl" style={{ textShadow: '0 3px 6px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.5)' }}>
               {t('landingPage.welcomeMessage')}
             </span>
             {t('appName')} - {t('appTagline')}
           </h1>
-          <p className="text-xl mb-8 max-w-3xl mx-auto font-medium" style={{ textShadow: '0 3px 6px rgba(0,0,0,0.8), 0 1px 3px rgba(0,0,0,0.6)' }}>
+          <p className="text-xl mb-8 max-w-3xl mx-auto font-medium" dir={dir} style={{ textShadow: '0 3px 6px rgba(0,0,0,0.8), 0 1px 3px rgba(0,0,0,0.6)' }}>
             {t('home.description')}
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8" dir={dir}>
             <Link
               to="/register"
               className="bg-white text-blue-600 px-8 py-3 rounded-full font-bold text-lg shadow-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 hover:shadow-[0_20px_50px_rgba(255,255,255,0.4)]"
@@ -229,19 +232,19 @@ export const LandingPage: React.FC = () => {
       <div className="py-16 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm text-center">
+            <div className="bg-white p-6 rounded-lg shadow-sm text-center" dir={dir}>
               <div className="text-3xl font-bold text-blue-600 mb-2">300+</div>
               <div className="text-gray-600">{t('landingPage.stats.students')}</div>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm text-center">
+            <div className="bg-white p-6 rounded-lg shadow-sm text-center" dir={dir}>
               <div className="text-3xl font-bold text-green-600 mb-2">50+</div>
               <div className="text-gray-600">{t('landingPage.stats.projects')}</div>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm text-center">
+            <div className="bg-white p-6 rounded-lg shadow-sm text-center" dir={dir}>
               <div className="text-3xl font-bold text-purple-600 mb-2">100+</div>
               <div className="text-gray-600">{t('landingPage.stats.teachers')}</div>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm text-center">
+            <div className="bg-white p-6 rounded-lg shadow-sm text-center" dir={dir}>
               <div className="text-3xl font-bold text-orange-600 mb-2">5+</div>
               <div className="text-gray-600">{t('landingPage.stats.schools')}</div>
             </div>
@@ -294,6 +297,7 @@ export const LandingPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               className="text-center mb-12"
+              dir={dir}
             >
               <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
                 <Play className="w-4 h-4" />
@@ -334,7 +338,7 @@ export const LandingPage: React.FC = () => {
                       />
                     )}
                   </div>
-                  <div className="p-5">
+                  <div className="p-5" dir={dir}>
                     <h3 className="font-bold text-gray-800 text-lg leading-snug mb-2 group-hover:text-blue-600 transition-colors">
                       {video.title}
                     </h3>
@@ -357,6 +361,7 @@ export const LandingPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-4xl font-bold text-gray-800 mb-12 text-center"
+            dir={dir}
           >
             {t('home.featuresSection.title')}
           </motion.h2>
@@ -368,6 +373,7 @@ export const LandingPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="bg-gray-50 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition-all duration-300"
+                dir={dir}
               >
                 <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center bg-gradient-to-r ${feature.color}`}>
                   <feature.icon className="w-8 h-8 text-white" />
@@ -388,6 +394,7 @@ export const LandingPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-4xl font-bold text-gray-800 mb-12 text-center"
+            dir={dir}
           >
             {t('home.testimonials.title')}
           </motion.h2>
@@ -399,6 +406,7 @@ export const LandingPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="bg-white rounded-xl p-6 shadow-md"
+                dir={dir}
               >
                 <div className="flex items-center mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
@@ -431,6 +439,7 @@ export const LandingPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-4xl font-bold text-gray-800 mb-12 text-center"
+            dir={dir}
           >
             {t('landingPage.benefits.title')}
           </motion.h2>
@@ -444,8 +453,8 @@ export const LandingPage: React.FC = () => {
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="w-8 h-8 text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">{t('landingPage.benefits.benefit1.title')}</h3>
-              <p className="text-gray-600">{t('landingPage.benefits.benefit1.description')}</p>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2" dir={dir}>{t('landingPage.benefits.benefit1.title')}</h3>
+              <p className="text-gray-600" dir={dir}>{t('landingPage.benefits.benefit1.description')}</p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -456,8 +465,8 @@ export const LandingPage: React.FC = () => {
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Award className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">{t('landingPage.benefits.benefit2.title')}</h3>
-              <p className="text-gray-600">{t('landingPage.benefits.benefit2.description')}</p>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2" dir={dir}>{t('landingPage.benefits.benefit2.title')}</h3>
+              <p className="text-gray-600" dir={dir}>{t('landingPage.benefits.benefit2.description')}</p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -468,8 +477,8 @@ export const LandingPage: React.FC = () => {
               <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="w-8 h-8 text-purple-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">{t('landingPage.benefits.benefit3.title')}</h3>
-              <p className="text-gray-600">{t('landingPage.benefits.benefit3.description')}</p>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2" dir={dir}>{t('landingPage.benefits.benefit3.title')}</h3>
+              <p className="text-gray-600" dir={dir}>{t('landingPage.benefits.benefit3.description')}</p>
             </motion.div>
           </div>
         </div>
@@ -483,13 +492,14 @@ export const LandingPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-4xl font-bold mb-4"
+            dir={dir}
           >
             {t('home.cta.title')}
           </motion.h2>
-          <p className="text-xl mb-8 opacity-90 max-w-3xl mx-auto">
+          <p className="text-xl mb-8 opacity-90 max-w-3xl mx-auto" dir={dir}>
             {t('home.cta.description')}
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <div className="flex flex-col sm:flex-row justify-center gap-4" dir={dir}>
             <Link
               to="/register"
               className="bg-white text-blue-600 px-8 py-3 rounded-full font-bold text-lg shadow-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 hover:shadow-[0_20px_50px_rgba(255,255,255,0.4)]"
@@ -508,7 +518,7 @@ export const LandingPage: React.FC = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8 px-4">
+      <footer className="bg-gray-800 text-white py-8 px-4" dir={dir}>
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>

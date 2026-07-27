@@ -2,6 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html[lang="ar"] {
+    font-family: 'Tajawal', system-ui, sans-serif;
+  }
+  html[lang="ar"] body {
+    font-family: 'Tajawal', system-ui, sans-serif;
+  }
+  html[lang="ar"] h1,
+  html[lang="ar"] h2,
+  html[lang="ar"] h3,
+  html[lang="ar"] h4,
+  html[lang="ar"] h5,
+  html[lang="ar"] h6,
+  html[lang="ar"] p,
+  html[lang="ar"] span,
+  html[lang="ar"] button,
+  html[lang="ar"] a,
+  html[lang="ar"] div,
+  html[lang="ar"] li,
+  html[lang="ar"] label,
+  html[lang="ar"] input {
+    font-family: 'Tajawal', system-ui, sans-serif !important;
+  }
+}
+
 @layer utilities {
   /* Hide scrollbar for Chrome, Safari and Opera */
   .scrollbar-hide::-webkit-scrollbar {

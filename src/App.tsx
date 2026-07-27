@@ -258,11 +258,19 @@ const AppRoutes: React.FC = () => {
 
 function App() {
 
-  // Set document direction based on language
+  // Set document direction and language on the <html> element.
+  // We listen to i18n's 'languageChanged' event so the dir/lang attributes
+  // update immediately whenever the language switches, even though this
+  // component does not otherwise re-render on language change.
   useEffect(() => {
-    document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.lang = i18n.language;
-  }, [i18n.language]);
+    const applyDir = (lng: string) => {
+      document.documentElement.dir = lng === 'ar' ? 'rtl' : 'ltr';
+      document.documentElement.lang = lng;
+    };
+    applyDir(i18n.language);
+    i18n.on('languageChanged', applyDir);
+    return () => { i18n.off('languageChanged', applyDir); };
+  }, []);
 
   return (
     <AuthProvider>
