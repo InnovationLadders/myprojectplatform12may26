@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Wrench, AlertTriangle, CheckCircle, RefreshCw, Database } from 'lucide-react';
+import { Wrench, TriangleAlert as AlertTriangle, CircleCheck as CheckCircle, RefreshCw, Database } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { collection, getDocs, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
@@ -228,7 +228,7 @@ const FixEntrepreneurshipData: React.FC = () => {
               const teacherDoc = await getDoc(doc(db, 'users', projectData.teacher_id));
               if (teacherDoc.exists() && teacherDoc.data().role === 'teacher') {
                 updateData.teacher_id = projectData.teacher_id;
-                updateData.teacher_name = teacherDoc.data().name || 'معلم غير معروف';
+                updateData.teacher_name = teacherDoc.data().name || 'مشرف غير معروف';
               }
             } catch (error) {
               console.error(`   ⚠️ Error fetching teacher name: ${error}`);
@@ -393,7 +393,7 @@ const FixEntrepreneurshipData: React.FC = () => {
               transition={{ delay: 0.5 }}
               className="bg-white rounded-xl shadow-md p-6"
             >
-              <div className="text-sm text-gray-600 mb-1">معرفات معلمين فارغة</div>
+              <div className="text-sm text-gray-600 mb-1">معرفات مشرفين فارغة</div>
               <div className="text-3xl font-bold text-orange-600">{diagnosticResult.submissionsWithMissingTeacherId}</div>
             </motion.div>
 
@@ -450,7 +450,7 @@ const FixEntrepreneurshipData: React.FC = () => {
                       <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">عنوان المشروع</th>
                       <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الحقول الناقصة</th>
                       <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">المؤسسة الحالية</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">المعلم الحالي</th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">المشرف الحالي</th>
                       <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الحالة</th>
                       <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">يمكن الإصلاح</th>
                     </tr>

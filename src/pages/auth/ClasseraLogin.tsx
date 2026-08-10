@@ -17,7 +17,7 @@ export const ClasseraLogin: React.FC = () => {
     {
       icon: BookOpen,
       title: 'مزامنة البيانات',
-      description: 'تزامن تلقائي لبيانات الطلاب والمعلمين'
+      description: 'تزامن تلقائي لبيانات الطلاب والمشرفين'
     },
     {
       icon: Award,

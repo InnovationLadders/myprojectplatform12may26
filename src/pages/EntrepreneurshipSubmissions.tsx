@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Briefcase, Search, Filter, Eye, RefreshCw, AlertTriangle, Building2, User } from 'lucide-react';
+import { Briefcase, Search, Filter, Eye, RefreshCw, TriangleAlert as AlertTriangle, Building2, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { getEntrepreneurshipSubmissions, getEntrepreneurshipSubmissionsBySchoolId, getUserInfoForSubmission, updateSubmissionStatus } from '../lib/firebase';
@@ -370,7 +370,7 @@ const EntrepreneurshipSubmissions: React.FC = () => {
         >
           <div className="flex items-center gap-2 mb-1">
             <User className="w-4 h-4 text-green-600" />
-            <div className="text-sm text-gray-600">المعلمون المشرفون</div>
+            <div className="text-sm text-gray-600">المشرفون</div>
           </div>
           <div className="text-2xl font-bold text-green-600">{stats.uniqueTeachers}</div>
         </motion.div>
@@ -460,7 +460,7 @@ const EntrepreneurshipSubmissions: React.FC = () => {
                 onChange={(e) => setTeacherFilter(e.target.value)}
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               >
-                <option value="all">كل المعلمين</option>
+                <option value="all">كل المشرفين</option>
                 {uniqueTeachers.map((teacher) => (
                   <option key={teacher.id} value={teacher.id}>
                     {teacher.name}
@@ -577,7 +577,7 @@ const EntrepreneurshipSubmissions: React.FC = () => {
                             <div className="group relative">
                               <AlertTriangle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
                               <div className="hidden group-hover:block absolute z-10 bg-gray-900 text-white text-xs rounded py-1 px-2 right-0 top-6 whitespace-nowrap">
-                                بيانات المعلم ناقصة
+                                بيانات المشرف ناقصة
                               </div>
                             </div>
                           )}

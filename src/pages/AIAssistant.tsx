@@ -1,22 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import {
-  Bot,
-  Send,
-  Mic,
-  Paperclip,
-  Lightbulb,
-  BookOpen,
-  Code,
-  Calculator,
-  Palette,
-  Globe,
-  Zap,
-  MessageCircle,
-  User,
-  Sparkles,
-  AlertTriangle
-} from 'lucide-react';
+import { Bot, Send, Mic, Paperclip, Lightbulb, BookOpen, Code, Calculator, Palette, Globe, Zap, MessageCircle, User, Sparkles, TriangleAlert as AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import {
@@ -189,7 +173,7 @@ export const AIAssistant: React.FC = () => {
           messages: [
             {
               role: 'system',
-              content: aiConfig?.systemPrompt || 'أنت مساعد ذكي مفيد ومتخصص في مساعدة الطلاب والمعلمين في المشاريع التعليمية. تجيب باللغة العربية بطريقة واضحة ومفيدة.'
+              content: aiConfig?.systemPrompt || 'أنت مساعد ذكي مفيد ومتخصص في مساعدة الطلاب والمشرفين في المشاريع التعليمية. تجيب باللغة العربية بطريقة واضحة ومفيدة.'
             },
             { role: 'user', content: newMessage.message }
           ],

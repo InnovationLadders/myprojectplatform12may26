@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import {
-  FileText, Users, CheckCircle, MessageCircle, FileBox, Calendar,
-  Clock, Edit, ArrowRight, AlertTriangle, Award, Eye, Video,
-  Download, Plus, Upload, UserMinus, Send
-} from 'lucide-react';
+import { FileText, Users, CircleCheck as CheckCircle, MessageCircle, FileBox, Calendar, Clock, CreditCard as Edit, ArrowRight, TriangleAlert as AlertTriangle, Award, Eye, Video, Download, Plus, Upload, UserMinus, Send } from 'lucide-react';
 import { getProjectById, getProjectStudents, getProjectTasks, db, firestoreDoc, removeStudentFromProject, submitProjectToEntrepreneurship, getSubmissionByProjectId } from '../lib/firebase';
 import { collection, query, where, getDocs, getDoc } from 'firebase/firestore';
 import { useAuth } from '../contexts/AuthContext';
@@ -871,7 +867,7 @@ const ProjectDetails: React.FC = () => {
             ) : (evaluation || evaluationSaved) ? (
               <EvaluationSummary
                 evaluation={evaluation}
-                teacherName={evaluation?.teacherName || t('common.teacher', 'المعلم')}
+                teacherName={evaluation?.teacherName || t('common.teacher', 'المشرف')}
               />
             ) : (
               <div className="text-center py-8 bg-gray-50 rounded-xl">

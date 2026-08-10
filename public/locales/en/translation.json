@@ -86,7 +86,7 @@
     "remaining": "Remaining",
     "tasks": "Tasks",
     "and": "and",
-    "teacher": "Teacher",
+    "teacher": "Supervisor",
     "team": "Team",
     "teamLeader": "Team Leader",
     "subject": "Subject",
@@ -99,7 +99,7 @@
   
   "roles": {
     "student": "Student",
-    "teacher": "Teacher",
+    "teacher": "Supervisor",
     "school": "Educational Institution",
     "admin": "Admin",
     "consultant": "Consultant",
@@ -134,7 +134,7 @@
     "consultantSchedule": "Schedule",
     "consultantProfile": "Profile",
     "reviews": "Reviews",
-    "teachersAndStudents": "Teachers & Students",
+    "teachersAndStudents": "Supervisors & Students",
     "adminDashboard": "Admin Dashboard",
     "manageRewards": "Manage Rewards",
     "users": "Users",
@@ -189,7 +189,7 @@
     "description": {
       "school": "Thank you for registering on MyProject. Your educational institution account is being reviewed by our administration team.",
       "consultant": "Thank you for registering on MyProject. Your consultant account is being reviewed by our administration team.",
-      "teacher": "Thank you for registering on MyProject. Your teacher/supervisor account is being reviewed by the educational institution and our administration team. Your information will be verified and your account will be approved soon.",
+      "teacher": "Thank you for registering on MyProject. Your supervisor account is being reviewed by the educational institution and our administration team. Your information will be verified and your account will be approved soon.",
       "default": "Thank you for registering on MyProject. Your account is being reviewed by our administration team."
     },
     "whatHappensNext": "What happens next?",
@@ -247,7 +247,7 @@
          "description": "Create and manage your educational projects easily with advanced tracking and collaboration tools"
        },
        "consultations": {
-         "description": "Get personalized consultations from specialized experts and teachers to support your projects"
+         "description": "Get personalized consultations from specialized experts and supervisors to support your projects"
        },
        "store": {
          "description": "Shop for tools and materials needed to implement your educational and technical projects"
@@ -265,7 +265,7 @@
     },
     "cta": {
       "title": "Start Your Educational Journey Today",
-      "description": "Join thousands of students and teachers achieving success with MyProject",
+      "description": "Join thousands of students and supervisors achieving success with MyProject",
       "exploreIdeas": "Explore Ideas",
       "createProject": "Create New Project"
     }
@@ -309,7 +309,7 @@
       },
       "benefit3": {
         "title": "Learning Community",
-        "description": "Interactive environment connecting students, teachers and consultants"
+        "description": "Interactive environment connecting students, supervisors and consultants"
       }
     },
     "cta": {
@@ -652,7 +652,7 @@
   
   "consultations": {
     "title": "Consultations",
-    "subtitle": "Get help from teachers and consultants",
+    "subtitle": "Get help from supervisors and consultants",
     "requestConsultation": "Request Consultation",
     "stats": {
       "total": "Total Consultations",
@@ -735,7 +735,7 @@
     },
     "importantInfo": {
       "title": "Important Information",
-      "review": "Your request will be reviewed and assigned to an appropriate teacher as soon as possible",
+      "review": "Your request will be reviewed and assigned to an appropriate supervisor as soon as possible",
       "link": "A consultation link will be sent 15 minutes before the appointment",
       "cancel": "You can cancel the consultation up to 24 hours before the appointment"
     },
@@ -1279,7 +1279,7 @@
       "deleteAccountWarning": "Permanently deleting your account will result in losing all data and projects. This action cannot be undone.",
       "permanentlyDeleteAccount": "Permanently Delete Account",
       "studentDataTitle": "Data Management",
-      "studentDataDesc": "Data management options are not available for students. Please contact your teacher/supervisor or institution administrator for assistance."
+      "studentDataDesc": "Data management options are not available for students. Please contact your supervisor or institution administrator for assistance."
     },
     "migration": {
       "title": "Data Migration (Admin)",
@@ -1410,13 +1410,13 @@
   },
 
   "projectDetails": {
-    "supervisorTeacher": "Supervisor Teacher",
-    "selectTeacher": "Select Supervisor Teacher",
+    "supervisorTeacher": "Supervisor",
+    "selectTeacher": "Select Supervisor",
     "approveProject": "Approve Project",
     "errors": {
-      "selectTeacherRequired": "You must select a supervisor teacher before approving the project"
+      "selectTeacherRequired": "You must select a supervisor before approving the project"
     },
-    "assignedToYou": "You will be assigned as the supervisor teacher for this project",
+    "assignedToYou": "You will be assigned as the supervisor for this project",
     "projectApproved": "Project approved successfully",
     "approving": "Approving..."
   },
@@ -1585,7 +1585,7 @@
     "privateBadge": "Private",
     "publicBadge": "Public",
     "participatingStudents": "Participating Students:",
-    "supervisorTeacher": "Supervisor Teacher:",
+    "supervisorTeacher": "Supervisor:",
     "awards": "Awards:",
     "keywords": "Keywords:",
     "projectDescription": "Project Description",
@@ -1652,7 +1652,7 @@
     "create": "Create Account",
     "roles": {
       "student": "Student",
-      "teacher": "Teacher / Supervisor",
+      "teacher": "Supervisor",
       "consultant": "Consultant",
       "school": "Educational Institution",
       "investor": "Investor"
@@ -1700,7 +1700,7 @@
     "createAccountTitle": "Create New Account",
     "joinPlatform": "Join Mashroui Platform",
     "roleStudent": "Student",
-    "roleTeacher": "Teacher / Supervisor",
+    "roleTeacher": "Supervisor",
     "roleConsultant": "Consultant",
     "roleSchool": "Educational Institution",
     "roleInvestor": "Investor",
@@ -1894,7 +1894,7 @@
       "schools": "Educational Institution Reports",
       "users": "User Reports",
       "performance": "Performance Reports",
-      "teachers": "Teachers/Supervisors Reports",
+      "teachers": "Supervisors Reports",
       "students": "Student Reports"
     },
     "columns": {
@@ -1903,7 +1903,7 @@
       "status": "Status",
       "progress": "Completion Percentage",
       "weightedScore": "Weighted Score",
-      "supervisorTeacher": "Supervisor Teacher",
+      "supervisorTeacher": "Supervisor",
       "school": "Educational Institution",
       "studentsCount": "Number of Students",
       "createdAt": "Creation Date",
@@ -1913,11 +1913,11 @@
       "completedProjects": "Completed Projects",
       "averageRating": "Average Rating",
       "totalEvaluationScore": "Total Achievement Scores",
-      "teacherName": "Teacher Name",
+      "teacherName": "Supervisor Name",
       "subject": "Subject",
       "averageProjectRating": "Average Project Rating",
       "schoolName": "Educational Institution Name",
-      "teachersCount": "Number of Teachers",
+      "teachersCount": "Number of Supervisors",
       "completionRate": "Completion Rate"
     },
     "categories": {
@@ -1984,16 +1984,16 @@
       "studentsTitle": "Detailed Students Report",
       "studentsSearch": "Search students...",
       "studentsExport": "students_report",
-      "teachersTitle": "Detailed Teachers/Supervisors Report",
-      "teachersSearch": "Search teachers/supervisors...",
-      "teachersExport": "teachers_supervisors_report",
+      "teachersTitle": "Detailed Supervisors Report",
+      "teachersSearch": "Search supervisors...",
+      "teachersExport": "supervisors_report",
       "schoolsTitle": "Detailed Educational Institutions Report",
       "schoolsSearch": "Search educational institutions...",
       "schoolsExport": "educational_institutions_report"
     },
     "summary": {
       "totalStudents": "Total Students",
-      "totalTeachers": "Total Teachers/Supervisors",
+      "totalTeachers": "Total Supervisors",
       "totalSchools": "Total Educational Institutions"
     },
     "export": {
@@ -2003,7 +2003,7 @@
       "status": "Status",
       "progress": "Progress",
       "weightedScore": "Weighted Score",
-      "supervisor": "Supervisor Teacher",
+      "supervisor": "Supervisor",
       "school": "Educational Institution",
       "studentsCount": "Number of Students",
       "createdAt": "Creation Date",
@@ -2016,14 +2016,14 @@
       "completedProjects": "Completed Projects",
       "averageRating": "Average Rating",
       "totalScore": "Total Achievement Score",
-      "teacherName": "Teacher Name",
+      "teacherName": "Supervisor Name",
       "subject": "Subject",
-      "teachersCount": "Number of Teachers",
+      "teachersCount": "Number of Supervisors",
       "completionRate": "Completion Rate",
       "sheets": {
         "projects": "Projects",
         "students": "Students",
-        "teachers": "Teachers",
+        "teachers": "Supervisors",
         "schools": "Educational Institutions"
       },
       "fileName": "comprehensive_report"
@@ -2209,7 +2209,7 @@
     },
     "table": {
       "projectName": "Project Name",
-      "teacherName": "Supervisor Teacher",
+      "teacherName": "Supervisor",
       "submittedBy": "Submitted By",
       "submittedAt": "Submission Date",
       "status": "Status",
@@ -2235,7 +2235,7 @@
     "updateStatusSuccess": "Status updated successfully",
     "updateStatusError": "An error occurred while updating the status",
     "submittedByRole": {
-      "teacher": "Teacher",
+      "teacher": "Supervisor",
       "student": "Student",
       "school": "School Admin",
       "admin": "System Admin"
@@ -2297,7 +2297,7 @@
         "title": "Data Sharing",
         "intro": "We do not sell your personal information to third parties. We may share your information in the following cases:",
         "school": "With your registered educational institution",
-        "teachers": "With teachers and supervisors of your projects",
+        "teachers": "With supervisors of your projects",
         "team": "With project team members",
         "service": "With service providers who help us operate the platform",
         "legal": "When required by law or to protect against misuse"

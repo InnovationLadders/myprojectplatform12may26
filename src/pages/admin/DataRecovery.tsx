@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlertTriangle, CheckCircle, XCircle, RefreshCw, Download } from 'lucide-react';
+import { TriangleAlert as AlertTriangle, CircleCheck as CheckCircle, Circle as XCircle, RefreshCw, Download } from 'lucide-react';
 import { scanUsersForIssues, recoverUserData } from '../../utils/recoverUserData';
 
 interface UserIssue {
@@ -201,7 +201,7 @@ const DataRecovery: React.FC = () => {
                                   className="w-full px-3 py-2 border rounded-lg"
                                 >
                                   <option value="student">طالب</option>
-                                  <option value="teacher">معلم</option>
+                                  <option value="teacher">مشرف</option>
                                   <option value="school">المؤسسة التعليمية</option>
                                   <option value="admin">مدير</option>
                                   <option value="consultant">مستشار</option>

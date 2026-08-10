@@ -417,9 +417,9 @@ export const ClasseraIntegration: React.FC = () => {
                     <>
                       <div>Admin: <code>Hasan4ts0004</code></div>
                       <div>Student: <code>hasan4s0007</code></div>
-                      <div>Teacher: <code>Hasan4t0002</code></div>
+                      <div>Supervisor: <code>Hasan4t0002</code></div>
                       <div>New Student: <code>LtmStdPartner</code></div>
-                      <div>New Teacher: <code>LtmTeacherPartner</code></div>
+                      <div>New Supervisor: <code>LtmTeacherPartner</code></div>
                       <div>Supervisor: <code>LtmSupervisorPartner</code></div>
                     </>
                   ) : (
@@ -427,9 +427,9 @@ export const ClasseraIntegration: React.FC = () => {
                       <div>Admin: <code>aed2ts0001</code></div>
                       <div>Student: <code>aed2s1228</code></div>
                       <div>Student 2: <code>aed2s0003</code></div>
-                      <div>Teacher: <code>aed2t0001</code></div>
+                      <div>Supervisor: <code>aed2t0001</code></div>
                       <div>New Student: <code>LtmStdPartner</code></div>
-                      <div>New Teacher: <code>LtmTeacherPartner</code></div>
+                      <div>New Supervisor: <code>LtmTeacherPartner</code></div>
                       <div>Supervisor: <code>LtmSupervisorPartner</code></div>
                     </>
                   )}

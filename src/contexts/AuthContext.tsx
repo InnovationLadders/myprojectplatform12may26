@@ -447,7 +447,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             phone_provided: !!userData.phone
           });
         } else if (userData.role === 'teacher') {
-          console.log('👩‍🏫 بيانات المعلم المقدمة:', {
+          console.log('👩‍🏫 بيانات المشرف المقدمة:', {
             subject: userData.subject,
             subject_type: typeof userData.subject,
             subject_provided: !!userData.subject,
@@ -537,7 +537,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } else if (userData.role === 'student' || userData.role === 'teacher') {
         // For students and teachers, use the provided school_id or null
         schoolId = userData.school_id ? userData.school_id : null;
-        if (DEBUG_AUTH) console.log('👨‍🎓👩‍🏫 تسجيل طالب/معلم: تعيين school_id:', {
+        if (DEBUG_AUTH) console.log('👨‍🎓👩‍🏫 تسجيل طالب/مشرف: تعيين school_id:', {
           providedSchoolId: userData.school_id,
           finalSchoolId: schoolId,
           schoolIdType: typeof schoolId

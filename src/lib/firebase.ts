@@ -458,7 +458,7 @@ export const getAllTeachers = async () => {
     
     return teachersSnapshot.docs.map(doc => ({
       id: doc.id,
-      name: doc.data().name || 'معلم بدون اسم',
+      name: doc.data().name || 'مشرف بدون اسم',
       subject: doc.data().subject,
       school_id: doc.data().school_id,
       ...doc.data()
@@ -480,7 +480,7 @@ export const getTeachersBySchoolId = async (schoolId: string) => {
     
     return teachersSnapshot.docs.map(doc => ({
       id: doc.id,
-      name: doc.data().name || 'معلم بدون اسم',
+      name: doc.data().name || 'مشرف بدون اسم',
       subject: doc.data().subject,
       ...doc.data()
     }));

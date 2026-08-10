@@ -419,7 +419,7 @@ export const useReportsData = () => {
 
           return {
             id: teacher.id,
-            name: teacher.name || 'معلم غير معروف',
+            name: teacher.name || 'مشرف غير معروف',
             email: teacher.email || '',
             subject: teacher.subject || 'غير محدد',
             school_name: school?.name || 'غير محدد',
@@ -466,7 +466,7 @@ export const useReportsData = () => {
 
           return {
             id: teacher.id,
-            name: teacher.name || 'معلم غير معروف',
+            name: teacher.name || 'مشرف غير معروف',
             email: teacher.email || '',
             subject: teacher.subject || 'غير محدد',
             school_name: user.name || 'غير محدد', // Use current school's name

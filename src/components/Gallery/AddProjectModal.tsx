@@ -243,7 +243,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
         students: formData.students.filter(s => s.trim()),
         school: schoolName,
         schoolId: schoolId,
-        teacher: formData.teacher || user?.name || 'معلم غير معروف',
+        teacher: formData.teacher || user?.name || 'مشرف غير معروف',
         mediaUrl: mediaUrl || editingProject?.mediaUrl || '', // Use existing mediaUrl if no new file/youtube link
         mediaType: formData.mediaType,
         tags: formData.tags.filter(t => t.trim()),
@@ -454,7 +454,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                المعلم المشرف
+                المشرف
               </label>
               <div className="relative">
                 <User className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -463,7 +463,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
                   value={formData.teacher}
                   onChange={(e) => handleInputChange('teacher', e.target.value)}
                   className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                  placeholder={user?.role === 'school' ? user.name || 'اسم المعلم المشرف' : 'اسم المعلم المشرف'}
+                  placeholder={user?.role === 'school' ? user.name || 'اسم المشرف' : 'اسم المشرف'}
                 />
               </div>
             </div>

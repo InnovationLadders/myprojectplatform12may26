@@ -63,7 +63,7 @@ const DEFAULT_CONFIG: AIAssistantConfig = {
   maxTokens: 500,
   dailyLimitPerUser: 50,
   globalDailyLimit: 1000,
-  systemPrompt: 'أنت مساعد ذكي مفيد ومتخصص في مساعدة الطلاب والمعلمين في المشاريع التعليمية. تجيب باللغة العربية بطريقة واضحة ومفيدة.'
+  systemPrompt: 'أنت مساعد ذكي مفيد ومتخصص في مساعدة الطلاب والمشرفين في المشاريع التعليمية. تجيب باللغة العربية بطريقة واضحة ومفيدة.'
 };
 
 export const getAIConfig = async (): Promise<AIAssistantConfig> => {

@@ -12,7 +12,7 @@ import { sendStudentActivatedEmail } from '../services/emailService';
 const userRoles = [
   { id: 'all', name: 'جميع المستخدمين' },
   { id: 'student', name: 'طلاب', icon: GraduationCap, color: 'bg-blue-500' },
-  { id: 'teacher', name: 'معلمين/مشرفين', icon: BookOpen, color: 'bg-green-500' },
+  { id: 'teacher', name: 'مشرفين', icon: BookOpen, color: 'bg-green-500' },
   { id: 'school', name: 'مؤسسات تعليمية', icon: Building, color: 'bg-blue-700' },
   { id: 'consultant', name: 'مستشارين', icon: Briefcase, color: 'bg-orange-500' },
   { id: 'investor', name: 'مستثمرين', icon: TrendingUp, color: 'bg-emerald-500' },
@@ -78,7 +78,7 @@ const Users: React.FC = () => {
   const getRoleText = (role: string) => {
     switch (role) {
       case 'student': return 'طالب';
-      case 'teacher': return 'معلم\مشرف';
+      case 'teacher': return 'مشرف';
       case 'school': return 'مؤسسة تعليمية';
       case 'admin': return 'مدير';
       case 'consultant': return 'مستشار';
@@ -329,11 +329,11 @@ const Users: React.FC = () => {
             </div>
             <div>
               <h1 className="text-3xl font-bold">
-                {currentUser?.role === 'school' ? 'إدارة الطلاب والمعلمين' : 'إدارة المستخدمين'}
+                {currentUser?.role === 'school' ? 'إدارة الطلاب والمشرفين' : 'إدارة المستخدمين'}
               </h1>
               <p className="opacity-90">
                 {currentUser?.role === 'school'
-                  ? 'إدارة ومتابعة الطلاب والمعلمين في المؤسسة التعليمية'
+                  ? 'إدارة ومتابعة الطلاب والمشرفين في المؤسسة التعليمية'
                   : 'إدارة ومتابعة جميع مستخدمي المنصة'}
               </p>
             </div>
@@ -361,7 +361,7 @@ const Users: React.FC = () => {
           <div>
             <div className="text-2xl font-bold">{users.length}</div>
             <div className="text-sm opacity-80">
-              {currentUser?.role === 'school' ? 'إجمالي الطلاب والمعلمين' : 'إجمالي المستخدمين'}
+              {currentUser?.role === 'school' ? 'إجمالي الطلاب والمشرفين' : 'إجمالي المستخدمين'}
             </div>
           </div>
           <div>
@@ -370,7 +370,7 @@ const Users: React.FC = () => {
           </div>
           <div>
             <div className="text-2xl font-bold">{users.filter(u => u.role === 'teacher').length}</div>
-            <div className="text-sm opacity-80">معلمين/مشرفين</div>
+            <div className="text-sm opacity-80">مشرفين</div>
           </div>
           {currentUser?.role === 'admin' && (
             <div>
@@ -419,8 +419,8 @@ const Users: React.FC = () => {
               </h3>
               <p className="text-yellow-800 mb-4">
                 {currentUser?.role === 'school'
-                  ? 'لديك طلاب و/أو معلمين جدد بانتظار موافقتك. يرجى مراجعة بياناتهم والموافقة عليهم لتمكينهم من الوصول للمنصة.'
-                  : 'لديك مستخدمين جدد (مؤسسات تعليمية، مستشارين، معلمين، وطلاب بانتظار موافقة جهتهم) بانتظار الموافقة. يرجى مراجعة بياناتهم واتخاذ القرار المناسب.'}
+                  ? 'لديك طلاب و/أو مشرفين جدد بانتظار موافقتك. يرجى مراجعة بياناتهم والموافقة عليهم لتمكينهم من الوصول للمنصة.'
+                  : 'لديك مستخدمين جدد (مؤسسات تعليمية، مستشارين، مشرفين، وطلاب بانتظار موافقة جهتهم) بانتظار الموافقة. يرجى مراجعة بياناتهم واتخاذ القرار المناسب.'}
               </p>
               <button
                 onClick={() => setStatusFilter('pending')}
@@ -746,7 +746,7 @@ const Users: React.FC = () => {
                       <div className="text-sm text-gray-900">{user.school || 'غير محدد'}</div>
                       {user.role === 'school' && user.studentsCount !== undefined && (
                         <div className="text-xs text-gray-500">
-                          {user.studentsCount} طالب، {user.teachersCount || 0} معلم\مشرف
+                          {user.studentsCount} طالب، {user.teachersCount || 0} مشرف
                         </div>
                       )}
                     </td>

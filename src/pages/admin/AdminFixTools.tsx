@@ -124,7 +124,7 @@ const AdminFixTools: React.FC = () => {
             <h2 className="text-xl font-bold text-gray-900">تشخيص مشاكل school_id</h2>
           </div>
           <p className="text-gray-600 mb-4">
-            تحليل جميع المشاريع للتحقق من صحة معرفات المؤسسات التعليمية والمعلمين
+            تحليل جميع المشاريع للتحقق من صحة معرفات المؤسسات التعليمية والمشرفين
           </p>
           <button
             onClick={runDiagnosis}
@@ -156,7 +156,7 @@ const AdminFixTools: React.FC = () => {
             <h2 className="text-xl font-bold text-gray-900">الإصلاح التلقائي</h2>
           </div>
           <p className="text-gray-600 mb-4">
-            إصلاح تلقائي لمشاكل school_id بناءً على معلومات المعلم المسؤول
+            إصلاح تلقائي لمشاكل school_id بناءً على معلومات المشرف المسؤول
           </p>
           <button
             onClick={runAutoFix}
@@ -253,7 +253,7 @@ const AdminFixTools: React.FC = () => {
                 <tr>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الحالة</th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">المشروع</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">المعلم</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">المشرف</th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">المؤسسة التعليمية</th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">المشاكل</th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الإجراءات</th>

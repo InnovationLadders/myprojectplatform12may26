@@ -1,22 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  X, 
-  MessageCircle, 
-  Calendar, 
-  Clock,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  Eye,
-  Download,
-  Upload,
-  Lightbulb,
-  Cpu,
-  Palette,
-  BookOpen,
-  User
-} from 'lucide-react';
+import { X, MessageCircle, Calendar, Clock, CircleCheck as CheckCircle, Circle as XCircle, CircleAlert as AlertCircle, Eye, Download, Upload, Lightbulb, Cpu, Palette, BookOpen, User } from 'lucide-react';
 import { Consultation } from '../../hooks/useConsultations';
 import { formatDate } from '../../utils/dateUtils';
 
@@ -161,12 +145,12 @@ export const ConsultationDetails: React.FC<ConsultationDetailsProps> = ({
         <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-xl mb-6">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
-              <h4 className="font-semibold text-gray-800">{consultation.mentor_name || "معلم غير معين"}</h4>
+              <h4 className="font-semibold text-gray-800">{consultation.mentor_name || "مشرف غير معين"}</h4>
               <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(consultation.status)}`}>
                 {getStatusText(consultation.status)}
               </span>
             </div>
-            <p className="text-gray-600 text-sm">معلم</p>
+            <p className="text-gray-600 text-sm">مشرف</p>
           </div>
         </div>
 

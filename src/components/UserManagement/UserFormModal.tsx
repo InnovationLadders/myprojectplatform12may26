@@ -599,7 +599,7 @@ export const UserFormModal: React.FC<UserFormModalProps> = ({
                   required
                 >
                   <option value="student">طالب</option>
-                  <option value="teacher">معلم\مشرف</option>
+                  <option value="teacher">مشرف</option>
                   <option value="school">مؤسسة تعليمية</option>
                   <option value="consultant">مستشار</option>
                   <option value="admin">مدير</option>
