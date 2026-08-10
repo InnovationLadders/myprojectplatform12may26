@@ -1554,13 +1554,32 @@ export const updateUser = async (id: string, userData: any) => {
 // doc leaves the Auth account intact, which blocks re-registration with the
 // same email.
 export const deleteUser = async (userId: string): Promise<{ success: boolean; message?: string }> => {
+  console.log('🗑️ deleteUser: starting deletion for user:', userId);
+
+  // Step 1: Try the Cloud Function (deletes Auth + Firestore)
   try {
     const deleteUserAccount = httpsCallable(functions, 'deleteUserAccount');
-    const result = await deleteUserAccount({ userId });
+    await deleteUserAccount({ userId });
+    console.log('✅ deleteUser: Cloud Function succeeded for user:', userId);
     return { success: true };
-  } catch (error: any) {
-    console.error('Error deleting user:', error);
-    throw error;
+  } catch (cloudError: any) {
+    console.warn('⚠️ deleteUser: Cloud Function failed, falling back to Firestore-only delete:', cloudError?.message || cloudError);
+
+    // Step 2: Fallback — at minimum delete the Firestore doc so the user
+    // disappears from the admin list. The Auth account may remain, but this
+    // is better than doing nothing.
+    try {
+      const userRef = firestoreDoc(db, 'users', userId);
+      await deleteDoc(userRef);
+      console.log('✅ deleteUser: Firestore fallback succeeded for user:', userId);
+      return {
+        success: true,
+        message: 'تم حذف المستخدم من قاعدة البيانات. قد تحتاج لحذف حساب المصادقة يدوياً من Firebase Console لتحرير البريد الإلكتروني.'
+      };
+    } catch (fsError: any) {
+      console.error('❌ deleteUser: Both Cloud Function and Firestore fallback failed:', fsError);
+      throw fsError;
+    }
   }
 };
 

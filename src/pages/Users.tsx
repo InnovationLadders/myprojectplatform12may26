@@ -132,13 +132,21 @@ const Users: React.FC = () => {
     
     try {
       setActionLoading(`delete-${deleteConfirmUser.id}`);
-      await removeUser(deleteConfirmUser.id);
+      const result = await removeUser(deleteConfirmUser.id);
       setDeleteConfirmUser(null);
-      setSuccessMessage('تم حذف المستخدم بنجاح');
-      setTimeout(() => setSuccessMessage(null), 3000);
-    } catch (error) {
+      
+      if (result?.message) {
+        // Partial success — Cloud Function failed, Firestore fallback worked
+        setSuccessMessage(result.message);
+        setTimeout(() => setSuccessMessage(null), 6000);
+      } else {
+        setSuccessMessage('تم حذف المستخدم بنجاح');
+        setTimeout(() => setSuccessMessage(null), 3000);
+      }
+    } catch (error: any) {
       console.error('Error deleting user:', error);
-      alert('حدث خطأ في حذف المستخدم');
+      const errorMsg = error?.message || 'حدث خطأ غير معروف';
+      alert(`فشل حذف المستخدم: ${errorMsg}`);
     } finally {
       setActionLoading(null);
     }

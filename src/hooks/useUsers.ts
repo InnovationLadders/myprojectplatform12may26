@@ -495,15 +495,22 @@ export const useUsers = () => {
 
   const removeUser = async (userId: string) => {
     try {
-      await deleteUserFromFirestore(userId);
-      
+      console.log('🗑️ removeUser: starting for user:', userId);
+      const result = await deleteUserFromFirestore(userId);
+
       // Refresh users list
       await fetchUsers();
 
-      return { success: true };
-    } catch (error) {
-      console.error('Error deleting user:', error);
-      throw error;
+      if (result.message) {
+        // Cloud Function failed but Firestore fallback succeeded — surface the warning
+        console.warn('⚠️ removeUser: partial success:', result.message);
+      }
+
+      return result;
+    } catch (error: any) {
+      console.error('❌ removeUser: deletion failed completely:', error);
+      const errorMsg = error?.message || 'حدث خطأ غير معروف أثناء حذف المستخدم';
+      throw new Error(errorMsg);
     }
   };
 
