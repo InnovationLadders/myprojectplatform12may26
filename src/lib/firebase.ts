@@ -1549,11 +1549,16 @@ export const updateUser = async (id: string, userData: any) => {
 };
 
 // Delete user function for admin operations
-export const deleteUser = async (userId: string) => {
+// Calls the deleteUserAccount Cloud Function which removes the user from
+// Firebase Auth (freeing the email) AND Firestore. Deleting only the Firestore
+// doc leaves the Auth account intact, which blocks re-registration with the
+// same email.
+export const deleteUser = async (userId: string): Promise<{ success: boolean; message?: string }> => {
   try {
-    const userRef = firestoreDoc(db, 'users', userId);
-    await deleteDoc(userRef);
-  } catch (error) {
+    const deleteUserAccount = httpsCallable(functions, 'deleteUserAccount');
+    const result = await deleteUserAccount({ userId });
+    return { success: true };
+  } catch (error: any) {
     console.error('Error deleting user:', error);
     throw error;
   }

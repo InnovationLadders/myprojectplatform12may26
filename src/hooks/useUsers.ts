@@ -598,17 +598,18 @@ export const useUsers = () => {
       failed: [] as { id: string; error: string }[]
     };
 
-    for (const userId of userIds) {
-      try {
-        await deleteUserFromFirestore(userId);
-        results.successful.push(userId);
-      } catch (error) {
-        console.error('Error deleting user:', userId, error);
-        results.failed.push({
-          id: userId,
-          error: error instanceof Error ? error.message : 'حدث خطأ غير معروف'
-        });
-      }
+    try {
+      const bulkDelete = httpsCallable(functions, 'bulkDeleteUserAccounts');
+      const result = await bulkDelete({ userIds });
+      const data = result.data as { successful: string[]; failed: { id: string; error: string }[] };
+      results.successful = data.successful || [];
+      results.failed = data.failed || [];
+    } catch (error) {
+      console.error('Error bulk deleting users:', error);
+      results.failed = userIds.map(id => ({
+        id,
+        error: error instanceof Error ? error.message : 'حدث خطأ غير معروف'
+      }));
     }
 
     await fetchUsers();

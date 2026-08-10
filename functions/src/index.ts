@@ -1,5 +1,11 @@
 import * as functions from "firebase-functions/v1";
 import * as nodemailer from "nodemailer";
+import * as admin from "firebase-admin";
+
+// Initialize Firebase Admin SDK once
+if (admin.apps.length === 0) {
+  admin.initializeApp();
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -358,4 +364,161 @@ export const sendNotificationEmail = functions
     }
 
     return { success: true, messageId: "sent" };
+  });
+
+// ─── Delete User Account ──────────────────────────────────────────────────────
+// Deletes a user from Firebase Auth AND Firestore. Called from the admin panel
+// so that the email is fully freed and the same email can register again.
+
+export const deleteUserAccount = functions
+  .https.onCall(async (data: { userId?: string }, context: any) => {
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        "unauthenticated",
+        "Must be authenticated to delete a user account."
+      );
+    }
+
+    const callerUid = context.auth.uid;
+    const targetUid = data?.userId;
+
+    if (!targetUid) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Missing required field: userId"
+      );
+    }
+
+    // Prevent self-deletion
+    if (callerUid === targetUid) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Cannot delete your own account."
+      );
+    }
+
+    // Verify the caller is an admin by checking their Firestore record
+    let callerRole = "";
+    try {
+      const callerDoc = await admin.firestore().collection("users").doc(callerUid).get();
+      if (callerDoc.exists) {
+        callerRole = callerDoc.data()?.role || "";
+      }
+    } catch (err) {
+      console.error("Error fetching caller record:", err);
+    }
+
+    if (callerRole !== "admin" && callerRole !== "school" && callerRole !== "consultant") {
+      throw new functions.https.HttpsError(
+        "permission-denied",
+        "Only administrators can delete user accounts."
+      );
+    }
+
+    console.log(`deleteUserAccount: caller=${callerUid} (${callerRole}) target=${targetUid}`);
+
+    // 1) Delete the user from Firebase Authentication (this frees the email)
+    try {
+      await admin.auth().deleteUser(targetUid);
+      console.log(`deleteUserAccount: deleted auth user ${targetUid}`);
+    } catch (err: any) {
+      if (err?.errorInfo?.code === "auth/user-not-found") {
+        console.log(`deleteUserAccount: auth user ${targetUid} not found (already deleted)`);
+      } else {
+        console.error("deleteUserAccount: auth deletion failed:", err);
+        throw new functions.https.HttpsError(
+          "internal",
+          "Failed to delete authentication account: " + (err?.message || "unknown error")
+        );
+      }
+    }
+
+    // 2) Delete the user document from Firestore (cleanup)
+    try {
+      await admin.firestore().collection("users").doc(targetUid).delete();
+      console.log(`deleteUserAccount: deleted firestore doc ${targetUid}`);
+    } catch (err: any) {
+      console.error("deleteUserAccount: firestore deletion failed:", err);
+    }
+
+    return { success: true, userId: targetUid };
+  });
+
+// ─── Bulk Delete User Accounts ────────────────────────────────────────────────
+// Accepts an array of UIDs and deletes each from Auth + Firestore.
+
+export const bulkDeleteUserAccounts = functions
+  .https.onCall(async (data: { userIds?: string[] }, context: any) => {
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        "unauthenticated",
+        "Must be authenticated to delete user accounts."
+      );
+    }
+
+    const callerUid = context.auth.uid;
+    const userIds = data?.userIds;
+
+    if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Missing or invalid field: userIds"
+      );
+    }
+
+    // Verify the caller is an admin
+    let callerRole = "";
+    try {
+      const callerDoc = await admin.firestore().collection("users").doc(callerUid).get();
+      if (callerDoc.exists) {
+        callerRole = callerDoc.data()?.role || "";
+      }
+    } catch (err) {
+      console.error("Error fetching caller record:", err);
+    }
+
+    if (callerRole !== "admin" && callerRole !== "school" && callerRole !== "consultant") {
+      throw new functions.https.HttpsError(
+        "permission-denied",
+        "Only administrators can delete user accounts."
+      );
+    }
+
+    const results: { successful: string[]; failed: { id: string; error: string }[] } = {
+      successful: [],
+      failed: [],
+    };
+
+    for (const targetUid of userIds) {
+      if (targetUid === callerUid) {
+        results.failed.push({ id: targetUid, error: "Cannot delete your own account." });
+        continue;
+      }
+
+      try {
+        // Delete from Auth
+        try {
+          await admin.auth().deleteUser(targetUid);
+        } catch (err: any) {
+          if (err?.errorInfo?.code !== "auth/user-not-found") throw err;
+        }
+
+        // Delete from Firestore
+        try {
+          await admin.firestore().collection("users").doc(targetUid).delete();
+        } catch (err) {
+          console.error(`Firestore delete failed for ${targetUid}:`, err);
+        }
+
+        results.successful.push(targetUid);
+      } catch (err: any) {
+        console.error(`Failed to delete user ${targetUid}:`, err);
+        results.failed.push({
+          id: targetUid,
+          error: err?.message || "حدث خطأ غير معروف",
+        });
+      }
+    }
+
+    return results;
   });
