@@ -1946,10 +1946,12 @@ export const getStudentsBySchoolId = async (schoolId: string) => {
       where('school_id', '==', schoolId)
     );
     const studentsSnapshot = await getDocs(studentsQuery);
-    return studentsSnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    return studentsSnapshot.docs
+      .map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }))
+      .filter((student: any) => !student.status || student.status === 'active');
   }, []);
 };
 
