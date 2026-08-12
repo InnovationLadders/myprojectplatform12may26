@@ -2,6 +2,9 @@ import * as functions from "firebase-functions/v1";
 import * as nodemailer from "nodemailer";
 import * as admin from "firebase-admin";
 
+// Re-export SAML SSO functions for KFUPM integration
+export { samlAcs, samlMetadata, initKfupmSso } from "./saml";
+
 // Initialize Firebase Admin SDK once
 if (admin.apps.length === 0) {
   admin.initializeApp();

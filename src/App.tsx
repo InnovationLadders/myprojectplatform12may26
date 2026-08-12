@@ -18,6 +18,7 @@ import i18n from './i18n';
 import { SummerProgramEnrollment } from './pages/SummerProgramEnrollment';
 import { ClasseraCallback } from './pages/auth/ClasseraCallback';
 import { ClasseraLogin } from './pages/auth/ClasseraLogin';
+import { KfupmCallback } from './pages/auth/KfupmCallback';
 import { AuthActionHandler } from './pages/AuthActionHandler';
 
 const StudentDashboard = lazy(() => import('./pages/student/StudentDashboard').then(m => ({ default: m.StudentDashboard })));
@@ -154,6 +155,9 @@ const AppRoutes: React.FC = () => {
       {/* Classera SSO Routes */}
       <Route path="/auth/classera" element={user ? <Navigate to="/projects" /> : <ClasseraLogin />} />
       <Route path="/auth/classera/callback" element={<ClasseraCallback />} />
+
+      {/* KFUPM SSO Routes */}
+      <Route path="/auth/kfupm/callback" element={<KfupmCallback />} />
 
       {/* Email Verification Pending - for users who haven't verified their email yet */}
       <Route path="/email-verification-pending" element={

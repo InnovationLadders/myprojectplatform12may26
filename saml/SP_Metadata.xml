@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Service Provider (SP) Metadata for MyProjects Platform (منصة مشروعي)
+  To be provided to KFUPM ADFS team for Relying Party Trust configuration.
+
+  IMPORTANT: Replace "my-project-plateform-react.web.app" with your
+  production domain if you have a custom domain configured.
+-->
+<EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+                  entityID="https://my-project-plateform-react.web.app/saml/sp">
+
+  <SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+
+    <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</NameIDFormat>
+    <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
+
+    <AssertionConsumerService
+      Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+      Location="https://us-central1-my-project-plateform-react.cloudfunctions.net/samlAcs"
+      index="0"
+      isDefault="true"/>
+
+    <SingleLogoutService
+      Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+      Location="https://us-central1-my-project-plateform-react.cloudfunctions.net/samlSlo"/>
+
+    <AttributeConsumingService index="0">
+      <ServiceName xml:lang="en">MyProjects Platform</ServiceName>
+      <ServiceName xml:lang="ar">منصة مشروعي</ServiceName>
+
+      <RequestedAttribute
+        Name="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+        NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+        FriendlyName="Email"/>
+
+      <RequestedAttribute
+        Name="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn"
+        NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+        FriendlyName="UPN"/>
+
+      <RequestedAttribute
+        Name="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+        NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+        FriendlyName="Name"/>
+
+      <RequestedAttribute
+        Name="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
+        NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+        FriendlyName="Given Name"/>
+
+      <RequestedAttribute
+        Name="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname"
+        NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+        FriendlyName="Surname"/>
+
+      <RequestedAttribute
+        Name="http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+        FriendlyName="Role"/>
+    </AttributeConsumingService>
+
+  </SPSSODescriptor>
+
+  <Organization>
+    <OrganizationName xml:lang="en">MyProjects Platform</OrganizationName>
+    <OrganizationName xml:lang="ar">منصة مشروعي</OrganizationName>
+    <OrganizationDisplayName xml:lang="en">MyProjects Platform</OrganizationDisplayName>
+    <OrganizationDisplayName xml:lang="ar">منصة مشروعي</OrganizationDisplayName>
+    <OrganizationURL xml:lang="en">https://my-project-plateform-react.web.app</OrganizationURL>
+  </Organization>
+
+  <ContactPerson contactType="technical">
+    <GivenName>MyProjects Platform Support</GivenName>
+    <EmailAddress>mailto:myprojectplatform.noreply@gmail.com</EmailAddress>
+  </ContactPerson>
+
+</EntityDescriptor>

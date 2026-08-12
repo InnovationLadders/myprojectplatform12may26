@@ -1,0 +1,73 @@
+=================================================================
+  Claim Rules for KFUPM ADFS Relying Party Trust
+  Platform: MyProjects (منصة مشروعي)
+  Date: 2026-08-12
+=================================================================
+
+These are the claim rules that should be configured on the
+KFUPM ADFS Relying Party Trust for our application.
+
+Please add the following as "Send Claims Using a Custom Rule"
+(Choose "Send Claims Using a Custom Rule" for each rule below).
+
+-----------------------------------------------------------------
+Rule 1: Pass Through E-Mail Address
+-----------------------------------------------------------------
+
+c:[Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
+ => issue(claim = c);
+
+-----------------------------------------------------------------
+Rule 2: Pass Through UPN (University ID)
+-----------------------------------------------------------------
+
+c:[Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn"]
+ => issue(claim = c);
+
+-----------------------------------------------------------------
+Rule 3: Pass Through Name (Full Name)
+-----------------------------------------------------------------
+
+c:[Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]
+ => issue(claim = c);
+
+-----------------------------------------------------------------
+Rule 4: Pass Through Given Name (First Name)
+-----------------------------------------------------------------
+
+c:[Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"]
+ => issue(claim = c);
+
+-----------------------------------------------------------------
+Rule 5: Pass Through Surname (Last Name)
+-----------------------------------------------------------------
+
+c:[Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname"]
+ => issue(claim = c);
+
+-----------------------------------------------------------------
+Rule 6: Pass Through Role
+-----------------------------------------------------------------
+
+c:[Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
+ => issue(claim = c);
+
+=================================================================
+  Summary of Required Claims
+=================================================================
+
+The application requires the following claims to be sent in the
+SAML response for each authenticated user:
+
+  1. E-Mail Address     - Used as the primary user identifier
+  2. UPN                - University ID / User Principal Name
+  3. Name               - Full display name of the user
+  4. Given Name         - First name
+  5. Surname            - Last name / Family name
+  6. Role               - To distinguish students from faculty
+
+If any of these claims are not available for a specific user,
+please send the ones that are available. The E-Mail Address claim
+is the most critical as it is used to match the user account.
+
+=================================================================

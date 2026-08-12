@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { ClasseraLoginButton } from '../components/Auth/ClasseraLoginButton';
+import { KfupmLoginButton } from '../components/Auth/KfupmLoginButton';
 import { ForgotPasswordModal } from '../components/Auth/ForgotPasswordModal';
 import { useSchoolBranding } from '../contexts/SchoolBrandingContext';
 import { getSubdomain } from '../utils/subdomain';
@@ -192,6 +193,18 @@ export const LoginPage: React.FC = () => {
             </motion.button>
           </form>
 
+
+          {/* KFUPM SSO Login */}
+          <div className="relative mt-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">أو</span>
+            </div>
+          </div>
+
+          <KfupmLoginButton returnUrl="/home" />
 
           {/* Classera SSO Login - Hidden until service is ready */}
           {false && (
