@@ -3,11 +3,10 @@
   Service Provider (SP) Metadata for MyProjects Platform (منصة مشروعي)
   To be provided to KFUPM ADFS team for Relying Party Trust configuration.
 
-  IMPORTANT: Replace "my-project-plateform-react.web.app" with your
-  production domain if you have a custom domain configured.
+  ACS URL is the Firebase Cloud Function endpoint (not the frontend domain).
 -->
 <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
-                  entityID="https://my-project-plateform-react.web.app/saml/sp">
+                  entityID="https://kfupm.myprojectplatform.com/saml/sp">
 
   <SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
 
@@ -66,7 +65,7 @@
     <OrganizationName xml:lang="ar">منصة مشروعي</OrganizationName>
     <OrganizationDisplayName xml:lang="en">MyProjects Platform</OrganizationDisplayName>
     <OrganizationDisplayName xml:lang="ar">منصة مشروعي</OrganizationDisplayName>
-    <OrganizationURL xml:lang="en">https://my-project-plateform-react.web.app</OrganizationURL>
+    <OrganizationURL xml:lang="en">https://www.myprojectplatform.com</OrganizationURL>
   </Organization>
 
   <ContactPerson contactType="technical">

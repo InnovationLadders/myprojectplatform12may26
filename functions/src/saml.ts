@@ -13,9 +13,9 @@ const auth = admin.auth();
 
 const KFUPM_IDP_ENTITY_ID = "http://sts.kfupm.edu.sa/adfs/services/trust";
 const KFUPM_SSO_URL = "https://sts.kfupm.edu.sa/adfs/ls/";
-const SP_ENTITY_ID = "https://my-project-plateform-react.web.app/saml/sp";
+const SP_ENTITY_ID = "https://kfupm.myprojectplatform.com/saml/sp";
 // The frontend URL to redirect the user to after we issue a custom token
-const APP_REDIRECT_URL = "https://my-project-plateform-react.web.app/auth/kfupm/callback";
+const APP_REDIRECT_URL = "https://kfupm.myprojectplatform.com/auth/kfupm/callback";
 
 // ─── SAML Response Parsing ─────────────────────────────────────────────────
 
