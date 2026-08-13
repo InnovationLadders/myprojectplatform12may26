@@ -51,6 +51,9 @@ export interface User {
   company_name?: string;
   investment_interests?: string;
   agreed_to_investor_pledge?: boolean;
+  profile_incomplete?: boolean;
+  sso_provider?: string;
+  sso_upn?: string;
 }
 
 interface AuthContextType {
@@ -62,6 +65,7 @@ interface AuthContextType {
   loginWithGoogle: () => Promise<void>;
   logout: (onLogoutComplete?: () => void) => Promise<void>;
   resendVerificationEmail: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -281,6 +285,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               company_name: userData.company_name,
               investment_interests: userData.investment_interests,
               agreed_to_investor_pledge: userData.agreed_to_investor_pledge,
+              profile_incomplete: userData.profile_incomplete || false,
+              sso_provider: userData.sso_provider,
+              sso_upn: userData.sso_upn,
               cachedAt: Date.now()
             };
             sessionStorage.setItem('userProfile', JSON.stringify(userProfile));
@@ -842,6 +849,49 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const refreshUser = async () => {
+    const firebaseUser = auth.currentUser;
+    if (!firebaseUser) return;
+    const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      const userProfile: User = {
+        id: firebaseUser.uid,
+        email: firebaseUser.email || '',
+        name: userData.name || firebaseUser.displayName || '',
+        role: userData.role,
+        avatar: userData.avatar || undefined,
+        phone: userData.phone,
+        bio: userData.bio,
+        createdAt: userData.created_at?.toDate?.()?.toISOString() || new Date().toISOString(),
+        school_id: userData.school_id,
+        grade: userData.grade,
+        subject: userData.subject,
+        languages: userData.languages,
+        schoolIdNumber: userData.schoolIdNumber,
+        status: userData.status || 'active',
+        city: userData.city,
+        aboutYourself: userData.aboutYourself,
+        gender: userData.gender,
+        emailVerified: firebaseUser.emailVerified,
+        specializations: userData.specializations,
+        experience_years: userData.experience_years,
+        hourly_rate: userData.hourly_rate,
+        rating: userData.rating,
+        reviews_count: userData.reviews_count,
+        company_name: userData.company_name,
+        investment_interests: userData.investment_interests,
+        agreed_to_investor_pledge: userData.agreed_to_investor_pledge,
+        profile_incomplete: userData.profile_incomplete || false,
+        sso_provider: userData.sso_provider,
+        sso_upn: userData.sso_upn,
+        cachedAt: Date.now()
+      };
+      sessionStorage.setItem('userProfile', JSON.stringify(userProfile));
+      setUser(userProfile);
+    }
+  };
+
   const value = {
     user,
     loading,
@@ -850,7 +900,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     register,
     loginWithGoogle,
     logout,
-    resendVerificationEmail
+    resendVerificationEmail,
+    refreshUser
   };
 
   return (

@@ -3,10 +3,10 @@
   Service Provider (SP) Metadata for MyProjects Platform (منصة مشروعي)
   To be provided to KFUPM ADFS team for Relying Party Trust configuration.
 
-  ACS URL is the Firebase Cloud Function endpoint (not the frontend domain).
+  ACS URL is routed via Firebase Hosting rewrites to the samlAcs Cloud Function.
 -->
 <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
-                  entityID="https://kfupm.myprojectplatform.com/saml/sp">
+                  entityID="https://myprojectplatform.com/saml/sp">
 
   <SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
 
@@ -15,13 +15,13 @@
 
     <AssertionConsumerService
       Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-      Location="https://us-central1-my-project-plateform-react.cloudfunctions.net/samlAcs"
+      Location="https://myprojectplatform.com/api/saml/acs"
       index="0"
       isDefault="true"/>
 
     <SingleLogoutService
       Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
-      Location="https://us-central1-my-project-plateform-react.cloudfunctions.net/samlSlo"/>
+      Location="https://myprojectplatform.com/api/saml/slo"/>
 
     <AttributeConsumingService index="0">
       <ServiceName xml:lang="en">MyProjects Platform</ServiceName>

@@ -19,6 +19,7 @@ import { SummerProgramEnrollment } from './pages/SummerProgramEnrollment';
 import { ClasseraCallback } from './pages/auth/ClasseraCallback';
 import { ClasseraLogin } from './pages/auth/ClasseraLogin';
 import { KfupmCallback } from './pages/auth/KfupmCallback';
+import { SSOProfileCompletion } from './pages/SSOProfileCompletion';
 import { AuthActionHandler } from './pages/AuthActionHandler';
 
 const StudentDashboard = lazy(() => import('./pages/student/StudentDashboard').then(m => ({ default: m.StudentDashboard })));
@@ -79,6 +80,12 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: strin
   if (user.status === 'pending') {
     console.log('⏸️ ProtectedRoute: User status is pending, redirecting to /pending-activation');
     return <Navigate to="/pending-activation" />;
+  }
+
+  // Check if SSO user needs to complete their profile
+  if (user.profile_incomplete && (user.role === 'student' || user.role === 'teacher')) {
+    console.log('📋 ProtectedRoute: SSO user profile incomplete, redirecting to /complete-profile');
+    return <Navigate to="/complete-profile" />;
   }
 
   // Validate subdomain access
@@ -158,6 +165,13 @@ const AppRoutes: React.FC = () => {
 
       {/* KFUPM SSO Routes */}
       <Route path="/auth/kfupm/callback" element={<KfupmCallback />} />
+
+      {/* SSO Profile Completion - for SSO users who haven't filled in their details yet */}
+      <Route path="/complete-profile" element={
+        !user ? <Navigate to="/login" /> :
+        (!user.profile_incomplete) ? <Navigate to="/projects" /> :
+        <SSOProfileCompletion />
+      } />
 
       {/* Email Verification Pending - for users who haven't verified their email yet */}
       <Route path="/email-verification-pending" element={

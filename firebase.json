@@ -22,6 +22,18 @@
     ],
     "rewrites": [
       {
+        "source": "/api/saml/acs",
+        "function": "samlAcs"
+      },
+      {
+        "source": "/api/saml/slo",
+        "function": "samlSlo"
+      },
+      {
+        "source": "/api/saml/metadata",
+        "function": "samlMetadata"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

@@ -27,6 +27,8 @@ export const KfupmCallback: React.FC = () => {
 
         // Give AuthContext time to pick up the new user
         setTimeout(() => {
+          // The ProtectedRoute will redirect to /complete-profile if
+          // the SSO user's profile is incomplete, otherwise to /home
           navigate('/home', { replace: true });
         }, 1500);
       } catch (err) {

@@ -12,10 +12,14 @@ const auth = admin.auth();
 // ─── KFUPM SAML Configuration ──────────────────────────────────────────────
 
 const KFUPM_IDP_ENTITY_ID = "http://sts.kfupm.edu.sa/adfs/services/trust";
-const KFUPM_SSO_URL = "https://sts.kfupm.edu.sa/adfs/ls/";
-const SP_ENTITY_ID = "https://kfupm.myprojectplatform.com/saml/sp";
+const KFUPM_SSO_URL = "https://sts.kfupupm.edu.sa/adfs/ls/";
+const SP_ENTITY_ID = "https://myprojectplatform.com/saml/sp";
 // The frontend URL to redirect the user to after we issue a custom token
 const APP_REDIRECT_URL = "https://kfupm.myprojectplatform.com/auth/kfupm/callback";
+
+// KFUPM subdomain — used to look up the institution's Firestore document
+// so SSO users are auto-linked to their school.
+const KFUPM_SUBDOMAIN = "kfupm";
 
 // ─── SAML Response Parsing ─────────────────────────────────────────────────
 
@@ -268,14 +272,37 @@ export const samlAcs = functions
         console.log("[samlAcs] New user created:", firebaseUser.uid);
       }
 
+      const platformRole = mapRole(userInfo.role);
+
+      // Look up the KFUPM institution document by subdomain so we can
+      // auto-link students/teachers to their school.
+      let schoolId: string | null = null;
+      if (platformRole === "student" || platformRole === "teacher") {
+        try {
+          const schoolSnapshot = await db
+            .collection("users")
+            .where("subdomain", "==", KFUPM_SUBDOMAIN)
+            .where("role", "==", "school")
+            .limit(1)
+            .get();
+          if (!schoolSnapshot.empty) {
+            schoolId = schoolSnapshot.docs[0].id;
+            console.log("[samlAcs] Found KFUPM school document:", schoolId);
+          } else {
+            console.warn("[samlAcs] No school found with subdomain:", KFUPM_SUBDOMAIN);
+          }
+        } catch (schoolErr) {
+          console.warn("[samlAcs] Error looking up KFUPM school:", schoolErr);
+        }
+      }
+
       // Update or create the Firestore user document
       const userRef = db.collection("users").doc(firebaseUser.uid);
       const userDoc = await userRef.get();
 
-      const platformRole = mapRole(userInfo.role);
-
       if (!userDoc.exists) {
-        // Create new user document
+        // Create new user document with profile_incomplete flag so the
+        // frontend knows to ask for missing details (grade, phone, etc.)
         const newUserData = {
           email: userInfo.email,
           name: userInfo.name || userInfo.email,
@@ -285,22 +312,30 @@ export const samlAcs = functions
           sso_provider: "kfupm",
           sso_upn: userInfo.upn || null,
           sso_name_id: userInfo.nameId || null,
+          school_id: schoolId,
+          schoolIdNumber: userInfo.upn || null, // KFUPM UPN as initial ID
+          profile_incomplete: true, // frontend will redirect to completion form
           created_at: admin.firestore.FieldValue.serverTimestamp(),
           updated_at: admin.firestore.FieldValue.serverTimestamp(),
           last_login: admin.firestore.FieldValue.serverTimestamp(),
         };
         await userRef.set(newUserData);
-        console.log("[samlAcs] Firestore user document created");
+        console.log("[samlAcs] Firestore user document created with profile_incomplete=true");
       } else {
         // Update existing user document with SSO info
-        await userRef.update({
+        const updateData: { [key: string]: any } = {
           name: userInfo.name || userDoc.data()?.name || userInfo.email,
           email_verified: true,
           sso_provider: "kfupm",
           sso_upn: userInfo.upn || userDoc.data()?.sso_upn || null,
           last_login: admin.firestore.FieldValue.serverTimestamp(),
           updated_at: admin.firestore.FieldValue.serverTimestamp(),
-        });
+        };
+        // If the existing user doesn't have a school_id yet, assign it now
+        if (schoolId && !userDoc.data()?.school_id) {
+          updateData.school_id = schoolId;
+        }
+        await userRef.update(updateData);
         console.log("[samlAcs] Firestore user document updated");
       }
 
@@ -330,12 +365,12 @@ export const samlMetadata = functions
     <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</NameIDFormat>
     <AssertionConsumerService
       Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-      Location="https://us-central1-my-project-plateform-react.cloudfunctions.net/samlAcs"
+      Location="https://myprojectplatform.com/api/saml/acs"
       index="0"
       isDefault="true"/>
     <SingleLogoutService
       Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
-      Location="https://us-central1-my-project-plateform-react.cloudfunctions.net/samlSlo"/>
+      Location="https://myprojectplatform.com/api/saml/slo"/>
   </SPSSODescriptor>
 </EntityDescriptor>`);
   });
@@ -362,7 +397,7 @@ export const initKfupmSso = functions
   Version="2.0"
   IssueInstant="${issueInstant}"
   ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-  AssertionConsumerServiceURL="https://us-central1-my-project-plateform-react.cloudfunctions.net/samlAcs"
+  AssertionConsumerServiceURL="https://myprojectplatform.com/api/saml/acs"
   Destination="${KFUPM_SSO_URL}">
   <saml:Issuer>${SP_ENTITY_ID}</saml:Issuer>
   <samlp:NameIDPolicy
