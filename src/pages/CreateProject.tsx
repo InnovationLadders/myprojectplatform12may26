@@ -83,8 +83,12 @@ export const CreateProject: React.FC = () => {
               duration: getTextValue(idea.duration) || '',
               objectives: objectives.length ? objectives : [''],
               materials: materials.length ? materials : [''],
-              steps: steps.length ? steps : ['']
+              steps: steps.length ? steps : [''],
+              image_url: idea.image || ''
             }));
+            if (idea.image) {
+              setProjectImage(idea.image);
+            }
           } else {
             setIdeaError('لم يتم العثور على فكرة المشروع المطلوبة');
           }
