@@ -15,18 +15,17 @@ export const KfupmLoginButton: React.FC<KfupmLoginButtonProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = async (e: React.MouseEvent) => {
+  const handleLogin = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
     try {
       setIsLoading(true);
       setError(null);
-      await initiateKfupmSso(returnUrl);
+      initiateKfupmSso(returnUrl);
     } catch (err) {
       console.error('[KfupmLoginButton] Login failed:', err);
       setError('فشل في بدء تسجيل الدخول. يرجى المحاولة مرة أخرى.');
-    } finally {
       setIsLoading(false);
     }
   };
