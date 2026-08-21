@@ -370,6 +370,21 @@ const ProjectDetails: React.FC = () => {
         transition={{ duration: 0.6 }}
         className="bg-white rounded-2xl shadow-lg p-6"
       >
+        {/* Project Cover Image */}
+        {project.image_url && (
+          <div className="relative w-full h-48 md:h-64 rounded-xl overflow-hidden mb-6 bg-gray-100">
+            <img
+              src={project.image_url}
+              alt={project.title}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+              }}
+            />
+          </div>
+        )}
+
         <div className="flex flex-col gap-4 mb-6">
           <div className="flex items-center gap-2 md:gap-4">
             <Link

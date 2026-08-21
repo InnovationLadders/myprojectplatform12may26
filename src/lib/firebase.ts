@@ -822,6 +822,58 @@ export const uploadFileToProjectStorage = async (
   });
 };
 
+/**
+ * Uploads a project cover image to Firebase Storage.
+ * Does NOT update the project document — caller is responsible for saving the URL.
+ */
+export const uploadProjectImage = async (
+  file: File,
+  onProgress?: (progress: number) => void
+): Promise<string> => {
+  const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+  if (!validTypes.includes(file.type)) {
+    throw new Error('نوع الملف غير مدعوم. يرجى استخدام JPG أو PNG أو WebP');
+  }
+  const maxSize = 5 * 1024 * 1024;
+  if (file.size > maxSize) {
+    throw new Error('حجم الصورة كبير جداً. الحد الأقصى 5 ميجابايت');
+  }
+
+  const timestamp = Date.now();
+  const ext = file.name.split('.').pop();
+  const storageRef = ref(storage, `project_images/${timestamp}_${Math.random().toString(36).slice(2)}.${ext}`);
+  const uploadTask = uploadBytesResumable(storageRef, file);
+
+  return new Promise<string>((resolve, reject) => {
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        onProgress?.(progress);
+      },
+      (error) => reject(new Error('فشل رفع الصورة. يرجى المحاولة مرة أخرى')),
+      async () => {
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        resolve(downloadURL);
+      }
+    );
+  });
+};
+
+/**
+ * Deletes a project cover image from Firebase Storage by URL.
+ */
+export const deleteProjectImage = async (imageUrl: string): Promise<void> => {
+  try {
+    const imageRef = ref(storage, imageUrl);
+    await deleteObject(imageRef);
+  } catch (error: any) {
+    if (error.code !== 'storage/object-not-found') {
+      console.error('Error deleting project image:', error);
+    }
+  }
+};
+
 // Enhanced function to get all users with role filtering
 export const getAllUsers = async (roleFilter?: string) => {
   return withErrorHandling(async () => {

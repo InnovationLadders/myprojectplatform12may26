@@ -5,10 +5,11 @@ import { useAuth } from '../contexts/AuthContext';
 import { useStudents } from '../hooks/useStudents';
 import { useProjects } from '../hooks/useProjects';
 import { useProjectIdeas } from '../hooks/useProjectIdeas';
-import { ArrowRight, Save, Plus, X, Calendar, Users, Target, BookOpen, Lightbulb, Upload, FileText, Search, UserPlus, Mail, User, TriangleAlert as AlertTriangle, CircleCheck as CheckCircle, Filter, GraduationCap } from 'lucide-react';
+import { ArrowRight, Save, Plus, X, Calendar, Users, Target, BookOpen, Lightbulb, Upload, FileText, Search, UserPlus, Mail, User, TriangleAlert as AlertTriangle, CircleCheck as CheckCircle, Filter, GraduationCap, Image as ImageIcon, Loader } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { getTextValue, getArrayValue } from '../utils/multiLangHelper';
 import { getAvailableGrades, filterStudentsByGrade, classifyGrade } from '../utils/gradeClassifier';
+import { uploadProjectImage, deleteProjectImage } from '../lib/firebase';
 
 export const CreateProject: React.FC = () => {
   const { t } = useTranslation();
@@ -25,6 +26,10 @@ export const CreateProject: React.FC = () => {
   const [ideaLoading, setIdeaLoading] = useState(false);
   const [ideaError, setIdeaError] = useState<string | null>(null);
   const [usingIdea, setUsingIdea] = useState<any>(null);
+  const [projectImage, setProjectImage] = useState<string | null>(null);
+  const [imageUploading, setImageUploading] = useState(false);
+  const [imageProgress, setImageProgress] = useState(0);
+  const [imageError, setImageError] = useState<string | null>(null);
   
   // Set default status based on user role
   const defaultStatus = user?.role === 'student' ? 'draft' : 'active';
@@ -43,7 +48,8 @@ export const CreateProject: React.FC = () => {
     due_date: '', // Changed from dueDate to due_date for consistency
     maxStudents: 5,
     status: defaultStatus,
-    selectedStudentIds: [] as string[]
+    selectedStudentIds: [] as string[],
+    image_url: '' as string
   });
 
   // Load project idea if ideaId is provided in URL
@@ -146,6 +152,31 @@ export const CreateProject: React.FC = () => {
     });
   };
 
+  const handleImageSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setImageError(null);
+    setImageUploading(true);
+    setImageProgress(0);
+    try {
+      const downloadUrl = await uploadProjectImage(file, (progress) => setImageProgress(progress));
+      setProjectImage(downloadUrl);
+      setFormData(prev => ({ ...prev, image_url: downloadUrl }));
+    } catch (err: any) {
+      setImageError(err.message || 'فشل رفع الصورة');
+    } finally {
+      setImageUploading(false);
+    }
+  };
+
+  const handleImageRemove = async () => {
+    if (projectImage) {
+      try { await deleteProjectImage(projectImage); } catch {}
+    }
+    setProjectImage(null);
+    setFormData(prev => ({ ...prev, image_url: '' }));
+  };
+
   const handleSubmit = async () => {
     try {
       setLoading(true);
@@ -161,7 +192,8 @@ export const CreateProject: React.FC = () => {
         ...formData,
         progress: 0, // Explicitly set initial progress to 0
         due_date: formData.due_date, // Pass due_date for consistency
-        selectedStudentIds: finalSelectedStudentIds // Use the updated array that includes the current student
+        selectedStudentIds: finalSelectedStudentIds, // Use the updated array that includes the current student
+        image_url: projectImage || ''
       });
       navigate('/projects');
     } catch (error) {
@@ -327,6 +359,75 @@ export const CreateProject: React.FC = () => {
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
+              {/* Project Image Upload */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  صورة المشروع (اختياري)
+                </label>
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0">
+                    {projectImage ? (
+                      <div className="relative w-32 h-32 rounded-xl border-2 border-gray-300 overflow-hidden bg-white">
+                        <img src={projectImage} alt="Project" className="w-full h-full object-cover" />
+                        {!imageUploading && (
+                          <button
+                            type="button"
+                            onClick={handleImageRemove}
+                            className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        )}
+                        {imageUploading && (
+                          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                            <Loader className="w-8 h-8 text-white animate-spin" />
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="w-32 h-32 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50">
+                        <ImageIcon className="w-12 h-12 text-gray-400" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 space-y-3">
+                    <label
+                      htmlFor="project-image-upload"
+                      className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors cursor-pointer ${
+                        imageUploading
+                          ? 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
+                          : 'bg-white border-blue-500 text-blue-600 hover:bg-blue-50'
+                      }`}
+                    >
+                      <Upload className="w-4 h-4" />
+                      {imageUploading ? 'جاري الرفع...' : 'رفع صورة'}
+                    </label>
+                    <input
+                      id="project-image-upload"
+                      type="file"
+                      accept="image/jpeg,image/jpg,image/png,image/webp"
+                      onChange={handleImageSelect}
+                      disabled={imageUploading}
+                      className="hidden"
+                    />
+                    <p className="text-xs text-gray-500">JPG، PNG، أو WebP - الحد الأقصى 5 ميجابايت</p>
+                    {imageUploading && imageProgress > 0 && (
+                      <div className="space-y-1">
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="bg-blue-500 h-2 rounded-full transition-all duration-300" style={{ width: `${imageProgress}%` }} />
+                        </div>
+                        <p className="text-xs text-gray-600 text-center">{Math.round(imageProgress)}%</p>
+                      </div>
+                    )}
+                    {imageError && (
+                      <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                        <p className="text-sm text-red-600">{imageError}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   {t('createProject.form.title')} *

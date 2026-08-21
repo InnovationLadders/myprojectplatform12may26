@@ -441,8 +441,23 @@ export const Projects: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 group"
+            className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 group overflow-hidden"
           >
+            {/* Project Image */}
+            <div className="relative w-full h-48 bg-gray-100 overflow-hidden">
+              <img
+                src={project.image_url || '/mashrouilogo.png'}
+                alt={project.title}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                loading="lazy"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = '/mashrouilogo.png';
+                }}
+              />
+            </div>
+
+            <div className="p-6">
             {/* Project Header */}
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
@@ -615,6 +630,7 @@ export const Projects: React.FC = () => {
                   {project.due_date ? formatDate(project.due_date) : t('projects.notSpecified')}
                 </div>
               </div>
+            </div>
             </div>
           </motion.div>
         ))}
