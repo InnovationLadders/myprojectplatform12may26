@@ -194,17 +194,21 @@ export const LoginPage: React.FC = () => {
           </form>
 
 
-          {/* KFUPM SSO Login */}
-          <div className="relative mt-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">أو</span>
-            </div>
-          </div>
+          {/* KFUPM SSO Login — only shown on the kfupm subdomain */}
+          {currentSubdomain === 'kfupm' && (
+            <>
+              <div className="relative mt-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300" />
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">أو</span>
+                </div>
+              </div>
 
-          <KfupmLoginButton returnUrl="/home" />
+              <KfupmLoginButton returnUrl="/home" />
+            </>
+          )}
 
           {/* Classera SSO Login - Hidden until service is ready */}
           {false && (
