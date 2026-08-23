@@ -1,9 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bulkDeleteUserAccounts = exports.deleteUserAccount = exports.sendNotificationEmail = void 0;
+exports.bulkDeleteUserAccounts = exports.deleteUserAccount = exports.sendNotificationEmail = exports.initKfupmSso = exports.samlMetadata = exports.samlAcs = void 0;
 const functions = require("firebase-functions/v1");
 const nodemailer = require("nodemailer");
 const admin = require("firebase-admin");
+// Re-export SAML SSO functions for KFUPM integration
+var saml_1 = require("./saml");
+Object.defineProperty(exports, "samlAcs", { enumerable: true, get: function () { return saml_1.samlAcs; } });
+Object.defineProperty(exports, "samlMetadata", { enumerable: true, get: function () { return saml_1.samlMetadata; } });
+Object.defineProperty(exports, "initKfupmSso", { enumerable: true, get: function () { return saml_1.initKfupmSso; } });
 // Initialize Firebase Admin SDK once
 if (admin.apps.length === 0) {
     admin.initializeApp();

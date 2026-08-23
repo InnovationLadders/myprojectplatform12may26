@@ -1,1 +1,3 @@
+/api/saml/acs        https://us-central1-my-project-plateform-react.cloudfunctions.net/samlAcs        200
+/api/saml/metadata   https://us-central1-my-project-plateform-react.cloudfunctions.net/samlMetadata   200
 /*    /index.html   200

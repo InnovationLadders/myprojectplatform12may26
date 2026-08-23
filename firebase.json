@@ -26,10 +26,6 @@
         "function": "samlAcs"
       },
       {
-        "source": "/api/saml/slo",
-        "function": "samlSlo"
-      },
-      {
         "source": "/api/saml/metadata",
         "function": "samlMetadata"
       },
