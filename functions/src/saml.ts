@@ -380,7 +380,7 @@ export const samlMetadata = functions
 <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
                   entityID="${SP_ENTITY_ID}">
   <SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
-    <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</NameIDFormat>
+    <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</NameIDFormat>
     <AssertionConsumerService
       Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
       Location="https://myprojectplatform.com/api/saml/acs"
@@ -418,9 +418,7 @@ export const initKfupmSso = functions
   AssertionConsumerServiceURL="https://myprojectplatform.com/api/saml/acs"
   Destination="${KFUPM_SSO_URL}">
   <saml:Issuer>${SP_ENTITY_ID}</saml:Issuer>
-  <samlp:NameIDPolicy
-    AllowCreate="true"
-    Format="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"/>
+  <samlp:NameIDPolicy AllowCreate="true"/>
 </samlp:AuthnRequest>`;
 
     // Deflate + base64 encode for HTTP-Redirect binding

@@ -29,9 +29,7 @@ export const initiateKfupmSso = (returnUrl?: string): void => {
   AssertionConsumerServiceURL="${ACS_URL}"
   Destination="${KFUPM_SSO_URL}">
   <saml:Issuer>${SP_ENTITY_ID}</saml:Issuer>
-  <samlp:NameIDPolicy
-    AllowCreate="true"
-    Format="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"/>
+  <samlp:NameIDPolicy AllowCreate="true"/>
 </samlp:AuthnRequest>`;
 
   // Base64-encode the XML for HTTP-POST binding
