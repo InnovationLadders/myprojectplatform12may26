@@ -218,11 +218,29 @@ export const samlAcs = functions
       return;
     }
 
-    try {
-      // The SAMLResponse is sent as a POST body parameter (base64-encoded)
-      const samlResponseB64 = req.body.SAMLResponse;
+      try {
+        // ─── كود التشخيص الشامل للـ DEPLOY الواحد ───
+        console.log("[samlAcs] --- DIAGNOSTIC START ---");
+        console.log("1. Content-Type Header:", req.headers['content-type']);
+        console.log("2. Request Body Keys:", Object.keys(req.body || {}));
+        console.log("3. SAMLResponse Data Type:", typeof req.body?.SAMLResponse);
 
-      if (!samlResponseB64) {
+        const samlResponseB64 = req.body.SAMLResponse;
+        if (samlResponseB64) {
+            try {
+                const decodedXml = Buffer.from(samlResponseB64, "base64").toString("utf8");
+                console.log("4. Decoded SAML XML (Length: " + decodedXml.length + "):");
+                console.log(decodedXml);
+            } catch (err) {
+                console.error("4. Error decoding Base64:", err);
+            }
+        } else {
+            console.log("4. SAMLResponse is undefined or empty!");
+        }
+        console.log("[samlAcs] --- DIAGNOSTIC END ---");
+        // ─── نهاية كود التشخيص ───
+
+        if (!samlResponseB64) {
         console.error("[samlAcs] No SAMLResponse in POST body");
         res.status(400).send("Missing SAMLResponse");
         return;
