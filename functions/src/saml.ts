@@ -40,13 +40,11 @@ interface SamlUserInfo {
 function parseSamlResponse(samlXml: string): SamlUserInfo {
   const info: SamlUserInfo = { email: "", name: "" };
 
-  // Extract NameID
-  const nameIdMatch = samlXml.match(
-    /<saml:NameID[^>]*>([^<]+)<\/saml:NameID>/i
-  );
+
+  // 1. تعديل الـ NameID ليكون مرناً
+  const nameIdMatch = samlXml.match(/<[^:]*:?NameID[^>]*>([^<]+)<\/[^:]*:?NameID>/i);
   if (nameIdMatch) {
     info.nameId = nameIdMatch[1].trim();
-    // If NameID format is emailAddress, use it
     if (info.nameId.includes("@")) {
       info.email = info.nameId;
     }
@@ -57,8 +55,8 @@ function parseSamlResponse(samlXml: string): SamlUserInfo {
   // <saml:Attribute Name="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress">
   //   <saml:AttributeValue>user@kfupm.edu.sa</saml:AttributeValue>
   // </saml:Attribute>
-  const attributeRegex =
-    /<saml:Attribute\s+[^>]*Name="([^"]+)"[^>]*>([\s\S]*?)<\/saml:Attribute>/gi;
+// 2. تعديل الـ Attribute ليدعم كافة بادئات SAML 2.0 أو غيابها
+  const attributeRegex = /<[^:]*:?Attribute\s+[^>]*Name="([^"]+)"[^>]*>([\s\S]*?)<\/[^:]*:?Attribute>/gi;
   let match: RegExpExecArray | null;
 
   while ((match = attributeRegex.exec(samlXml)) !== null) {
@@ -66,8 +64,8 @@ function parseSamlResponse(samlXml: string): SamlUserInfo {
     const attrBody = match[2];
 
     // Extract the AttributeValue(s)
-    const valueMatches = attrBody.match(
-      /<saml:AttributeValue[^>]*>([^<]*)<\/saml:AttributeValue>/gi
+        // 3. تعديل الـ AttributeValue ليكون مرناً ومغلق القوس بشكل سليم
+    const valueMatches = attrBody.match(/<[^:]*:?AttributeValue[^>]*>([^<]*)<\/[^:]*:?AttributeValue>/gi);
     );
     const values = valueMatches
       ? valueMatches.map((v) =>
@@ -137,7 +135,8 @@ function parseSamlResponse(samlXml: string): SamlUserInfo {
  *      requests from our SP entity ID
  */
 function validateSamlResponse(samlXml: string): { valid: boolean; error?: string } {
-  if (!samlXml.includes("<saml:Assertion") && !samlXml.includes("<Assertion")) {
+  // الكود الجديد المرن للبحث عن الـ Assertion
+  if (!samlXml.match(/<[^:]*:?Assertion/i)) {
     return { valid: false, error: "No SAML assertion found in response" };
   }
 
