@@ -66,7 +66,6 @@ function parseSamlResponse(samlXml: string): SamlUserInfo {
     // Extract the AttributeValue(s)
         // 3. تعديل الـ AttributeValue ليكون مرناً ومغلق القوس بشكل سليم
     const valueMatches = attrBody.match(/<[^:]*:?AttributeValue[^>]*>([^<]*)<\/[^:]*:?AttributeValue>/gi);
-    );
     const values = valueMatches
       ? valueMatches.map((v) =>
           v
