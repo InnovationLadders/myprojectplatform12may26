@@ -36,81 +36,98 @@ interface SamlUserInfo {
 /**
  * Extracts the SAML assertion from a SAMLResponse (base64-decoded XML).
  * Parses attribute statements to find email, name, UPN, role, etc.
+ * Supports different SAML prefixes and common email claim formats.
  */
 function parseSamlResponse(samlXml: string): SamlUserInfo {
   const info: SamlUserInfo = { email: "", name: "" };
 
+  const decodeXml = (value: string): string => {
+    return value
+      .replace(/<[^>]+>/g, "")
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .trim();
+  };
 
-  // 1. تعديل الـ NameID ليكون مرناً
-  const nameIdMatch = samlXml.match(/<[^:]*:?NameID[^>]*>([^<]+)<\/[^:]*:?NameID>/i);
+  const nameIdMatch = samlXml.match(
+    /<(?:[\w.-]+:)?NameID\b[^>]*>([\s\S]*?)<\/(?:[\w.-]+:)?NameID>/i
+  );
+
   if (nameIdMatch) {
-    info.nameId = nameIdMatch[1].trim();
+    info.nameId = decodeXml(nameIdMatch[1]);
+
     if (info.nameId.includes("@")) {
       info.email = info.nameId;
     }
   }
 
-  // Extract all Attribute statements
-  // ADFS sends attributes like:
-  // <saml:Attribute Name="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress">
-  //   <saml:AttributeValue>user@kfupm.edu.sa</saml:AttributeValue>
-  // </saml:Attribute>
-// 2. تعديل الـ Attribute ليدعم كافة بادئات SAML 2.0 أو غيابها
-  const attributeRegex = /<[^:]*:?Attribute\s+[^>]*Name="([^"]+)"[^>]*>([\s\S]*?)<\/[^:]*:?Attribute>/gi;
+  const attributeRegex =
+    /<(?:[\w.-]+:)?Attribute\b[^>]*\bName=["']([^"']+)["'][^>]*>([\s\S]*?)<\/(?:[\w.-]+:)?Attribute>/gi;
+
   let match: RegExpExecArray | null;
 
   while ((match = attributeRegex.exec(samlXml)) !== null) {
-    const attrName = match[1];
+    const attrName = match[1].trim().toLowerCase();
     const attrBody = match[2];
 
-    // Extract the AttributeValue(s)
-        // 3. تعديل الـ AttributeValue ليكون مرناً ومغلق القوس بشكل سليم
-    const valueMatches = attrBody.match(/<[^:]*:?AttributeValue[^>]*>([^<]*)<\/[^:]*:?AttributeValue>/gi);
-    const values = valueMatches
-      ? valueMatches.map((v) =>
-          v
-            .replace(/<[^>]+>/g, "")
-            .replace(/&amp;/g, "&")
-            .replace(/&lt;/g, "<")
-            .replace(/&gt;/g, ">")
-            .replace(/&quot;/g, '"')
-            .replace(/&#39;/g, "'")
-            .trim()
-        )
-      : [];
+    const valueRegex =
+      /<(?:[\w.-]+:)?AttributeValue\b[^>]*>([\s\S]*?)<\/(?:[\w.-]+:)?AttributeValue>/gi;
+
+    const values: string[] = [];
+    let valueMatch: RegExpExecArray | null;
+
+    while ((valueMatch = valueRegex.exec(attrBody)) !== null) {
+      values.push(decodeXml(valueMatch[1]));
+    }
 
     const value = values[0] || "";
 
     switch (attrName) {
       case "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress":
-      case "http://schemas.xmlsoap.org/claims/EmailAddress":
+      case "http://schemas.xmlsoap.org/claims/emailaddress":
+      case "email":
+      case "emailaddress":
+      case "mail":
         if (value && !info.email) info.email = value;
         break;
+
       case "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name":
+      case "name":
         if (value) info.name = value;
         break;
+
       case "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname":
+      case "givenname":
         if (value) info.givenName = value;
         break;
+
       case "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname":
+      case "surname":
         if (value) info.surname = value;
         break;
+
       case "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn":
-      case "http://schemas.xmlsoap.org/claims/UPN":
+      case "http://schemas.xmlsoap.org/claims/upn":
+      case "upn":
         if (value) info.upn = value;
         break;
+
       case "http://schemas.microsoft.com/ws/2008/06/identity/claims/role":
+      case "role":
         if (value) info.role = value;
         break;
     }
   }
 
-  // If no name was found but we have givenName and surname, combine them
   if (!info.name && (info.givenName || info.surname)) {
-    info.name = [info.givenName, info.surname].filter(Boolean).join(" ");
+    info.name = [info.givenName, info.surname]
+      .filter(Boolean)
+      .join(" ");
   }
 
-  // If still no email but we have UPN with @, use UPN as email
   if (!info.email && info.upn && info.upn.includes("@")) {
     info.email = info.upn;
   }
