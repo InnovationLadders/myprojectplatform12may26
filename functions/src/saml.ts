@@ -136,29 +136,17 @@ function parseSamlResponse(samlXml: string): SamlUserInfo {
 }
 
 /**
- * Basic SAML response validation:
- * - Checks that the response contains a SAML assertion
- * - Checks that the issuer matches KFUPM's entity ID
- * - Checks that the response status is Success
- * - Checks that the audience matches our SP entity ID
- *
- * NOTE: Full XML signature verification requires a crypto library.
- * For production, add xml-crypto or @node-saml to verify the signature.
- * For now, we rely on:
- *   1. HTTPS transport security (ADFS only responds over HTTPS)
- *   2. Issuer/audience validation
- *   3. The ADFS Relying Party Trust being configured to only accept
- *      requests from our SP entity ID
+ * Basic SAML response validation with namespace flexibility
  */
 function validateSamlResponse(samlXml: string): { valid: boolean; error?: string } {
-  // الكود الجديد المرن للبحث عن الـ Assertion
+  // Check Assertion
   if (!samlXml.match(/<[^:]*:?Assertion/i)) {
     return { valid: false, error: "No SAML assertion found in response" };
   }
 
-  // Check issuer
+  // Check issuer (Flexible namespace prefix match)
   const issuerMatch = samlXml.match(
-    /<saml:Issuer[^>]*>([^<]+)<\/saml:Issuer>/i
+    /<(?:[\w.-]+:)?Issuer[^>]*>([^<]+)<\/(?:[\w.-]+:)?Issuer>/i
   );
   if (issuerMatch) {
     const issuer = issuerMatch[1].trim();
@@ -167,9 +155,9 @@ function validateSamlResponse(samlXml: string): { valid: boolean; error?: string
     }
   }
 
-  // Check status
+  // Check status (Flexible namespace prefix match)
   const statusMatch = samlXml.match(
-    /<samlp:StatusCode\s+Value="([^"]+)"/i
+    /<(?:[\w.-]+:)?StatusCode\s+Value="([^"]+)"/i
   );
   if (statusMatch) {
     const statusCode = statusMatch[1];
@@ -181,9 +169,9 @@ function validateSamlResponse(samlXml: string): { valid: boolean; error?: string
     }
   }
 
-  // Check audience
+  // Check audience (Flexible namespace prefix match)
   const audienceMatch = samlXml.match(
-    /<saml:Audience[^>]*>([^<]+)<\/saml:Audience>/i
+    /<(?:[\w.-]+:)?Audience[^>]*>([^<]+)<\/(?:[\w.-]+:)?Audience>/i
   );
   if (audienceMatch) {
     const audience = audienceMatch[1].trim();
@@ -197,7 +185,6 @@ function validateSamlResponse(samlXml: string): { valid: boolean; error?: string
 
 /**
  * Determines the platform role from the SAML role claim.
- * KFUPM may send roles like "Student", "Faculty", "Staff", etc.
  */
 function mapRole(samlRole?: string): "student" | "teacher" {
   if (!samlRole) return "student";
@@ -233,29 +220,28 @@ export const samlAcs = functions
       return;
     }
 
-      try {
-        // ─── كود التشخيص الشامل للـ DEPLOY الواحد ───
-        console.log("[samlAcs] --- DIAGNOSTIC START ---");
-        console.log("1. Content-Type Header:", req.headers['content-type']);
-        console.log("2. Request Body Keys:", Object.keys(req.body || {}));
-        console.log("3. SAMLResponse Data Type:", typeof req.body?.SAMLResponse);
+    try {
+      // ─── Diagnostic Logs ───
+      console.log("[samlAcs] --- DIAGNOSTIC START ---");
+      console.log("1. Content-Type Header:", req.headers['content-type']);
+      console.log("2. Request Body Keys:", Object.keys(req.body || {}));
+      console.log("3. SAMLResponse Data Type:", typeof req.body?.SAMLResponse);
 
-        const samlResponseB64 = req.body.SAMLResponse;
-        if (samlResponseB64) {
-            try {
-                const decodedXml = Buffer.from(samlResponseB64, "base64").toString("utf8");
-                console.log("4. Decoded SAML XML (Length: " + decodedXml.length + "):");
-                console.log(decodedXml);
-            } catch (err) {
-                console.error("4. Error decoding Base64:", err);
-            }
-        } else {
-            console.log("4. SAMLResponse is undefined or empty!");
+      const samlResponseB64 = req.body.SAMLResponse;
+      if (samlResponseB64) {
+        try {
+          const decodedXml = Buffer.from(samlResponseB64, "base64").toString("utf8");
+          console.log("4. Decoded SAML XML (Length: " + decodedXml.length + "):");
+          console.log(decodedXml);
+        } catch (err) {
+          console.error("4. Error decoding Base64:", err);
         }
-        console.log("[samlAcs] --- DIAGNOSTIC END ---");
-        // ─── نهاية كود التشخيص ───
+      } else {
+        console.log("4. SAMLResponse is undefined or empty!");
+      }
+      console.log("[samlAcs] --- DIAGNOSTIC END ---");
 
-        if (!samlResponseB64) {
+      if (!samlResponseB64) {
         console.error("[samlAcs] No SAMLResponse in POST body");
         res.status(400).send("Missing SAMLResponse");
         return;
@@ -294,11 +280,10 @@ export const samlAcs = functions
         firebaseUser = await auth.getUserByEmail(userInfo.email);
         console.log("[samlAcs] Existing user found:", firebaseUser.uid);
       } catch (err) {
-        // User doesn't exist — create them
         console.log("[samlAcs] User not found, creating new account for:", userInfo.email);
         firebaseUser = await auth.createUser({
           email: userInfo.email,
-          emailVerified: true, // SSO-verified email
+          emailVerified: true,
           displayName: userInfo.name || userInfo.email,
           password: Math.random().toString(36).slice(2) + Date.now().toString(36),
         });
@@ -307,8 +292,6 @@ export const samlAcs = functions
 
       const platformRole = mapRole(userInfo.role);
 
-      // Look up the KFUPM institution document by subdomain so we can
-      // auto-link students/teachers to their school.
       let schoolId: string | null = null;
       if (platformRole === "student" || platformRole === "teacher") {
         try {
@@ -329,25 +312,22 @@ export const samlAcs = functions
         }
       }
 
-      // Update or create the Firestore user document
       const userRef = db.collection("users").doc(firebaseUser.uid);
       const userDoc = await userRef.get();
 
       if (!userDoc.exists) {
-        // Create new user document with profile_incomplete flag so the
-        // frontend knows to ask for missing details (grade, phone, etc.)
         const newUserData = {
           email: userInfo.email,
           name: userInfo.name || userInfo.email,
           role: platformRole,
-          status: "active", // SSO users are pre-verified by the university
+          status: "active",
           email_verified: true,
           sso_provider: "kfupm",
           sso_upn: userInfo.upn || null,
           sso_name_id: userInfo.nameId || null,
           school_id: schoolId,
-          schoolIdNumber: userInfo.upn || null, // KFUPM UPN as initial ID
-          profile_incomplete: true, // frontend will redirect to completion form
+          schoolIdNumber: userInfo.upn || null,
+          profile_incomplete: true,
           created_at: admin.firestore.FieldValue.serverTimestamp(),
           updated_at: admin.firestore.FieldValue.serverTimestamp(),
           last_login: admin.firestore.FieldValue.serverTimestamp(),
@@ -355,7 +335,6 @@ export const samlAcs = functions
         await userRef.set(newUserData);
         console.log("[samlAcs] Firestore user document created with profile_incomplete=true");
       } else {
-        // Update existing user document with SSO info
         const updateData: { [key: string]: any } = {
           name: userInfo.name || userDoc.data()?.name || userInfo.email,
           email_verified: true,
@@ -364,7 +343,6 @@ export const samlAcs = functions
           last_login: admin.firestore.FieldValue.serverTimestamp(),
           updated_at: admin.firestore.FieldValue.serverTimestamp(),
         };
-        // If the existing user doesn't have a school_id yet, assign it now
         if (schoolId && !userDoc.data()?.school_id) {
           updateData.school_id = schoolId;
         }
@@ -372,12 +350,9 @@ export const samlAcs = functions
         console.log("[samlAcs] Firestore user document updated");
       }
 
-      // Generate a Firebase custom token
       const customToken = await auth.createCustomToken(firebaseUser.uid);
       console.log("[samlAcs] Custom token generated for user:", firebaseUser.uid);
 
-      // Redirect to the frontend callback with the token
-      // The frontend will use signInWithCustomToken to complete authentication
       const redirectUrl = `${APP_REDIRECT_URL}?token=${encodeURIComponent(customToken)}`;
       res.redirect(302, redirectUrl);
     } catch (error) {
@@ -419,7 +394,6 @@ export const initKfupmSso = functions
     const returnUrl = data?.returnUrl || "/home";
     const relayState = encodeURIComponent(returnUrl);
 
-    // Build a SAML AuthnRequest (minimal, deflated for HTTP-Redirect binding)
     const requestId = "_" + Math.random().toString(36).substring(2, 18);
     const issueInstant = new Date().toISOString();
 
@@ -436,7 +410,6 @@ export const initKfupmSso = functions
   <samlp:NameIDPolicy AllowCreate="true"/>
 </samlp:AuthnRequest>`;
 
-    // Deflate + base64 encode for HTTP-Redirect binding
     const zlib = require("zlib");
     const deflated = zlib.deflateRawSync(authnRequest).toString("base64");
     const encoded = encodeURIComponent(deflated);
