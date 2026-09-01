@@ -153,6 +153,7 @@
         "haveAccount": "لديك حساب بالفعل؟",
         "createAccount": "إنشاء حساب جديد",
         "loginWithGoogle": "تسجيل الدخول باستخدام Google",
+        "registerWithGoogle": "التسجيل باستخدام Google",
         "loginWithApple": "تسجيل الدخول باستخدام Apple",
         "or": "أو",
         "enterEmail": "أدخل بريدك الإلكتروني",

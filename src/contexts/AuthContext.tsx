@@ -264,7 +264,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               email: firebaseUser.email || '',
               name: userData.name || firebaseUser.displayName || '',
               role: userData.role,
-              avatar: userData.avatar || undefined,
+              avatar: userData.avatar || firebaseUser.photoURL || undefined,
               phone: userData.phone,
               bio: userData.bio,
               createdAt: userData.created_at?.toDate?.()?.toISOString() || new Date().toISOString(),
@@ -288,6 +288,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               profile_incomplete: userData.profile_incomplete || false,
               sso_provider: userData.sso_provider,
               sso_upn: userData.sso_upn,
+              schoolIdNumber: userData.schoolIdNumber,
               cachedAt: Date.now()
             };
             sessionStorage.setItem('userProfile', JSON.stringify(userProfile));
@@ -772,24 +773,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loginWithGoogle = async () => {
     try {
       const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
       const { user: firebaseUser } = await signInWithPopup(auth, provider);
-      
-      // Check if user document exists in Firestore
+
+      // Check if user document already exists in Firestore
       const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
       if (!userDoc.exists()) {
-        // Create user document for Google sign-in users
+        // New Google user — create a minimal profile marked as incomplete.
+        // The user will be redirected to /complete-profile to choose their role
+        // and fill in the required details.
         await setDoc(doc(db, 'users', firebaseUser.uid), {
           name: firebaseUser.displayName || 'مستخدم جديد',
-          email: firebaseUser.email,
-          role: 'student', // Default role for Google sign-in
+          email: firebaseUser.email || '',
+          role: 'student',
+          avatar: firebaseUser.photoURL || null,
           created_at: serverTimestamp(),
           updated_at: serverTimestamp(),
           last_active_at: serverTimestamp(),
-          status: 'active'
+          status: 'active',
+          email_verified_at: serverTimestamp(),
+          profile_incomplete: true,
+          sso_provider: 'google',
+          school_id: null,
+          phone: null,
+          bio: null,
+          grade: null,
+          subject: null,
+          city: null,
+          gender: null,
+          languages: ['العربية'],
         });
       }
-      
+
       // The onAuthStateChanged listener will handle setting the user state
+      // and the ProtectedRoute will redirect to /complete-profile if needed
     } catch (error: any) {
       if (error.code === 'auth/network-request-failed' || error.code === 'unavailable') {
         console.warn('Network request failed during Google login:', error.message);

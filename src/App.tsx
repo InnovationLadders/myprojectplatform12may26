@@ -82,9 +82,9 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: strin
     return <Navigate to="/pending-activation" />;
   }
 
-  // Check if SSO user needs to complete their profile
-  if (user.profile_incomplete && (user.role === 'student' || user.role === 'teacher')) {
-    console.log('📋 ProtectedRoute: SSO user profile incomplete, redirecting to /complete-profile');
+  // Check if SSO/Google user needs to complete their profile
+  if (user.profile_incomplete) {
+    console.log('📋 ProtectedRoute: User profile incomplete, redirecting to /complete-profile');
     return <Navigate to="/complete-profile" />;
   }
 
