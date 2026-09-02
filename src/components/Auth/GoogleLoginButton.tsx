@@ -46,7 +46,13 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
     setIsLoading(true);
 
     try {
+      const timeoutId = setTimeout(() => {
+        setIsLoading(false);
+        setError('استغرق تسجيل الدخول وقتًا أطول من المتوقع. يرجى المحاولة مرة أخرى.');
+      }, 30000);
+
       await loginWithGoogle();
+      clearTimeout(timeoutId);
     } catch (err: any) {
       console.error('[GoogleLoginButton] Login failed:', err);
       if (err?.code === 'auth/popup-closed-by-user') {

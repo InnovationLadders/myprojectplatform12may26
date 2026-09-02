@@ -294,13 +294,63 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             sessionStorage.setItem('userProfile', JSON.stringify(userProfile));
             setUser(userProfile);
           } else {
-            console.error("CRITICAL: User document doesn't exist for authenticated user:", firebaseUser.uid);
-            console.log("This indicates an incomplete registration. Signing out user to prevent invalid state.");
-            
-            // Sign out the user since they don't have a valid profile
-            await signOut(auth);
-            setUser(null);
-            return; // Exit early to prevent further processing
+            // Check if this is a Google sign-in (providerData will contain google.com)
+            const isGoogleSignIn = firebaseUser.providerData?.some(
+              (p) => p.providerId === 'google.com'
+            );
+
+            if (isGoogleSignIn) {
+              // New Google user — create a minimal profile marked as incomplete.
+              // This runs in onAuthStateChanged which fires BEFORE loginWithGoogle's
+              // setDoc could run, preventing the race condition where the listener
+              // signs out the user before the doc is created.
+              console.log("Google sign-in detected with no Firestore profile. Creating incomplete profile for:", firebaseUser.uid);
+              await setDoc(doc(db, 'users', firebaseUser.uid), {
+                name: firebaseUser.displayName || 'مستخدم جديد',
+                email: firebaseUser.email || '',
+                role: 'student',
+                avatar: firebaseUser.photoURL || null,
+                created_at: serverTimestamp(),
+                updated_at: serverTimestamp(),
+                last_active_at: serverTimestamp(),
+                status: 'active',
+                email_verified_at: serverTimestamp(),
+                profile_incomplete: true,
+                sso_provider: 'google',
+                school_id: null,
+                phone: null,
+                bio: null,
+                grade: null,
+                subject: null,
+                city: null,
+                gender: null,
+                languages: ['العربية'],
+              });
+
+              const userProfile = {
+                id: firebaseUser.uid,
+                email: firebaseUser.email || '',
+                name: firebaseUser.displayName || 'مستخدم جديد',
+                role: 'student' as const,
+                avatar: firebaseUser.photoURL || undefined,
+                createdAt: new Date().toISOString(),
+                status: 'active',
+                emailVerified: firebaseUser.emailVerified,
+                profile_incomplete: true,
+                sso_provider: 'google' as const,
+                cachedAt: Date.now()
+              };
+              sessionStorage.setItem('userProfile', JSON.stringify(userProfile));
+              setUser(userProfile);
+            } else {
+              console.error("CRITICAL: User document doesn't exist for authenticated user:", firebaseUser.uid);
+              console.log("This indicates an incomplete registration. Signing out user to prevent invalid state.");
+
+              // Sign out the user since they don't have a valid profile
+              await signOut(auth);
+              setUser(null);
+              return; // Exit early to prevent further processing
+            }
           }
         } catch (error: any) {
           // Handle various Firebase errors gracefully
@@ -774,39 +824,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: 'select_account' });
-      const { user: firebaseUser } = await signInWithPopup(auth, provider);
+      await signInWithPopup(auth, provider);
 
-      // Check if user document already exists in Firestore
-      const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
-      if (!userDoc.exists()) {
-        // New Google user — create a minimal profile marked as incomplete.
-        // The user will be redirected to /complete-profile to choose their role
-        // and fill in the required details.
-        await setDoc(doc(db, 'users', firebaseUser.uid), {
-          name: firebaseUser.displayName || 'مستخدم جديد',
-          email: firebaseUser.email || '',
-          role: 'student',
-          avatar: firebaseUser.photoURL || null,
-          created_at: serverTimestamp(),
-          updated_at: serverTimestamp(),
-          last_active_at: serverTimestamp(),
-          status: 'active',
-          email_verified_at: serverTimestamp(),
-          profile_incomplete: true,
-          sso_provider: 'google',
-          school_id: null,
-          phone: null,
-          bio: null,
-          grade: null,
-          subject: null,
-          city: null,
-          gender: null,
-          languages: ['العربية'],
-        });
-      }
-
-      // The onAuthStateChanged listener will handle setting the user state
-      // and the ProtectedRoute will redirect to /complete-profile if needed
+      // The onAuthStateChanged listener handles creating the Firestore profile
+      // for new Google users and redirecting to /complete-profile if needed.
+      // We intentionally do NOT create the doc here to avoid a race condition
+      // where the listener fires before this code runs and signs the user out.
     } catch (error: any) {
       if (error.code === 'auth/network-request-failed' || error.code === 'unavailable') {
         console.warn('Network request failed during Google login:', error.message);
