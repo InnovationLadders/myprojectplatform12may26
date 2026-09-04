@@ -1,18 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { GraduationCap, Loader as Loader2, CircleAlert as AlertCircle } from 'lucide-react';
 import { signInWithCustomToken } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
+import { useAuth } from '../../contexts/AuthContext';
 
 export const KfupmCallback: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState('جاري إكمال تسجيل الدخول...');
+  const { user, loading } = useAuth();
+  const [tokenProcessed, setTokenProcessed] = useState(false);
+  const processedRef = useRef(false);
+  const userRef = useRef(user);
+
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
 
   useEffect(() => {
     const completeLogin = async () => {
+      if (processedRef.current) return;
+      processedRef.current = true;
+
       const token = searchParams.get('token');
 
       if (!token) {
@@ -23,19 +35,13 @@ export const KfupmCallback: React.FC = () => {
       try {
         setStatus('جاري التحقق من حسابك...');
         await signInWithCustomToken(auth, token);
-        setStatus('تم تسجيل الدخول بنجاح! جاري التحويل...');
-
-        // Give AuthContext time to pick up the new user
-        setTimeout(() => {
-          // The ProtectedRoute will redirect to /complete-profile if
-          // the SSO user's profile is incomplete, otherwise to /home
-          navigate('/home', { replace: true });
-        }, 1500);
+        setStatus('تم تسجيل الدخول بنجاح! جاري تجهيز بيئة العمل...');
+        setTokenProcessed(true);
       } catch (err) {
         console.error('[KfupmCallback] Sign-in failed:', err);
         const errCode = (err as any)?.code || '';
         if (errCode === 'auth/invalid-custom-token') {
-          setError('رمز المصادقة غير صالح. يرجى المحاولة مرة أخرى.');
+          setError('رمز المصادقة غير صالح أو منتهي الصلاحية. يرجى المحاولة مرة أخرى.');
         } else if (errCode === 'auth/network-request-failed') {
           setError('فشل الاتصال بالشبكة. يرجى التحقق من اتصال الإنترنت.');
         } else {
@@ -45,7 +51,25 @@ export const KfupmCallback: React.FC = () => {
     };
 
     completeLogin();
-  }, [searchParams, navigate]);
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (tokenProcessed && !loading) {
+      if (user) {
+        // The ProtectedRoute will redirect to /complete-profile if
+        // the SSO user's profile is incomplete, otherwise to /home
+        navigate('/home', { replace: true });
+      } else {
+        // Wait a bit before showing an error in case of delay
+        const timer = setTimeout(() => {
+          if (!userRef.current) {
+            setError('استغرق تحميل بيانات المستخدم وقتاً طويلاً. يرجى تحديث الصفحة أو المحاولة مرة أخرى.');
+          }
+        }, 10000); // 10 seconds to allow for Firestore retries
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [tokenProcessed, loading, user, navigate]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50 flex items-center justify-center p-4">
