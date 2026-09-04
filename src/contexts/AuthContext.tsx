@@ -139,7 +139,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       try {
         try {
-          const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+          // Add a retry mechanism for fetching the user document to handle race conditions
+          // with custom token sign-ins (like KFUPM SSO) where the Cloud Function might
+          // take a moment to write the Firestore document.
+          let userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+          
+          if (!userDoc.exists() && firebaseUser.providerData?.length === 0) {
+            console.log('⏳ AuthProvider: Custom token user detected without a profile. Retrying fetch...');
+            for (let i = 0; i < 3; i++) {
+              await new Promise(r => setTimeout(r, 1000));
+              userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+              if (userDoc.exists()) break;
+            }
+          }
+
           console.log('📄 AuthProvider: User document exists:', userDoc.exists());
 
           if (userDoc.exists()) {
@@ -294,17 +307,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             sessionStorage.setItem('userProfile', JSON.stringify(userProfile));
             setUser(userProfile);
           } else {
-            // Check if this is a Google sign-in (providerData will contain google.com)
+            // Check if this is a Google sign-in or a custom token sign-in (like KFUPM SSO)
             const isGoogleSignIn = firebaseUser.providerData?.some(
               (p) => p.providerId === 'google.com'
             );
+            const isCustomTokenSignIn = firebaseUser.providerData?.length === 0;
 
-            if (isGoogleSignIn) {
+            if (isGoogleSignIn || isCustomTokenSignIn) {
               // New Google user — create a minimal profile marked as incomplete.
               // This runs in onAuthStateChanged which fires BEFORE loginWithGoogle's
               // setDoc could run, preventing the race condition where the listener
               // signs out the user before the doc is created.
-              console.log("Google sign-in detected with no Firestore profile. Creating incomplete profile for:", firebaseUser.uid);
+              console.log("SSO sign-in detected with no Firestore profile. Creating incomplete profile for:", firebaseUser.uid);
+              const ssoProvider = isGoogleSignIn ? 'google' : 'kfupm';
               await setDoc(doc(db, 'users', firebaseUser.uid), {
                 name: firebaseUser.displayName || 'مستخدم جديد',
                 email: firebaseUser.email || '',
@@ -316,7 +331,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 status: 'active',
                 email_verified_at: serverTimestamp(),
                 profile_incomplete: true,
-                sso_provider: 'google',
+                sso_provider: ssoProvider,
                 school_id: null,
                 phone: null,
                 bio: null,
@@ -337,7 +352,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 status: 'active',
                 emailVerified: firebaseUser.emailVerified,
                 profile_incomplete: true,
-                sso_provider: 'google' as const,
+                sso_provider: ssoProvider,
                 cachedAt: Date.now()
               };
               sessionStorage.setItem('userProfile', JSON.stringify(userProfile));

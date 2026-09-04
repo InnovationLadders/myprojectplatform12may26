@@ -33,7 +33,8 @@ export const SSOProfileCompletion: React.FC = () => {
   const { schoolId: subdomainSchoolId, schoolName: subdomainSchoolName } = useSchoolBranding();
 
   const isGoogleUser = user?.sso_provider === 'google';
-  const hasExistingRole = isGoogleUser ? false : !!user?.role;
+  const isKfupmUser = user?.sso_provider === 'kfupm';
+  const hasExistingRole = (isGoogleUser || isKfupmUser) ? !!user?.role : false;
   const isStudent = hasExistingRole && user?.role === 'student';
   const isTeacher = hasExistingRole && user?.role === 'teacher';
 
@@ -42,11 +43,11 @@ export const SSOProfileCompletion: React.FC = () => {
     phone: '',
     city: '',
     grade: '',
-    schoolIdNumber: '',
+    schoolIdNumber: user?.sso_upn || '',
     gender: '' as 'male' | 'female' | '',
     subject: '',
     bio: '',
-    school_id: '',
+    school_id: user?.school_id || '',
     specializations: [] as string[],
     otherSpecialization: '',
     experience_years: 0,
@@ -64,14 +65,8 @@ export const SSOProfileCompletion: React.FC = () => {
   const [isSubdomainRegistration, setIsSubdomainRegistration] = useState(false);
 
   useEffect(() => {
-    if (user?.sso_upn) {
-      setFormData(prev => ({ ...prev, schoolIdNumber: user.sso_upn || '' }));
-    }
-  }, [user]);
-
-  useEffect(() => {
     const fetchSchools = async () => {
-      if (!isGoogleUser) {
+      if (!isGoogleUser && !isKfupmUser) {
         setSchoolsLoading(false);
         return;
       }
@@ -121,7 +116,7 @@ export const SSOProfileCompletion: React.FC = () => {
     e.preventDefault();
     setError('');
 
-    if (isGoogleUser && !formData.role) {
+    if (!hasExistingRole && !formData.role) {
       setError('الرجاء اختيار نوع الحساب');
       return;
     }
@@ -134,7 +129,7 @@ export const SSOProfileCompletion: React.FC = () => {
       return;
     }
 
-    const selectedRole = isGoogleUser ? formData.role : user?.role;
+    const selectedRole = !hasExistingRole ? formData.role : user?.role;
 
     if (selectedRole === 'student' && !formData.grade) {
       setError('الرجاء تحديد الصف الدراسي');
@@ -254,8 +249,10 @@ export const SSOProfileCompletion: React.FC = () => {
             </motion.div>
             <h1 className="text-2xl font-bold text-gray-800 mb-2">استكمال البيانات</h1>
             <p className="text-gray-600 text-sm">
-              {isGoogleUser
+              {user?.sso_provider === 'google'
                 ? 'تم تسجيل دخولك بنجاح عبر حساب جوجل. الرجاء استكمال بياناتك للمتابعة.'
+                : user?.sso_provider === 'kfupm'
+                ? 'تم تسجيل دخولك بنجاح عبر حساب جامعة الملك فهد. الرجاء استكمال بياناتك للمتابعة.'
                 : 'تم تسجيل دخولك بنجاح. الرجاء استكمال بياناتك للمتابعة.'}
             </p>
           </div>
@@ -281,8 +278,8 @@ export const SSOProfileCompletion: React.FC = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Role Selection — only for Google users who don't have a role yet */}
-            {isGoogleUser && (
+            {/* Role Selection — only for SSO users who don't have a role yet */}
+            {!hasExistingRole && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   نوع الحساب
