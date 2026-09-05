@@ -5,6 +5,7 @@ import {
   User, Mail, Phone, Building, GraduationCap,
   CircleCheck as CheckCircle, TriangleAlert as AlertTriangle,
   Send, Calendar, MapPin, Info, MessageSquare, Presentation,
+  Clock, Video,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { addLectureRegistration } from '../lib/firebase';
@@ -127,6 +128,18 @@ export const LectureRegistration: React.FC = () => {
               <Info className="w-5 h-5 opacity-80" />
               <span className="text-sm font-medium">
                 {t('lectureRegistration.lectureDay')}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Clock className="w-5 h-5 opacity-80" />
+              <span className="text-sm font-medium">
+                {t('lectureRegistration.lectureTime')}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Video className="w-5 h-5 opacity-80" />
+              <span className="text-sm font-medium">
+                {t('lectureRegistration.lectureMode')}
               </span>
             </div>
           </div>
@@ -330,6 +343,12 @@ export const LectureRegistration: React.FC = () => {
                       <ul className="space-y-1 text-blue-700 text-sm">
                         <li>{t('lectureRegistration.infoPoints.point1')}</li>
                         <li>{t('lectureRegistration.infoPoints.point2')}</li>
+                        {t('lectureRegistration.infoPoints.point3', { defaultValue: '' }) && (
+                          <li>{t('lectureRegistration.infoPoints.point3')}</li>
+                        )}
+                        {t('lectureRegistration.infoPoints.point4', { defaultValue: '' }) && (
+                          <li>{t('lectureRegistration.infoPoints.point4')}</li>
+                        )}
                       </ul>
                     </div>
                   </div>

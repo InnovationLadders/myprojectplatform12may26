@@ -2420,6 +2420,8 @@
     "lectureSubtitle": "Introductory lecture on Project-Based Learning methodology",
     "lectureDate": "September 14, 2026",
     "lectureDay": "Monday",
+    "lectureTime": "9:00 - 10:00 PM",
+    "lectureMode": "Remote / Online",
     "formTitle": "Attendance Registration",
     "formSubtitle": "Please fill out the form to register for the lecture",
     "fields": {
@@ -2455,14 +2457,15 @@
     },
     "infoTitle": "Important Information",
     "infoPoints": {
-      "point1": "A confirmation will be sent to your email.",
-      "point2": "Please arrive 15 minutes before the lecture.",
-      "point3": "Registration is open to all and free of charge."
+      "point1": "A confirmation and the remote lecture link will be sent to your email.",
+      "point2": "Please join 5 minutes before the lecture starts.",
+      "point3": "Registration is open to all and free of charge.",
+      "point4": "The lecture is remote, from 9:00 to 10:00 PM."
     },
     "submit": "Register",
     "submitting": "Registering...",
     "successTitle": "Registration Successful!",
-    "successMessage": "Thank you! You have been registered for the \"Project-Based Learning PBL\" lecture. We look forward to seeing you on September 14, 2026.",
+    "successMessage": "Thank you! You have been registered for the \"Project-Based Learning PBL\" lecture. We look forward to seeing you on September 14, 2026, from 9:00 to 10:00 PM (remote / online).",
     "registerAnother": "Register Another Person",
     "backHome": "Back to Home",
     "admin": {
