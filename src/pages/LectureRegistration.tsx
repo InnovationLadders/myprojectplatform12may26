@@ -330,7 +330,6 @@ export const LectureRegistration: React.FC = () => {
                       <ul className="space-y-1 text-blue-700 text-sm">
                         <li>{t('lectureRegistration.infoPoints.point1')}</li>
                         <li>{t('lectureRegistration.infoPoints.point2')}</li>
-                        <li>{t('lectureRegistration.infoPoints.point3')}</li>
                       </ul>
                     </div>
                   </div>
