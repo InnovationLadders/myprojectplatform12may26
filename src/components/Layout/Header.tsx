@@ -27,24 +27,33 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   console.log('🔍 Header Debug - Full user object:', user);
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [showNotificationsDropdown, setShowNotificationsDropdown] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const notificationsDropdownRef = useRef<HTMLDivElement>(null);
+  const profileMenuRef = useRef<HTMLDivElement>(null);
+  const languageMenuRef = useRef<HTMLDivElement>(null);
   const searchModalRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown when clicking outside
+  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (notificationsDropdownRef.current && !notificationsDropdownRef.current.contains(event.target as Node)) {
         setShowNotificationsDropdown(false);
+      }
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target as Node)) {
+        setShowProfileMenu(false);
+      }
+      if (languageMenuRef.current && !languageMenuRef.current.contains(event.target as Node)) {
+        setShowLanguageMenu(false);
       }
       if (searchModalRef.current && !searchModalRef.current.contains(event.target as Node)) {
         setShowSearchModal(false);
       }
     };
 
-    if (showNotificationsDropdown || showSearchModal) {
+    if (showNotificationsDropdown || showSearchModal || showProfileMenu || showLanguageMenu) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -53,7 +62,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showNotificationsDropdown, showSearchModal]);
+  }, [showNotificationsDropdown, showSearchModal, showProfileMenu, showLanguageMenu]);
 
   const unreadCount = getUnreadCount();
 
@@ -91,7 +100,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   };
 
   return (
-    <header className="bg-white border-b border-gray-200 px-3 md:px-6 py-2 md:py-4">
+    <header className="bg-white border-b border-gray-200 px-3 md:px-6 py-2 md:py-4 overflow-visible">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 md:gap-4">
           <button
@@ -130,7 +139,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           <RewardsWidget />
 
           {/* Language Switcher */}
-          <div className="relative">
+          <div className="relative" ref={languageMenuRef}>
             <button
               onClick={() => setShowLanguageMenu(!showLanguageMenu)}
               className="p-1.5 md:p-2 rounded-lg hover:bg-gray-100 transition-colors flex items-center gap-1"
@@ -140,7 +149,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
             </button>
             
             {showLanguageMenu && (
-              <div className="absolute top-full right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+              <div className="absolute top-full right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 z-50 min-w-[120px]">
                 <button 
                   onClick={() => changeLanguage('ar')}
                   className={`block w-full text-right px-4 py-2 text-sm hover:bg-gray-50 ${i18n.language === 'ar' ? 'font-bold text-blue-600' : ''}`}
@@ -289,8 +298,11 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                 </p>
               )}
             </div>
-            <div className="relative group">
-              <button className="border-2 border-gray-200 hover:border-blue-500 transition-colors rounded-full">
+            <div className="relative" ref={profileMenuRef}>
+              <button
+                onClick={() => setShowProfileMenu(!showProfileMenu)}
+                className="border-2 border-gray-200 hover:border-blue-500 transition-colors rounded-full"
+              >
                 <AvatarDisplay
                   avatarUrl={user?.avatar}
                   userName={user?.name}
@@ -299,23 +311,40 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                 />
               </button>
               
-              <div className="absolute left-0 top-12 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                <div className="p-2">
-                  <Link to="/settings" className="w-full text-right px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md block">
-                    {t('header.profile')}
-                  </Link>
-                  <Link to="/settings" className="w-full text-right px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md block">
-                    {t('header.settings')}
-                  </Link>
-                  <hr className="my-1" />
-                  <button
-                    onClick={() => logout(() => navigate('/'))}
-                    className="w-full text-right px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md"
-                  >
-                    {t('header.logout')}
-                  </button>
-                </div>
-              </div>
+              {showProfileMenu && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+                  style={{ right: 0 }}
+                >
+                  <div className="p-2">
+                    <Link
+                      to="/settings"
+                      className="w-full text-right px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md block"
+                      onClick={() => setShowProfileMenu(false)}
+                    >
+                      {t('header.profile')}
+                    </Link>
+                    <Link
+                      to="/settings"
+                      className="w-full text-right px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md block"
+                      onClick={() => setShowProfileMenu(false)}
+                    >
+                      {t('header.settings')}
+                    </Link>
+                    <hr className="my-1" />
+                    <button
+                      onClick={() => { setShowProfileMenu(false); logout(() => navigate('/')); }}
+                      className="w-full text-right px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md"
+                    >
+                      {t('header.logout')}
+                    </button>
+                  </div>
+                </motion.div>
+              )}
             </div>
           </div>
         </div>
