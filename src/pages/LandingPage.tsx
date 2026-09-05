@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSchoolBranding } from '../contexts/SchoolBrandingContext';
 import { useFeaturedVideos } from '../hooks/useFeaturedVideos';
-import { Lightbulb, Users, MessageCircle, ShoppingCart, Bot, GalleryVertical, Shield, ArrowLeft, Star, Award, BookOpen, CircleCheck as CheckCircle, DollarSign, Truck, Globe, Target, Play } from 'lucide-react';
+import { Lightbulb, Users, MessageCircle, ShoppingCart, Bot, GalleryVertical, Shield, ArrowLeft, Star, Award, BookOpen, CircleCheck as CheckCircle, DollarSign, Truck, Globe, Target, Play, Calendar } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
   const { t, i18n } = useTranslation();
