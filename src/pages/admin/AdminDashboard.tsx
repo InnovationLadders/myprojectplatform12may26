@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { LayoutDashboard, Users, BookOpen, Lightbulb, Video, Calendar, ChartBar as BarChart3, Settings, School, TrendingUp, Award, Clock, CircleCheck as CheckCircle, TriangleAlert as AlertTriangle, Database, Building, Wrench, Play } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, Lightbulb, Video, Calendar, ChartBar as BarChart3, Settings, School, TrendingUp, Award, Clock, CircleCheck as CheckCircle, TriangleAlert as AlertTriangle, Database, Building, Wrench, Play, Presentation } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ClasseraIntegration } from '../../components/Admin/ClasseraIntegration';
 
@@ -31,6 +31,7 @@ export const AdminDashboard: React.FC = () => {
     { id: 'videos', name: 'الفيديوهات التعليمية', icon: Video },
     { id: 'featured-videos', name: 'فيديوهات الصفحة الرئيسية', icon: Play },
     { id: 'summer-program', name: 'البرنامج الصيفي', icon: Calendar },
+    { id: 'lecture-registration', name: 'تسجيلات الحضور', icon: Presentation },
     { id: 'school-customization', name: 'تخصيص المؤسسات', icon: Building },
     // Hidden until service is ready
     // { id: 'classera', name: 'تكامل Classera', icon: School },
@@ -117,6 +118,13 @@ export const AdminDashboard: React.FC = () => {
       icon: Calendar,
       link: '/admin/summer-program-registrations',
       color: 'from-blue-500 to-indigo-500'
+    },
+    {
+      title: 'تسجيلات حضور المحاضرات',
+      description: 'مراجعة وإدارة تسجيلات الحضور للمحاضرات',
+      icon: Presentation,
+      link: '/admin/lecture-registrations',
+      color: 'from-teal-500 to-cyan-500'
     },
     {
       title: 'إدارة المستخدمين',
@@ -335,6 +343,21 @@ export const AdminDashboard: React.FC = () => {
               <Link
                 to="/admin/summer-program-registrations"
                 className="px-6 py-2 bg-indigo-500 text-white rounded-xl hover:bg-indigo-600 transition-colors"
+              >
+                عرض التسجيلات
+              </Link>
+            </div>
+          )}
+
+          {/* Lecture Registration Tab */}
+          {activeTab === 'lecture-registration' && (
+            <div className="text-center py-8">
+              <Presentation className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">تسجيلات حضور المحاضرات</h3>
+              <p className="text-gray-600 mb-4">مراجعة وإدارة تسجيلات الحضور للمحاضرات</p>
+              <Link
+                to="/admin/lecture-registrations"
+                className="px-6 py-2 bg-teal-500 text-white rounded-xl hover:bg-teal-600 transition-colors"
               >
                 عرض التسجيلات
               </Link>

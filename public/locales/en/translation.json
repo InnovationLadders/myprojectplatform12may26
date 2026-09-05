@@ -1,12 +1,11 @@
 {
   "appName": "MyProject",
   "appTagline": "Students Projects Platform",
-  
   "common": {
     "user": "User",
     "loading": "Loading...",
     "sending": "Sending...",
-    "error": "An error occurred",
+    "error": "Error",
     "save": "Save",
     "cancel": "Cancel",
     "edit": "Edit",
@@ -57,7 +56,6 @@
     "success": "Success",
     "warning": "Warning",
     "info": "Information",
-    "error": "Error",
     "clearAll": "Clear All",
     "progress": "Progress",
     "progressScore": "Completion Percentage",
@@ -96,7 +94,6 @@
     "viewAll": "View All",
     "tags": "Tags"
   },
-  
   "roles": {
     "student": "Student",
     "teacher": "Supervisor",
@@ -105,7 +102,6 @@
     "consultant": "Consultant",
     "investor": "Investor"
   },
-  
   "header": {
     "searchProjects": "Search projects...",
     "profile": "Profile",
@@ -113,7 +109,6 @@
     "logout": "Logout",
     "notifications": "Notifications"
   },
-  
   "sidebar": {
     "home": "Home",
     "dashboard": "Dashboard",
@@ -141,11 +136,20 @@
     "summerProgram": "Summer Program",
     "entrepreneurshipSubmissions": "Entrepreneurship"
   },
-  
   "auth": {
     "login": "Login",
     "register": "Register",
-    "forgotPassword": "Forgot Password?",
+    "forgotPassword": {
+      "link": "Forgot Password?",
+      "title": "Reset Password",
+      "description": "Enter your email address and we'll send you a link to reset your password",
+      "emailPlaceholder": "Enter your email",
+      "sendButton": "Send Reset Link",
+      "emailRequired": "Email is required",
+      "invalidEmail": "Invalid email address",
+      "successMessage": "Password reset link has been sent to your email. Please check your inbox.",
+      "sendError": "An error occurred while sending the email. Please try again."
+    },
     "noAccount": "Don't have an account?",
     "haveAccount": "Already have an account?",
     "createAccount": "Create Account",
@@ -171,20 +175,8 @@
     "networkError": "Network connection error. Please check your internet connection.",
     "emailNotConfirmed": "Please confirm your email before logging in.",
     "tooManyRequests": "Too many attempts. Please try again later.",
-    "byLoggingIn": "By logging in, you agree to our",
-    "forgotPassword": {
-      "link": "Forgot Password?",
-      "title": "Reset Password",
-      "description": "Enter your email address and we'll send you a link to reset your password",
-      "emailPlaceholder": "Enter your email",
-      "sendButton": "Send Reset Link",
-      "emailRequired": "Email is required",
-      "invalidEmail": "Invalid email address",
-      "successMessage": "Password reset link has been sent to your email. Please check your inbox.",
-      "sendError": "An error occurred while sending the email. Please try again."
-    }
+    "byLoggingIn": "By logging in, you agree to our"
   },
-  
   "pendingActivation": {
     "title": "Your Account is Under Review",
     "description": {
@@ -212,7 +204,6 @@
     "refreshPage": "Refresh Page",
     "logout": "Logout"
   },
-  
   "home": {
     "welcome": "Welcome to MyProject",
     "tagline": "Modern Educational Projects Management Platform",
@@ -220,14 +211,24 @@
     "exploreIdeas": "Explore Ideas",
     "manageProjects": "Manage Projects",
     "features": {
-      "clearGoals": "Clear Goals",
-      "clearGoalsDesc": "Clearly define project objectives",
-      "timeManagement": "Time Management",
-      "timeManagementDesc": "Track deadlines and scheduling",
-      "teamwork": "Teamwork",
-      "teamworkDesc": "Effective collaboration between students",
-      "evaluation": "Evaluation",
-      "evaluationDesc": "Comprehensive project evaluation"
+      "projectIdeas": {
+        "description": "Explore a rich library of creative project ideas across various educational and technical fields"
+      },
+      "projects": {
+        "description": "Create and manage your educational projects easily with advanced tracking and collaboration tools"
+      },
+      "consultations": {
+        "description": "Get personalized consultations from specialized experts and supervisors to support your projects"
+      },
+      "store": {
+        "description": "Shop for tools and materials needed to implement your educational and technical projects"
+      },
+      "aiAssistant": {
+        "description": "Benefit from the AI assistant to get instant answers and help with problem-solving"
+      },
+      "gallery": {
+        "description": "Browse the gallery of outstanding projects and get inspired by student achievements"
+      }
     },
     "stats": {
       "activeUsers": "Active Users",
@@ -240,26 +241,6 @@
       "description": "Discover a comprehensive set of tools and services designed to enhance project-based learning",
       "exploreMore": "Explore More"
     },
-     "features": {
-       "projectIdeas": {
-         "description": "Explore a rich library of creative project ideas across various educational and technical fields"
-       },
-       "projects": {
-         "description": "Create and manage your educational projects easily with advanced tracking and collaboration tools"
-       },
-       "consultations": {
-         "description": "Get personalized consultations from specialized experts and supervisors to support your projects"
-       },
-       "store": {
-         "description": "Shop for tools and materials needed to implement your educational and technical projects"
-       },
-       "aiAssistant": {
-         "description": "Benefit from the AI assistant to get instant answers and help with problem-solving"
-       },
-       "gallery": {
-         "description": "Browse the gallery of outstanding projects and get inspired by student achievements"
-       }
-     },
     "testimonials": {
       "title": "User Testimonials",
       "subtitle": "What MyProject users say about their experience"
@@ -271,7 +252,6 @@
       "createProject": "Create New Project"
     }
   },
-  
   "landingPage": {
     "welcomeMessage": "Our Future Scientists.",
     "featuredVideos": {
@@ -338,7 +318,6 @@
       "content3": "The platform helped us organize and manage student projects efficiently and track their progress."
     }
   },
-  
   "summerProgram": {
     "title": "Summer Program \"SaifiTech\"",
     "subtitle": "Summer training program for students in technology and innovation",
@@ -519,7 +498,6 @@
       "rejectError": "An error occurred while rejecting the registration"
     }
   },
-  
   "aiAssistant": {
     "title": "AI Assistant",
     "subtitle": "Your personal learning and creativity assistant",
@@ -594,7 +572,6 @@
       }
     }
   },
-  
   "search": {
     "title": "Find Consultants",
     "subtitle": "Search for specialized consultants in various fields",
@@ -621,7 +598,6 @@
     "noConsultantsFound": "No consultants found",
     "tryChangingFilters": "Try changing your search criteria or filters"
   },
-  
   "favorites": {
     "title": "Favorite Consultants",
     "subtitle": "Your list of favorite consultants",
@@ -650,7 +626,6 @@
     "noFavoritesMatch": "No consultants match your search criteria",
     "searchConsultants": "Search for Consultants"
   },
-  
   "consultations": {
     "title": "Consultations",
     "subtitle": "Get help from supervisors and consultants",
@@ -762,7 +737,6 @@
       }
     }
   },
-  
   "myConsultations": {
     "title": "My Consultations",
     "subtitle": "Manage your consultation requests",
@@ -789,7 +763,6 @@
     "noRequests": "No requests",
     "noRequestsMatch": "No consultation requests match your search criteria"
   },
-  
   "projects": {
     "title": "Project Management",
     "subtitle": "Track and manage all your student projects",
@@ -849,7 +822,6 @@
     "completedTasks": "Completed tasks",
     "defaultSchoolName": "Educational Institution"
   },
-  
   "projectIdeas": {
     "title": "Project Ideas",
     "subtitle": "Discover a variety of creative project ideas",
@@ -927,7 +899,6 @@
       "englishTags": "Tags in English"
     }
   },
-  
   "store": {
     "title": "Store",
     "subtitle": "Tools and materials for educational projects",
@@ -991,7 +962,6 @@
       "easyReturnsDesc": "Flexible 30-day return policy"
     }
   },
-  
   "intellectualProperty": {
     "title": "Intellectual Property",
     "subtitle": "Protect and register students' creative ideas and projects",
@@ -1088,7 +1058,6 @@
       "errorMessage": "An error occurred while submitting the intellectual property request"
     }
   },
-  
   "resources": {
     "title": "Learning Resources",
     "subtitle": "Comprehensive library of educational and training resources",
@@ -1147,7 +1116,6 @@
     "noResourcesFound": "No resources found",
     "tryChangingFilters": "Try changing your search criteria or filters"
   },
-  
   "settings": {
     "title": "Settings",
     "subtitle": "Manage your account settings and platform preferences",
@@ -1317,7 +1285,6 @@
       "noteDesc": "Ranking includes only your institution's students. Students do not see a ranking compared to students from other institutions. The service operates independently for each institution."
     }
   },
-  
   "createProject": {
     "title": "Create New Project",
     "subtitle": "Create a new educational project for students",
@@ -1393,7 +1360,6 @@
       "creationFailed": "Error creating project"
     }
   },
-  
   "editProject": {
     "title": "Edit Project",
     "subtitle": "Update and modify your project details",
@@ -1409,7 +1375,6 @@
     "addRemoveStudents": "Add or remove students participating in the project",
     "changesWillAffect": "Changes to the student list will be reflected immediately in the project"
   },
-
   "projectDetails": {
     "supervisorTeacher": "Supervisor",
     "selectTeacher": "Select Supervisor",
@@ -1421,7 +1386,6 @@
     "projectApproved": "Project approved successfully",
     "approving": "Approving..."
   },
-
   "cart": {
     "title": "Shopping Cart",
     "subtitle": "Review and manage your products",
@@ -1462,7 +1426,6 @@
     "qualityGuarantee": "Quality Guarantee",
     "returnPolicy": "30-day return guarantee"
   },
-
   "checkout": {
     "title": "Checkout",
     "subtitle": "Enter shipping and payment information",
@@ -1542,7 +1505,6 @@
       "processingError": "An error occurred while processing the order. Please try again."
     }
   },
-
   "gallery": {
     "title": "Project Gallery",
     "subtitle": "Explore outstanding and inspiring projects from our students",
@@ -1609,7 +1571,6 @@
     "of": "of",
     "project": "project"
   },
-
   "investorRequests": {
     "title": "Investor Requests",
     "subtitle": "Track and manage investor interest in student projects",
@@ -1646,7 +1607,6 @@
     "editResponse": "Edit Response",
     "respondAndUpdate": "Respond & Update"
   },
-
   "register": {
     "title": "Create New Account",
     "creating": "Creating account...",
@@ -1761,7 +1721,6 @@
     "accountCreationError": "An error occurred while creating the account",
     "schoolPlaceholder": "Enter the educational institution name"
   },
-
   "pointsDetails": {
     "title": "Points Calculation Details",
     "subtitle": "Detailed breakdown for {{name}}",
@@ -1785,7 +1744,6 @@
     "noData": "No data available",
     "loadError": "Unable to load points details. Please try again."
   },
-
   "consultant": {
     "dashboard": {
       "title": "Consultant Dashboard",
@@ -1816,7 +1774,6 @@
       "totalReviews": "Total Reviews"
     }
   },
-
   "projectEvaluation": {
     "title": "Project Evaluation",
     "overallScore": "Weighted Score",
@@ -1839,7 +1796,6 @@
     "cannotLoadForm": "Cannot load evaluation form. Please try again later.",
     "errorOccurred": "An error occurred"
   },
-
   "projectChat": {
     "title": "Team Chat",
     "createMeeting": "Create Meeting",
@@ -1878,7 +1834,6 @@
     "errorDeletingMessage": "An error occurred while deleting the message",
     "unknownUser": "Unknown user"
   },
-
   "reports": {
     "title": "Reports and Statistics",
     "subtitle": "Comprehensive analysis of platform and project performance",
@@ -1924,7 +1879,7 @@
     "categories": {
       "stem": "Science & Technology",
       "entrepreneurship": "Entrepreneurship",
-      "volunteer": "Volunteering",
+      "volunteer": "Volunteer",
       "ethics": "Ethics"
     },
     "statuses": {
@@ -1932,22 +1887,6 @@
       "active": "Active",
       "draft": "Draft",
       "archived": "Archived"
-    },
-    "metrics": {
-      "totalProjects": "Total Projects",
-      "activeProjects": "Active Projects",
-      "averageProgress": "Average Progress",
-      "averageRating": "Average Rating"
-    },
-    "charts": {
-      "monthlyProgress": "Monthly Project Progress",
-      "projectsByCategory": "Projects by Category",
-      "progressDistribution": "Progress Distribution"
-    },
-    "charts": {
-      "projectsTrend": "Monthly Projects Trend",
-      "categoryDistribution": "Projects by Category",
-      "progressDistribution": "Progress Distribution"
     },
     "metrics": {
       "totalProjects": "Total Projects",
@@ -1957,17 +1896,10 @@
       "weightedRating": "Average Weighted Rating",
       "completionRate": "Project Completion Rate"
     },
-    "categories": {
-      "stem": "Science & Technology",
-      "entrepreneurship": "Entrepreneurship",
-      "volunteer": "Volunteer",
-      "ethics": "Ethics"
-    },
-    "statuses": {
-      "completed": "Completed",
-      "active": "Active",
-      "draft": "Draft",
-      "archived": "Archived"
+    "charts": {
+      "projectsTrend": "Monthly Projects Trend",
+      "categoryDistribution": "Projects by Category",
+      "progressDistribution": "Progress Distribution"
     },
     "performance": {
       "progressDistribution": "Progress Distribution",
@@ -2034,7 +1966,6 @@
     "errorOccurred": "An error occurred",
     "errorMessage": "Error"
   },
-
   "reportTable": {
     "searchPlaceholder": "Search...",
     "showing": "Showing",
@@ -2046,7 +1977,6 @@
     "noData": "No data available",
     "exportError": "An error occurred while exporting data"
   },
-
   "dashboard": {
     "welcome": "Welcome back, {{name}}!",
     "subtitle": "Here's what's happening with your projects today",
@@ -2483,6 +2413,105 @@
         "phone": "Phone"
       },
       "acceptance": "By using MyProject platform, you confirm that you have read, understood, and agreed to be bound by these Terms of Use."
+    }
+  },
+  "lectureRegistration": {
+    "lectureTitle": "Project-Based Learning PBL",
+    "lectureSubtitle": "Introductory lecture on Project-Based Learning methodology",
+    "lectureDate": "September 14, 2026",
+    "lectureDay": "Monday",
+    "formTitle": "Attendance Registration",
+    "formSubtitle": "Please fill out the form to register for the lecture",
+    "fields": {
+      "fullName": "Full Name",
+      "email": "Email",
+      "phone": "Phone Number",
+      "affiliation": "School / Organization",
+      "role": "Role",
+      "notes": "Notes"
+    },
+    "placeholders": {
+      "fullName": "Enter your full name",
+      "email": "example@email.com",
+      "phone": "05xxxxxxxx",
+      "affiliation": "Your school or organization",
+      "role": "Select your role",
+      "notes": "Any additional notes (optional)"
+    },
+    "roles": [
+      "Student",
+      "Teacher",
+      "School Principal",
+      "Supervisor",
+      "Parent",
+      "Other"
+    ],
+    "errors": {
+      "required": "Please fill in all required fields",
+      "invalidEmail": "Invalid email address",
+      "invalidPhone": "Phone number must be between 9 and 15 digits",
+      "duplicateEmail": "This email is already registered for this lecture",
+      "general": "An error occurred during registration. Please try again."
+    },
+    "infoTitle": "Important Information",
+    "infoPoints": {
+      "point1": "A confirmation will be sent to your email.",
+      "point2": "Please arrive 15 minutes before the lecture.",
+      "point3": "Registration is open to all and free of charge."
+    },
+    "submit": "Register",
+    "submitting": "Registering...",
+    "successTitle": "Registration Successful!",
+    "successMessage": "Thank you! You have been registered for the \"Project-Based Learning PBL\" lecture. We look forward to seeing you on September 14, 2026.",
+    "registerAnother": "Register Another Person",
+    "backHome": "Back to Home",
+    "admin": {
+      "title": "Lecture Registrations",
+      "searchPlaceholder": "Search by name, email, or organization...",
+      "export": "Export to Excel",
+      "exportSuccess": "Data exported successfully",
+      "exportError": "An error occurred during export",
+      "submittedAt": "Registered At",
+      "status": "Status",
+      "statuses": {
+        "all": "All",
+        "registered": "Registered",
+        "attended": "Attended",
+        "cancelled": "Cancelled"
+      },
+      "stats": {
+        "total": "Total Registrations",
+        "registered": "Registered",
+        "attended": "Attended",
+        "cancelled": "Cancelled"
+      },
+      "attendSuccess": "Marked as attended",
+      "cancelSuccess": "Registration cancelled",
+      "deleteSuccess": "Registration deleted successfully",
+      "updateError": "An error occurred while updating status",
+      "deleteError": "An error occurred while deleting",
+      "attendConfirm": "Are you sure you want to mark this person as attended?",
+      "cancelConfirm": "Are you sure you want to cancel this person's registration?",
+      "deleteConfirm": "Are you sure you want to delete this registration? This action cannot be undone.",
+      "noRegistrations": "No registrations yet",
+      "noRegistrationsDesc": "No registrations have been received for this lecture yet.",
+      "actions": {
+        "view": "View Details",
+        "markAttended": "Mark as Attended",
+        "markCancelled": "Cancel Registration",
+        "delete": "Delete"
+      },
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "affiliation": "Organization",
+        "role": "Role",
+        "notes": "Notes",
+        "status": "Status",
+        "submittedAt": "Registered At",
+        "actions": "Actions"
+      }
     }
   }
 }

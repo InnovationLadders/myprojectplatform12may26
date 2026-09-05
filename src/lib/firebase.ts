@@ -2123,6 +2123,99 @@ export const deleteSummerProgramRegistration = async (id: string): Promise<void>
   }
 };
 
+// ============================================
+// Lecture Registration Functions
+// ============================================
+
+export interface LectureRegistrationData {
+  id?: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  affiliation: string;
+  role: string;
+  notes?: string;
+  status: 'registered' | 'attended' | 'cancelled';
+  createdAt: string | Date;
+  updatedAt: string | Date;
+}
+
+export const addLectureRegistration = async (data: Omit<LectureRegistrationData, 'id' | 'status' | 'createdAt' | 'updatedAt'>): Promise<string> => {
+  try {
+    const registrationsRef = collection(db, 'lecture_registrations');
+
+    // Prevent duplicate registration by email
+    const existingQuery = query(registrationsRef, where('email', '==', data.email));
+    const existingSnapshot = await getDocs(existingQuery);
+    if (!existingSnapshot.empty) {
+      throw new Error('DUPLICATE_EMAIL');
+    }
+
+    const registrationData = {
+      ...data,
+      status: 'registered',
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    };
+
+    const docRef = await addDoc(registrationsRef, registrationData);
+    return docRef.id;
+  } catch (error) {
+    console.error('Error adding lecture registration:', error);
+    throw error;
+  }
+};
+
+export const getLectureRegistrations = async (): Promise<LectureRegistrationData[]> => {
+  try {
+    const registrationsRef = collection(db, 'lecture_registrations');
+    const registrationsQuery = query(registrationsRef, orderBy('createdAt', 'desc'));
+    const snapshot = await getDocs(registrationsQuery);
+
+    return snapshot.docs.map(docSnap => {
+      const data = docSnap.data();
+      return {
+        id: docSnap.id,
+        fullName: data.fullName || '',
+        email: data.email || '',
+        phone: data.phone || '',
+        affiliation: data.affiliation || '',
+        role: data.role || '',
+        notes: data.notes || '',
+        status: data.status || 'registered',
+        createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+        updatedAt: data.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+      };
+    });
+  } catch (error) {
+    console.error('Error fetching lecture registrations:', error);
+    throw error;
+  }
+};
+
+export const updateLectureRegistration = async (id: string, updates: Partial<LectureRegistrationData>): Promise<void> => {
+  try {
+    const registrationRef = firestoreDoc(db, 'lecture_registrations', id);
+    await updateDoc(registrationRef, {
+      ...updates,
+      updatedAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error('Error updating lecture registration:', error);
+    throw error;
+  }
+};
+
+export const deleteLectureRegistration = async (id: string): Promise<void> => {
+  try {
+    const registrationRef = firestoreDoc(db, 'lecture_registrations', id);
+    await deleteDoc(registrationRef);
+  } catch (error) {
+    console.error('Error deleting lecture registration:', error);
+    throw error;
+  }
+};
+
 // Get projects where user is involved (for notifications)
 export const getProjectsUserIsInvolvedIn = async (userId: string, userRole: string) => {
   return withErrorHandling(async () => {

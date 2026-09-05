@@ -252,6 +252,37 @@ export const LandingPage: React.FC = () => {
         </div>
       </div>
 
+      {/* Lecture Registration Banner */}
+      <div className="py-12 px-4 bg-gradient-to-r from-blue-600 to-teal-600">
+        <div className="max-w-4xl mx-auto text-center text-white">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="inline-flex items-center gap-2 bg-white bg-opacity-20 px-4 py-2 rounded-full text-sm font-medium mb-4">
+              <Calendar className="w-4 h-4" />
+              {isRTL ? 'محاضرة قادمة' : 'Upcoming Lecture'}
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-3" dir={dir}>
+              {isRTL ? 'التعلّم القائم على المشاريع PBL' : 'Project-Based Learning PBL'}
+            </h2>
+            <p className="text-lg opacity-90 mb-2" dir={dir}>
+              {isRTL ? 'الاثنين 14 سبتمبر 2026' : 'Monday, September 14, 2026'}
+            </p>
+            <p className="text-base opacity-80 mb-6 max-w-2xl mx-auto" dir={dir}>
+              {isRTL ? 'محاضرة تعريفية بمنهجية التعلّم القائم على المشاريع - التسجيل مجاني ومفتوح للجميع' : 'Introductory lecture on PBL methodology - Free and open to all'}
+            </p>
+            <Link
+              to="/lecture-registration"
+              className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-3 rounded-full font-bold text-lg shadow-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105"
+            >
+              {isRTL ? 'سجّل حضورك الآن' : 'Register Now'}
+            </Link>
+          </motion.div>
+        </div>
+      </div>
+
       {/* Project Gallery */}
       <div className="py-16 px-4 bg-white">
         <div className="max-w-6xl mx-auto">

@@ -16,6 +16,7 @@ import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { TermsOfUse } from './pages/TermsOfUse';
 import i18n from './i18n';
 import { SummerProgramEnrollment } from './pages/SummerProgramEnrollment';
+import { LectureRegistration } from './pages/LectureRegistration';
 import { ClasseraCallback } from './pages/auth/ClasseraCallback';
 import { ClasseraLogin } from './pages/auth/ClasseraLogin';
 import { KfupmCallback } from './pages/auth/KfupmCallback';
@@ -185,6 +186,9 @@ const AppRoutes: React.FC = () => {
       {/* Summer Program Enrollment - Public Route */}
       <Route path="/summer-program-enrollment" element={<SummerProgramEnrollment />} />
 
+      {/* Lecture Registration - Public Route */}
+      <Route path="/lecture-registration" element={<LectureRegistration />} />
+
       {/* Legal Pages - Public Routes */}
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-of-use" element={<TermsOfUse />} />
@@ -259,6 +263,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/admin/fix-tools" element={<ProtectedRoute allowedRoles={['admin']}><AdminFixTools /></ProtectedRoute>} />
       <Route path="/admin/migrate-to-dammam" element={<ProtectedRoute allowedRoles={['admin']}><MigrateToNewDatabase /></ProtectedRoute>} />
       <Route path="/admin/manage-featured-videos" element={<ProtectedRoute allowedRoles={['admin']}><ManageFeaturedVideos /></ProtectedRoute>} />
+      <Route path="/admin/lecture-registrations" element={<ProtectedRoute allowedRoles={['admin']}><LectureRegistrations /></ProtectedRoute>} />
       <Route path="/users" element={<ProtectedRoute allowedRoles={['admin', 'school']}><Users /></ProtectedRoute>} />
       
       {/* Settings */}
@@ -339,6 +344,7 @@ import { ManageSchoolCustomization } from './pages/admin/ManageSchoolCustomizati
 import MigrateProjectIdeas from './pages/admin/MigrateProjectIdeas';
 import MigrateToNewDatabase from './pages/admin/MigrateToNewDatabase';
 import ManageFeaturedVideos from './pages/admin/ManageFeaturedVideos';
+import LectureRegistrations from './pages/admin/LectureRegistrations';
 import { SearchResultsPage } from './pages/SearchResultsPage';
 import StudentRewards from './pages/StudentRewards';
 import PointsDetails from './pages/PointsDetails';
