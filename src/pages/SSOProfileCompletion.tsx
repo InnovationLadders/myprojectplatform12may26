@@ -366,7 +366,7 @@ export const SSOProfileCompletion: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">الصف الدراسي</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">المرحلة/المستوى الدراسي</label>
                   <div className="relative">
                     <GraduationCap className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <select
@@ -375,7 +375,7 @@ export const SSOProfileCompletion: React.FC = () => {
                       className="w-full pr-12 pl-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
                       required
                     >
-                      <option value="">اختر الصف</option>
+                      <option value="">اخترالمستوى/ الصف</option>
                       {GRADES.map(g => (
                         <option key={g.value} value={g.value}>{g.label}</option>
                       ))}
