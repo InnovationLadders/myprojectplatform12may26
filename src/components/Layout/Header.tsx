@@ -65,6 +65,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   }, [showNotificationsDropdown, showSearchModal, showProfileMenu, showLanguageMenu]);
 
   const unreadCount = getUnreadCount();
+  const isArabic = i18n.language === 'ar';
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
@@ -149,7 +150,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
             </button>
             
             {showLanguageMenu && (
-              <div className="absolute top-full right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 z-50 min-w-[120px]">
+              <div className={`absolute top-full mt-1 bg-white rounded-lg shadow-lg border border-gray-200 z-50 min-w-[120px] ${isArabic ? 'left-0' : 'right-0'}`}>
                 <button 
                   onClick={() => changeLanguage('ar')}
                   className={`block w-full text-right px-4 py-2 text-sm hover:bg-gray-50 ${i18n.language === 'ar' ? 'font-bold text-blue-600' : ''}`}
@@ -188,7 +189,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
-                className="absolute top-full right-0 mt-3 w-[calc(100vw-2rem)] sm:w-96 max-w-md bg-white rounded-lg shadow-lg border border-gray-200 z-50 overflow-hidden"
+                className={`absolute top-full mt-3 w-[calc(100vw-2rem)] sm:w-96 max-w-md bg-white rounded-lg shadow-lg border border-gray-200 z-50 overflow-hidden ${isArabic ? 'left-0' : 'right-0'}`}
               >
                 <div className="p-4 border-b border-gray-200 bg-gray-50">
                   <div className="flex items-center justify-between">
@@ -318,7 +319,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.15 }}
                   className="absolute top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
-                  style={{ right: 0 }}
+                  style={isArabic ? { left: 0 } : { right: 0 }}
                 >
                   <div className="p-2">
                     <Link
