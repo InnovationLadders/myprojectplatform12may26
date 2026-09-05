@@ -544,6 +544,14 @@ export const LandingPage: React.FC = () => {
             >
               {t('landingPage.cta.summerProgram')}
             </Link>
+            <Link
+              to="/lecture-registration"
+              className="bg-white bg-opacity-20 backdrop-blur-md border-2 border-white text-white px-8 py-3 rounded-full font-bold text-lg shadow-2xl hover:bg-opacity-30 transition-all duration-300 transform hover:scale-105 inline-flex items-center gap-2"
+              style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
+            >
+              <Calendar className="w-5 h-5" />
+              {isRTL ? 'سجّل حضورك للمحاضرة' : 'Register for Lecture'}
+            </Link>
           </div>
         </div>
       </div>
@@ -568,6 +576,7 @@ export const LandingPage: React.FC = () => {
                 <li><Link to="/login" className="text-gray-400 hover:text-white transition-colors">{t('auth.login')}</Link></li>
                 <li><Link to="/register" className="text-gray-400 hover:text-white transition-colors">{t('auth.createAccount')}</Link></li>
                 <li><Link to="/summer-program-enrollment" className="text-gray-400 hover:text-white transition-colors">{t('landingPage.footer.summerProgram')}</Link></li>
+                <li><Link to="/lecture-registration" className="text-gray-400 hover:text-white transition-colors">{isRTL ? 'تسجيل حضور المحاضرة' : 'Lecture Registration'}</Link></li>
               </ul>
             </div>
             <div>
