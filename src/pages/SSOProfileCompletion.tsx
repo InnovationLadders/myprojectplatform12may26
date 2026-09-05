@@ -132,7 +132,7 @@ export const SSOProfileCompletion: React.FC = () => {
     const selectedRole = !hasExistingRole ? formData.role : user?.role;
 
     if (selectedRole === 'student' && !formData.grade) {
-      setError('الرجاء تحديد الصف الدراسي');
+      setError('المرحلة/المستوى الدراسي');
       return;
     }
     if ((selectedRole === 'student' || selectedRole === 'teacher') && !formData.school_id) {
