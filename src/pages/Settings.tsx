@@ -16,6 +16,8 @@ export const Settings: React.FC = () => {
   const isStudent = user?.role === 'student';
   const isAdmin = user?.role === 'admin';
   const isSchool = user?.role === 'school';
+  const isTeacher = user?.role === 'teacher';
+  const hideDataSection = isStudent || isTeacher;
   const [activeSection, setActiveSection] = useState('profile');
   const [showPassword, setShowPassword] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -81,9 +83,7 @@ export const Settings: React.FC = () => {
     { id: 'profile', name: t('settings.sections.profile'), icon: User },
     { id: 'notifications', name: t('settings.sections.notifications'), icon: Bell },
     { id: 'security', name: t('settings.sections.security'), icon: Shield },
-    { id: 'appearance', name: t('settings.sections.appearance'), icon: Palette },
-    { id: 'language', name: t('settings.sections.language'), icon: Globe },
-    { id: 'data', name: t('settings.sections.data'), icon: Database },
+    ...(!hideDataSection ? [{ id: 'data', name: t('settings.sections.data'), icon: Database }] : []),
     ...(isAdmin ? [{ id: 'admin-migration', name: t('settings.sections.adminMigration'), icon: RefreshCw }] : []),
     ...(isSchool ? [
       { id: 'institution-settings', name: t('settings.sections.institutionSettings'), icon: UserCheck },

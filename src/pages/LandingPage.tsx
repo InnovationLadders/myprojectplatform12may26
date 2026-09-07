@@ -211,17 +211,10 @@ export const LandingPage: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8" dir={dir}>
             <Link
-              to="/register"
+              to="/login"
               className="bg-white text-blue-600 px-8 py-3 rounded-full font-bold text-lg shadow-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 hover:shadow-[0_20px_50px_rgba(255,255,255,0.4)]"
             >
-              {t('auth.createAccount')}
-            </Link>
-            <Link
-              to="/login"
-              className="bg-white bg-opacity-20 backdrop-blur-md border-2 border-white text-white px-8 py-3 rounded-full font-bold text-lg shadow-2xl hover:bg-opacity-30 transition-all duration-300 transform hover:scale-105"
-              style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
-            >
-              {t('auth.login')}
+              {t('landingPage.enterPlatform')}
             </Link>
           </div>
         </div>
@@ -532,10 +525,10 @@ export const LandingPage: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4" dir={dir}>
             <Link
-              to="/register"
+              to="/login"
               className="bg-white text-blue-600 px-8 py-3 rounded-full font-bold text-lg shadow-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 hover:shadow-[0_20px_50px_rgba(255,255,255,0.4)]"
             >
-              {t('auth.createAccount')}
+              {t('landingPage.enterPlatform')}
             </Link>
             <Link
               to="/summer-program-enrollment"
@@ -573,8 +566,7 @@ export const LandingPage: React.FC = () => {
             <div>
               <h4 className="text-lg font-semibold mb-4">{t('landingPage.footer.quickLinks')}</h4>
               <ul className="space-y-2">
-                <li><Link to="/login" className="text-gray-400 hover:text-white transition-colors">{t('auth.login')}</Link></li>
-                <li><Link to="/register" className="text-gray-400 hover:text-white transition-colors">{t('auth.createAccount')}</Link></li>
+                <li><Link to="/login" className="text-gray-400 hover:text-white transition-colors">{t('landingPage.enterPlatform')}</Link></li>
                 <li><Link to="/summer-program-enrollment" className="text-gray-400 hover:text-white transition-colors">{t('landingPage.footer.summerProgram')}</Link></li>
                 <li><Link to="/lecture-registration" className="text-gray-400 hover:text-white transition-colors">{isRTL ? 'تسجيل حضور المحاضرة' : 'Lecture Registration'}</Link></li>
               </ul>

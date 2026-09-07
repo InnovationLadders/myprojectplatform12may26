@@ -40,7 +40,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMinimized, 
   // Common menu items for all users
   const commonMenuItems = [
     { id: 'projects', icon: FileText, label: t('sidebar.projects'), path: '/projects' },
-    { id: 'dashboard', icon: LayoutDashboard, label: t('sidebar.dashboard'), path: getDashboardPath() },
     { id: 'project-ideas', icon: Lightbulb, label: t('sidebar.projectIdeas'), path: '/project-ideas' },
     // TEMPORARILY HIDDEN - uncomment to re-enable in menu
     // { id: 'store', icon: ShoppingCart, label: t('sidebar.store'), path: '/store' },

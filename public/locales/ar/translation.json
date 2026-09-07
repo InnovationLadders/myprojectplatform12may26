@@ -253,6 +253,7 @@
   },
   "landingPage": {
     "welcomeMessage": "علماء المستقبل",
+    "enterPlatform": "الدخول للمنصة",
     "featuredVideos": {
       "badge": "مشاريع الطلاب",
       "title": "مشاريع مميزة",
@@ -499,7 +500,7 @@
   },
   "aiAssistant": {
     "title": "المساعد الذكي",
-    "subtitle": "مساعدك الشخصي للتعلم والإبداع",
+    "subtitle": "يساعدك لإنجاز مشروعك",
     "stats": {
       "alwaysAvailable": "متاح دائماً",
       "unlimitedQuestions": "أسئلة غير محدودة",
@@ -963,8 +964,8 @@
   },
   "intellectualProperty": {
     "title": "الملكية الفكرية",
-    "subtitle": "حماية وتسجيل أفكار ومشاريع الطلاب الإبداعية",
-    "newRegistration": "تسجيل جديد",
+    "subtitle": "تسجيل طلبات الملكية الفكرية لمشروعك",
+    "newRegistration": "طلب تسجيل",
     "stats": {
       "totalRequests": "إجمالي الطلبات",
       "approved": "موافق عليها",

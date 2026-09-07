@@ -254,6 +254,7 @@
   },
   "landingPage": {
     "welcomeMessage": "Our Future Scientists.",
+    "enterPlatform": "Enter Platform",
     "featuredVideos": {
       "badge": "Student Projects",
       "title": "Featured Projects",
@@ -500,7 +501,7 @@
   },
   "aiAssistant": {
     "title": "AI Assistant",
-    "subtitle": "Your personal learning and creativity assistant",
+    "subtitle": "Helping you complete your project",
     "stats": {
       "alwaysAvailable": "Always Available",
       "unlimitedQuestions": "Unlimited Questions",
@@ -964,8 +965,8 @@
   },
   "intellectualProperty": {
     "title": "Intellectual Property",
-    "subtitle": "Protect and register students' creative ideas and projects",
-    "newRegistration": "New Registration",
+    "subtitle": "Register intellectual property requests for your project",
+    "newRegistration": "Request Registration",
     "stats": {
       "totalRequests": "Total Requests",
       "approved": "Approved",
