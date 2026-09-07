@@ -133,7 +133,8 @@
     "manageRewards": "إدارة المكافآت",
     "users": "المستخدمين",
     "summerProgram": "البرنامج الصيفي",
-    "entrepreneurshipSubmissions": "ريادة الأعمال"
+    "entrepreneurshipSubmissions": "ريادة الأعمال",
+    "ipSubmissions": "طلبات الملكية الفكرية"
   },
   "auth": {
     "login": "تسجيل الدخول",
@@ -2174,6 +2175,68 @@
     "showing": "عرض",
     "of": "من",
     "submission": "تقديم"
+  },
+  "ipSubmissions": {
+    "title": "طلبات الملكية الفكرية",
+    "subtitle": "المشاريع المقدمة لتسجيل الملكية الفكرية",
+    "submitButton": "تقديم للملكية الفكرية",
+    "submitConfirmTitle": "تقديم للملكية الفكرية",
+    "submitConfirmMessage": "هل أنت متأكد من رغبتك في تقديم هذا المشروع لتسجيل الملكية الفكرية؟",
+    "selectType": "اختر نوع الملكية الفكرية",
+    "descriptionLabel": "وصف مختصر (اختياري)",
+    "descriptionPlaceholder": "اكتب وصفاً مختصراً للملكية الفكرية...",
+    "submitting": "جاري التقديم...",
+    "submitSuccess": "تم تقديم المشروع بنجاح",
+    "submitError": "حدث خطأ أثناء تقديم المشروع",
+    "alreadySubmitted": "تم تقديم هذا المشروع مسبقاً",
+    "stats": {
+      "total": "إجمالي الطلبات",
+      "pending": "قيد المراجعة",
+      "approved": "مقبول",
+      "rejected": "مرفوض"
+    },
+    "searchPlaceholder": "البحث في طلبات الملكية الفكرية...",
+    "filters": {
+      "allStatuses": "جميع الحالات",
+      "allTypes": "جميع الأنواع",
+      "allSchools": "جميع المؤسسات"
+    },
+    "statuses": {
+      "pending": "قيد المراجعة",
+      "approved": "مقبول",
+      "rejected": "مرفوض"
+    },
+    "table": {
+      "projectName": "اسم المشروع",
+      "ipTitle": "عنوان الطلب",
+      "type": "النوع",
+      "school": "المؤسسة التعليمية",
+      "teacher": "المشرف",
+      "submittedAt": "تاريخ التقديم",
+      "status": "الحالة",
+      "actions": "الإجراءات"
+    },
+    "actions": {
+      "view": "عرض",
+      "changeStatus": "تغيير الحالة",
+      "updateStatus": "تحديث الحالة"
+    },
+    "noSubmissions": "لا توجد طلبات مقدمة",
+    "noSubmissionsMessage": "لم يتم تقديم أي طلبات للملكية الفكرية بعد",
+    "updateStatusTitle": "تحديث حالة الطلب",
+    "updateStatusMessage": "اختر الحالة الجديدة للطلب",
+    "updateStatusSuccess": "تم تحديث الحالة بنجاح",
+    "updateStatusError": "حدث خطأ أثناء تحديث الحالة",
+    "certificateNumber": "رقم الشهادة",
+    "certificateNumberPlaceholder": "أدخل رقم الشهادة",
+    "rejectionReason": "سبب الرفض",
+    "rejectionReasonPlaceholder": "أدخل سبب الرفض",
+    "detailsTitle": "تفاصيل طلب الملكية الفكرية",
+    "documents": "المستندات",
+    "tags": "الوسوم",
+    "showing": "عرض",
+    "of": "من",
+    "submission": "طلب"
   },
   "legal": {
     "backToHome": "العودة إلى الصفحة الرئيسية",

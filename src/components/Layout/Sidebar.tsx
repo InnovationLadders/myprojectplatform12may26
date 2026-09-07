@@ -87,6 +87,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMinimized, 
         { id: 'users', icon: Users, label: t('sidebar.users') || 'Students & Teachers', path: '/users' },
         { id: 'reports', icon: BarChart3, label: t('sidebar.reports'), path: '/reports' },
         { id: 'entrepreneurship-submissions', icon: Briefcase, label: t('sidebar.entrepreneurshipSubmissions'), path: '/entrepreneurship-submissions' },
+        { id: 'ip-submissions', icon: Shield, label: t('sidebar.ipSubmissions'), path: '/intellectual-property-submissions' },
         { id: 'investor-requests', icon: TrendingUp, label: 'طلبات المستثمرين', path: '/investor-requests' }
       );
     } else if (user?.role === 'admin') {
@@ -95,6 +96,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, isMinimized, 
         { id: 'users', icon: Users, label: t('sidebar.users') || 'User Management', path: '/users' },
         { id: 'manage-rewards', icon: Award, label: t('sidebar.manageRewards') || 'Manage Rewards', path: '/admin/manage-rewards' },
         { id: 'entrepreneurship-submissions', icon: Briefcase, label: t('sidebar.entrepreneurshipSubmissions'), path: '/entrepreneurship-submissions' },
+        { id: 'ip-submissions', icon: Shield, label: t('sidebar.ipSubmissions'), path: '/intellectual-property-submissions' },
         { id: 'investor-requests', icon: TrendingUp, label: 'طلبات المستثمرين', path: '/investor-requests' },
         { id: 'admin-fix-tools', icon: Wrench, label: 'أدوات الإصلاح', path: '/admin/fix-tools' }
       );

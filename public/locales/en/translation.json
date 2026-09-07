@@ -134,7 +134,8 @@
     "manageRewards": "Manage Rewards",
     "users": "Users",
     "summerProgram": "Summer Program",
-    "entrepreneurshipSubmissions": "Entrepreneurship"
+    "entrepreneurshipSubmissions": "Entrepreneurship",
+    "ipSubmissions": "IP Submissions"
   },
   "auth": {
     "login": "Login",
@@ -2173,6 +2174,68 @@
       "admin": "System Admin"
     },
     "submittedByLabel": "Submitted by",
+    "showing": "Showing",
+    "of": "of",
+    "submission": "submission"
+  },
+  "ipSubmissions": {
+    "title": "Intellectual Property Submissions",
+    "subtitle": "Projects submitted for intellectual property registration",
+    "submitButton": "Submit for IP",
+    "submitConfirmTitle": "Submit for Intellectual Property",
+    "submitConfirmMessage": "Are you sure you want to submit this project for intellectual property registration?",
+    "selectType": "Select IP type",
+    "descriptionLabel": "Brief description (optional)",
+    "descriptionPlaceholder": "Write a brief description of the intellectual property...",
+    "submitting": "Submitting...",
+    "submitSuccess": "Project submitted successfully",
+    "submitError": "An error occurred while submitting the project",
+    "alreadySubmitted": "This project has already been submitted",
+    "stats": {
+      "total": "Total Submissions",
+      "pending": "Under Review",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "searchPlaceholder": "Search IP submissions...",
+    "filters": {
+      "allStatuses": "All Statuses",
+      "allTypes": "All Types",
+      "allSchools": "All Schools"
+    },
+    "statuses": {
+      "pending": "Under Review",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "table": {
+      "projectName": "Project Name",
+      "ipTitle": "Request Title",
+      "type": "Type",
+      "school": "School",
+      "teacher": "Teacher",
+      "submittedAt": "Submitted At",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "View",
+      "changeStatus": "Change Status",
+      "updateStatus": "Update Status"
+    },
+    "noSubmissions": "No submissions",
+    "noSubmissionsMessage": "No intellectual property submissions yet",
+    "updateStatusTitle": "Update Submission Status",
+    "updateStatusMessage": "Select the new status for this submission",
+    "updateStatusSuccess": "Status updated successfully",
+    "updateStatusError": "An error occurred while updating the status",
+    "certificateNumber": "Certificate Number",
+    "certificateNumberPlaceholder": "Enter certificate number",
+    "rejectionReason": "Rejection Reason",
+    "rejectionReasonPlaceholder": "Enter rejection reason",
+    "detailsTitle": "IP Submission Details",
+    "documents": "Documents",
+    "tags": "Tags",
     "showing": "Showing",
     "of": "of",
     "submission": "submission"

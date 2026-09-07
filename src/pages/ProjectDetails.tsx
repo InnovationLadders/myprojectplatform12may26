@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FileText, Users, CircleCheck as CheckCircle, MessageCircle, FileBox, Calendar, Clock, CreditCard as Edit, ArrowRight, TriangleAlert as AlertTriangle, Award, Eye, Video, Download, Plus, Upload, UserMinus, Send } from 'lucide-react';
-import { getProjectById, getProjectStudents, getProjectTasks, db, firestoreDoc, removeStudentFromProject, submitProjectToEntrepreneurship, getSubmissionByProjectId } from '../lib/firebase';
+import { getProjectById, getProjectStudents, getProjectTasks, db, firestoreDoc, removeStudentFromProject, submitProjectToEntrepreneurship, getSubmissionByProjectId, submitProjectToIntellectualProperty, getIPSubmissionByProjectId } from '../lib/firebase';
 import { collection, query, where, getDocs, getDoc } from 'firebase/firestore';
 import { useAuth } from '../contexts/AuthContext';
 import { formatDate, getDaysRemaining } from '../utils/dateUtils';
@@ -18,6 +18,8 @@ import { useProjectEvaluation } from '../hooks/useProjectEvaluation';
 import { AddResourceModal } from '../components/ProjectDetails/AddResourceModal';
 import GanttChart from '../components/ProjectTasks/GanttChart';
 import SubmitToEntrepreneurshipModal from '../components/Entrepreneurship/SubmitToEntrepreneurshipModal';
+import SubmitToIntellectualPropertyModal from '../components/IntellectualProperty/SubmitToIntellectualPropertyModal';
+import { Shield as ShieldIcon } from 'lucide-react';
 
 const ProjectDetails: React.FC = () => {
   const { t } = useTranslation();
@@ -45,6 +47,9 @@ const ProjectDetails: React.FC = () => {
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAlreadySubmitted, setIsAlreadySubmitted] = useState(false);
+  const [showIPSubmitModal, setShowIPSubmitModal] = useState(false);
+  const [isIPSubmitting, setIsIPSubmitting] = useState(false);
+  const [isAlreadyIPSubmitted, setIsAlreadyIPSubmitted] = useState(false);
   const [supervisorName, setSupervisorName] = useState<string | null>(null);
 
   // Determine user role and permissions
@@ -65,6 +70,9 @@ const ProjectDetails: React.FC = () => {
 
   // Check if user can submit to entrepreneurship (teacher, project students, school admins, system admin)
   const canSubmitToEntrepreneurship = isAdmin || isProjectTeacher || isProjectStudent || (isSchool && project?.school_id === user?.id);
+
+  // Check if user can submit to intellectual property (same permissions)
+  const canSubmitToIP = canSubmitToEntrepreneurship;
 
   // Fetch project evaluation and extract progress score
   const fetchProjectProgress = async (projectId: string) => {
@@ -204,6 +212,17 @@ const ProjectDetails: React.FC = () => {
     };
 
     checkSubmissionStatus();
+
+    const checkIPSubmissionStatus = async () => {
+      if (!id) return;
+      try {
+        const ipSubmission = await getIPSubmissionByProjectId(id);
+        setIsAlreadyIPSubmitted(!!ipSubmission);
+      } catch (err) {
+        console.error('Error checking IP submission status:', err);
+      }
+    };
+    checkIPSubmissionStatus();
   }, [id]);
 
   const handleTaskAdded = () => {
@@ -234,6 +253,28 @@ const ProjectDetails: React.FC = () => {
       }
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleSubmitToIntellectualProperty = async (ipType: string, ipDescription: string) => {
+    if (!user || !id) return;
+
+    setIsIPSubmitting(true);
+    try {
+      await submitProjectToIntellectualProperty(id, user.id, user.role, ipType, ipDescription);
+      setIsAlreadyIPSubmitted(true);
+      setShowIPSubmitModal(false);
+      alert(t('ipSubmissions.submitSuccess'));
+    } catch (error: any) {
+      console.error('Error submitting to IP:', error);
+      if (error.message === 'Project already submitted') {
+        alert(t('ipSubmissions.alreadySubmitted'));
+        setIsAlreadyIPSubmitted(true);
+      } else {
+        alert(t('ipSubmissions.submitError'));
+      }
+    } finally {
+      setIsIPSubmitting(false);
     }
   };
 
@@ -412,6 +453,16 @@ const ProjectDetails: React.FC = () => {
               >
                 <Send className="w-4 h-4 md:w-5 md:h-5" />
                 <span className="truncate">{t('entrepreneurshipSubmissions.submitButton')}</span>
+              </button>
+            )}
+
+            {canSubmitToIP && !isAlreadyIPSubmitted && (
+              <button
+                onClick={() => setShowIPSubmitModal(true)}
+                className="w-full sm:w-auto px-4 md:px-6 py-2 md:py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
+              >
+                <ShieldIcon className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="truncate">{t('ipSubmissions.submitButton')}</span>
               </button>
             )}
 
@@ -1029,6 +1080,15 @@ const ProjectDetails: React.FC = () => {
         onClose={() => setShowSubmitModal(false)}
         onConfirm={handleSubmitToEntrepreneurship}
         isLoading={isSubmitting}
+        projectTitle={project.title}
+      />
+
+      {/* Submit to Intellectual Property Modal */}
+      <SubmitToIntellectualPropertyModal
+        isOpen={showIPSubmitModal}
+        onClose={() => setShowIPSubmitModal(false)}
+        onConfirm={handleSubmitToIntellectualProperty}
+        isLoading={isIPSubmitting}
         projectTitle={project.title}
       />
     </div>

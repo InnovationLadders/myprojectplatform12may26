@@ -239,6 +239,9 @@ const AppRoutes: React.FC = () => {
       {/* Entrepreneurship route */}
       <Route path="/entrepreneurship-submissions" element={<ProtectedRoute allowedRoles={['school', 'admin']}><EntrepreneurshipSubmissions /></ProtectedRoute>} />
 
+      {/* Intellectual Property Submissions route */}
+      <Route path="/intellectual-property-submissions" element={<ProtectedRoute allowedRoles={['school', 'admin']}><IntellectualPropertySubmissions /></ProtectedRoute>} />
+
       {/* Dashboard routes */}
       <Route path="/student-dashboard" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
 
@@ -328,6 +331,7 @@ import { Reports } from './pages/Reports';
 import { Search } from './pages/Search';
 import { Favorites } from './pages/client/Favorites';
 import EntrepreneurshipSubmissions from './pages/EntrepreneurshipSubmissions';
+import IntellectualPropertySubmissions from './pages/IntellectualPropertySubmissions';
 import { ConsultationRequests } from './pages/consultant/ConsultationRequests';
 import { ConsultantSchedule } from './pages/consultant/ConsultantSchedule';
 import { ConsultantProfile } from './pages/consultant/ConsultantProfile';

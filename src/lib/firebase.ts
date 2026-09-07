@@ -2603,6 +2603,176 @@ export const getSubmissionByProjectId = async (projectId: string) => {
   }
 };
 
+// ============================================
+// Intellectual Property Submission Functions
+// ============================================
+
+export const submitProjectToIntellectualProperty = async (
+  projectId: string,
+  submittedByUserId: string,
+  submittedByRole: string,
+  ipType: string,
+  ipDescription?: string
+) => {
+  try {
+    const projectDoc = await getDoc(doc(db, 'projects', projectId));
+    if (!projectDoc.exists()) {
+      throw new Error('Project not found');
+    }
+
+    const projectData = projectDoc.data();
+
+    const existingQuery = query(
+      collection(db, 'intellectual_property'),
+      where('project_id', '==', projectId)
+    );
+    const existing = await getDocs(existingQuery);
+    if (!existing.empty) {
+      throw new Error('Project already submitted');
+    }
+
+    const teacherId = projectData.teacher_id || '';
+    const schoolId = projectData.school_id || '';
+
+    let teacherName = '';
+    if (teacherId) {
+      const tDoc = await getDoc(doc(db, 'users', teacherId));
+      if (tDoc.exists()) teacherName = tDoc.data().name || '';
+    }
+
+    let schoolName = '';
+    if (schoolId) {
+      const sDoc = await getDoc(doc(db, 'users', schoolId));
+      if (sDoc.exists()) schoolName = sDoc.data().name || '';
+    }
+
+    const submissionData = {
+      project_id: projectId,
+      project_title: projectData.title || '',
+      teacher_id: teacherId,
+      teacher_name: teacherName,
+      school_id: schoolId,
+      school_name: schoolName,
+      submitted_by_user_id: submittedByUserId,
+      submitted_by_role: submittedByRole,
+      title: projectData.title || '',
+      description: ipDescription || projectData.description || '',
+      type: ipType,
+      status: 'pending',
+      documents: [],
+      tags: [],
+      submitted_at: serverTimestamp(),
+      updated_at: serverTimestamp(),
+      estimated_review_date: Timestamp.fromDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000))
+    };
+
+    const ref = await addDoc(collection(db, 'intellectual_property'), submissionData);
+
+    await updateDoc(doc(db, 'projects', projectId), {
+      submitted_to_intellectual_property: true,
+      submitted_to_intellectual_property_at: serverTimestamp()
+    });
+
+    return ref.id;
+  } catch (error) {
+    console.error('Error submitting to intellectual property:', error);
+    throw error;
+  }
+};
+
+export const getIntellectualPropertySubmissions = async () => {
+  try {
+    const q = query(
+      collection(db, 'intellectual_property'),
+      orderBy('submitted_at', 'desc')
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(d => ({
+      id: d.id,
+      ...d.data(),
+      submitted_at: d.data().submitted_at?.toDate().toISOString() || null,
+      updated_at: d.data().updated_at?.toDate().toISOString() || null,
+      reviewed_at: d.data().reviewed_at?.toDate().toISOString() || null
+    }));
+  } catch (error) {
+    console.error('Error getting IP submissions:', error);
+    throw error;
+  }
+};
+
+export const getIntellectualPropertySubmissionsBySchoolId = async (schoolId: string) => {
+  try {
+    const q = query(
+      collection(db, 'intellectual_property'),
+      where('school_id', '==', schoolId),
+      orderBy('submitted_at', 'desc')
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(d => ({
+      id: d.id,
+      ...d.data(),
+      submitted_at: d.data().submitted_at?.toDate().toISOString() || null,
+      updated_at: d.data().updated_at?.toDate().toISOString() || null,
+      reviewed_at: d.data().reviewed_at?.toDate().toISOString() || null
+    }));
+  } catch (error) {
+    console.error('Error getting school IP submissions:', error);
+    throw error;
+  }
+};
+
+export const updateIntellectualPropertySubmissionStatus = async (
+  submissionId: string,
+  newStatus: 'pending' | 'approved' | 'rejected',
+  options?: { certificateNumber?: string; rejectionReason?: string }
+) => {
+  try {
+    const updateData: any = {
+      status: newStatus,
+      updated_at: serverTimestamp()
+    };
+
+    if (newStatus === 'approved') {
+      updateData.reviewed_at = serverTimestamp();
+      if (options?.certificateNumber) {
+        updateData.certificate_number = options.certificateNumber;
+      }
+    } else if (newStatus === 'rejected') {
+      updateData.reviewed_at = serverTimestamp();
+      if (options?.rejectionReason) {
+        updateData.rejection_reason = options.rejectionReason;
+      }
+    }
+
+    await updateDoc(doc(db, 'intellectual_property', submissionId), updateData);
+  } catch (error) {
+    console.error('Error updating IP submission status:', error);
+    throw error;
+  }
+};
+
+export const getIPSubmissionByProjectId = async (projectId: string) => {
+  try {
+    const q = query(
+      collection(db, 'intellectual_property'),
+      where('project_id', '==', projectId),
+      limit(1)
+    );
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) return null;
+    const d = snapshot.docs[0];
+    return {
+      id: d.id,
+      ...d.data(),
+      submitted_at: d.data().submitted_at?.toDate().toISOString() || null,
+      updated_at: d.data().updated_at?.toDate().toISOString() || null
+    };
+  } catch (error) {
+    console.error('Error getting IP submission by project ID:', error);
+    throw error;
+  }
+};
+
 /**
  * Get user information by ID for display purposes
  * @param userId - The ID of the user
