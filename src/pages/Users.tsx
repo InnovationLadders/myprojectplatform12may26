@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users as UsersIcon, Search, Filter, Plus, MoveVertical as MoreVertical, CreditCard as Edit, Trash2, Mail, Phone, MapPin, Calendar, Award, BookOpen, GraduationCap, Building, Shield, Eye, UserPlus, CircleAlert as AlertCircle, CircleCheck as CheckCircle, School, Briefcase, X, UserCheck, UserX, Download, FileSpreadsheet, SquareCheck as CheckSquare, Square, CircleUser as UserCircle2, FileText, TrendingUp } from 'lucide-react';
+import { Users as UsersIcon, Search, Filter, Plus, MoveVertical as MoreVertical, CreditCard as Edit, Trash2, Mail, Phone, MapPin, Calendar, Award, BookOpen, GraduationCap, Building, Shield, Eye, UserPlus, CircleAlert as AlertCircle, CircleCheck as CheckCircle, School, Briefcase, X, UserCheck, UserX, Download, FileSpreadsheet, SquareCheck as CheckSquare, Square, CircleUser as UserCircle2, FileText, TrendingUp, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { useUsers } from '../hooks/useUsers';
 import { useAuth } from '../contexts/AuthContext';
 import { formatDate, formatRelativeTime } from '../utils/dateUtils';
@@ -57,6 +57,7 @@ const Users: React.FC = () => {
   const [bulkActionType, setBulkActionType] = useState<'delete' | 'activate' | 'deactivate' | null>(null);
   const [showBulkConfirm, setShowBulkConfirm] = useState(false);
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   // Get unique schools and cities for filters
   const uniqueSchools = ['all', ...new Set(users.filter(u => u.school).map(u => u.school))];
@@ -73,6 +74,10 @@ const Users: React.FC = () => {
     const matchesCity = selectedCity === 'all' || user.city === selectedCity;
     
     return matchesRole && matchesSearch && matchesStatus && matchesSchool && matchesCity;
+  }).sort((a, b) => {
+    const dateA = a.joinedAt ? new Date(a.joinedAt).getTime() : 0;
+    const dateB = b.joinedAt ? new Date(b.joinedAt).getTime() : 0;
+    return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
   });
 
   const getRoleText = (role: string) => {
@@ -201,6 +206,10 @@ const Users: React.FC = () => {
       console.error('Error submitting user form:', error);
       throw error;
     }
+  };
+
+  const toggleSortOrder = () => {
+    setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
   };
 
   const handleSelectAll = () => {
@@ -681,7 +690,19 @@ const Users: React.FC = () => {
                   الحالة
                 </th>
                 <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  تاريخ الانضمام
+                  <button
+                    onClick={toggleSortOrder}
+                    className="flex items-center gap-1 hover:text-blue-600 transition-colors"
+                  >
+                    تاريخ الانضمام
+                    {sortOrder === 'asc' ? (
+                      <ArrowUp className="w-3.5 h-3.5 text-blue-500" />
+                    ) : sortOrder === 'desc' ? (
+                      <ArrowDown className="w-3.5 h-3.5 text-blue-500" />
+                    ) : (
+                      <ArrowUpDown className="w-3.5 h-3.5 text-gray-400" />
+                    )}
+                  </button>
                 </th>
                 <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   الإجراءات
