@@ -221,30 +221,6 @@ export const LandingPage: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Stats Section */}
-      <div className="py-16 px-4 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm text-center" dir={dir}>
-              <div className="text-3xl font-bold text-blue-600 mb-2">300+</div>
-              <div className="text-gray-600">{t('landingPage.stats.students')}</div>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm text-center" dir={dir}>
-              <div className="text-3xl font-bold text-green-600 mb-2">50+</div>
-              <div className="text-gray-600">{t('landingPage.stats.projects')}</div>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm text-center" dir={dir}>
-              <div className="text-3xl font-bold text-purple-600 mb-2">100+</div>
-              <div className="text-gray-600">{t('landingPage.stats.teachers')}</div>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm text-center" dir={dir}>
-              <div className="text-3xl font-bold text-orange-600 mb-2">5+</div>
-              <div className="text-gray-600">{t('landingPage.stats.schools')}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Lecture Registration Banner */}
       <div className="py-12 px-4 bg-gradient-to-r from-blue-600 to-teal-600">
         <div className="max-w-4xl mx-auto text-center text-white">
@@ -273,6 +249,30 @@ export const LandingPage: React.FC = () => {
               {isRTL ? 'سجّل حضورك الآن' : 'Register Now'}
             </Link>
           </motion.div>
+        </div>
+      </div>
+
+      {/* Stats Section */}
+      <div className="py-16 px-4 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white p-6 rounded-lg shadow-sm text-center" dir={dir}>
+              <div className="text-3xl font-bold text-blue-600 mb-2">300+</div>
+              <div className="text-gray-600">{t('landingPage.stats.students')}</div>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm text-center" dir={dir}>
+              <div className="text-3xl font-bold text-green-600 mb-2">50+</div>
+              <div className="text-gray-600">{t('landingPage.stats.projects')}</div>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm text-center" dir={dir}>
+              <div className="text-3xl font-bold text-purple-600 mb-2">100+</div>
+              <div className="text-gray-600">{t('landingPage.stats.teachers')}</div>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm text-center" dir={dir}>
+              <div className="text-3xl font-bold text-orange-600 mb-2">5+</div>
+              <div className="text-gray-600">{t('landingPage.stats.schools')}</div>
+            </div>
+          </div>
         </div>
       </div>
 
