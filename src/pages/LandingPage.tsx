@@ -237,7 +237,7 @@ export const LandingPage: React.FC = () => {
               {isRTL ? 'التعلّم القائم على المشاريع PBL' : 'Project-Based Learning PBL'}
             </h2>
             <p className="text-lg opacity-90 mb-2" dir={dir}>
-              {isRTL ? 'اكتملت أماكن المحاضرة الحالية' : 'Current lecture is fully booked'}
+              {isRTL ? 'اكتمل التسجيل المحاضرة الحالية' : 'Current lecture is fully booked'}
             </p>
             <p className="text-base opacity-80 mb-6 max-w-2xl mx-auto" dir={dir}>
               {isRTL ? 'انضم إلى قائمة الانتظار وكن أول من يعرف موعد المحاضرة القادمة' : 'Join the waiting list and be the first to know when the next lecture is scheduled'}
