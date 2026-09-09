@@ -2486,8 +2486,15 @@
     "lectureDay": "Monday",
     "lectureTime": "9:00 - 10:00 PM",
     "lectureMode": "Remote / Online",
-    "formTitle": "Attendance Registration",
-    "formSubtitle": "Please fill out the form to register for the lecture",
+    "capacityFull": {
+      "badge": "Fully Booked",
+      "title": "Current Lecture is Fully Booked",
+      "message": "Registration for the \"Project-Based Learning PBL\" lecture is now full. Join the waiting list and be the first to know when the next lecture is scheduled.",
+      "nextLectureLabel": "Next Lecture",
+      "nextLectureDate": "To be announced soon"
+    },
+    "formTitle": "Join the Waiting List",
+    "formSubtitle": "Enter your details and we'll notify you as soon as the next lecture is scheduled",
     "fields": {
       "fullName": "Full Name",
       "email": "Email",
@@ -2521,15 +2528,14 @@
     },
     "infoTitle": "Important Information",
     "infoPoints": {
-      "point1": "A confirmation and the remote lecture link will be sent to your email.",
-      "point2": "Please join 5 minutes before the lecture starts.",
-      "point3": "Registration is open to all and free of charge.",
-      "point4": "The lecture is remote, from 9:00 to 10:00 PM."
+      "point1": "You will be notified by email as soon as the next lecture date is announced.",
+      "point2": "Joining the waiting list is free and open to all.",
+      "point3": "You'll get priority registration for the next lecture."
     },
-    "submit": "Register",
+    "submit": "Add Me to the Waiting List",
     "submitting": "Registering...",
-    "successTitle": "Registration Successful!",
-    "successMessage": "Thank you! You have been registered for the \"Project-Based Learning PBL\" lecture. We look forward to seeing you on September 14, 2026, from 9:00 to 10:00 PM (remote / online).",
+    "successTitle": "Added to the Waiting List!",
+    "successMessage": "Thank you for your interest! You've been added to the waiting list for the next lecture. We'll contact you as soon as the next lecture date is scheduled.",
     "registerAnother": "Register Another Person",
     "backHome": "Back to Home",
     "admin": {

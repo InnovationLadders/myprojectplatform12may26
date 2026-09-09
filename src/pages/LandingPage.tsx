@@ -222,7 +222,7 @@ export const LandingPage: React.FC = () => {
       </div>
 
       {/* Lecture Registration Banner */}
-      <div className="py-12 px-4 bg-gradient-to-r from-blue-600 to-teal-600">
+      <div className="py-12 px-4 bg-gradient-to-r from-amber-500 to-orange-600">
         <div className="max-w-4xl mx-auto text-center text-white">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -231,22 +231,22 @@ export const LandingPage: React.FC = () => {
           >
             <div className="inline-flex items-center gap-2 bg-white bg-opacity-20 px-4 py-2 rounded-full text-sm font-medium mb-4">
               <Calendar className="w-4 h-4" />
-              {isRTL ? 'محاضرة قادمة' : 'Upcoming Lecture'}
+              {isRTL ? 'المحاضرة القادمة قريباً' : 'Next Lecture Coming Soon'}
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-3" dir={dir}>
               {isRTL ? 'التعلّم القائم على المشاريع PBL' : 'Project-Based Learning PBL'}
             </h2>
             <p className="text-lg opacity-90 mb-2" dir={dir}>
-              {isRTL ? 'الاثنين 14 سبتمبر 2026' : 'Monday, September 14, 2026'}
+              {isRTL ? 'اكتملت أماكن المحاضرة الحالية' : 'Current lecture is fully booked'}
             </p>
             <p className="text-base opacity-80 mb-6 max-w-2xl mx-auto" dir={dir}>
-              {isRTL ? 'محاضرة تعريفية بمنهجية التعلّم القائم على المشاريع - التسجيل مجاني ومفتوح للجميع' : 'Introductory lecture on PBL methodology - Free and open to all'}
+              {isRTL ? 'انضم إلى قائمة الانتظار وكن أول من يعرف موعد المحاضرة القادمة' : 'Join the waiting list and be the first to know when the next lecture is scheduled'}
             </p>
             <Link
               to="/lecture-registration"
-              className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-3 rounded-full font-bold text-lg shadow-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105"
+              className="inline-flex items-center gap-2 bg-white text-orange-600 px-8 py-3 rounded-full font-bold text-lg shadow-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105"
             >
-              {isRTL ? 'سجّل حضورك الآن' : 'Register Now'}
+              {isRTL ? 'انضم إلى قائمة الانتظار' : 'Join the Waiting List'}
             </Link>
           </motion.div>
         </div>
@@ -543,7 +543,7 @@ export const LandingPage: React.FC = () => {
               style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
             >
               <Calendar className="w-5 h-5" />
-              {isRTL ? 'سجّل حضورك للمحاضرة' : 'Register for Lecture'}
+              {isRTL ? 'انضم إلى قائمة الانتظار' : 'Join the Waiting List'}
             </Link>
           </div>
         </div>
@@ -568,7 +568,7 @@ export const LandingPage: React.FC = () => {
               <ul className="space-y-2">
                 <li><Link to="/login" className="text-gray-400 hover:text-white transition-colors">{t('landingPage.enterPlatform')}</Link></li>
                 <li><Link to="/summer-program-enrollment" className="text-gray-400 hover:text-white transition-colors">{t('landingPage.footer.summerProgram')}</Link></li>
-                <li><Link to="/lecture-registration" className="text-gray-400 hover:text-white transition-colors">{isRTL ? 'تسجيل حضور المحاضرة' : 'Lecture Registration'}</Link></li>
+                <li><Link to="/lecture-registration" className="text-gray-400 hover:text-white transition-colors">{isRTL ? 'قائمة انتظار المحاضرة' : 'Lecture Waiting List'}</Link></li>
               </ul>
             </div>
             <div>

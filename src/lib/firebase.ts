@@ -2136,6 +2136,7 @@ export interface LectureRegistrationData {
   role: string;
   notes?: string;
   status: 'registered' | 'attended' | 'cancelled';
+  registrationType?: 'lecture' | 'waitlist';
   createdAt: string | Date;
   updatedAt: string | Date;
 }
@@ -2154,6 +2155,7 @@ export const addLectureRegistration = async (data: Omit<LectureRegistrationData,
     const registrationData = {
       ...data,
       status: 'registered',
+      registrationType: data.registrationType || 'waitlist',
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     };
@@ -2183,6 +2185,7 @@ export const getLectureRegistrations = async (): Promise<LectureRegistrationData
         role: data.role || '',
         notes: data.notes || '',
         status: data.status || 'registered',
+        registrationType: data.registrationType || 'lecture',
         createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
         updatedAt: data.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
       };

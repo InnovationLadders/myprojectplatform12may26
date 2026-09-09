@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import {
   User, Mail, Phone, Building, GraduationCap,
   CircleCheck as CheckCircle, TriangleAlert as AlertTriangle,
-  Send, Calendar, MapPin, Info, MessageSquare, Presentation,
-  Clock, Video,
+  Send, Calendar, Info, MessageSquare, Presentation,
+  Clock, Video, Users, Bell,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { addLectureRegistration } from '../lib/firebase';
@@ -63,6 +63,7 @@ export const LectureRegistration: React.FC = () => {
         affiliation: formData.affiliation,
         role: formData.role,
         notes: formData.notes,
+        registrationType: 'waitlist',
       });
       setSuccess(true);
       setFormData({ fullName: '', email: '', phone: '', affiliation: '', role: '', notes: '' });
@@ -97,50 +98,45 @@ export const LectureRegistration: React.FC = () => {
           </Link>
         </div>
 
-        {/* Lecture Info Banner */}
+        {/* Capacity Full Banner */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-gradient-to-r from-blue-600 to-teal-600 rounded-2xl shadow-xl p-8 text-white mb-8"
+          className="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl shadow-xl p-8 text-white mb-8 relative overflow-hidden"
         >
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-14 h-14 bg-white bg-opacity-20 rounded-xl flex items-center justify-center flex-shrink-0">
-              <Presentation className="w-7 h-7" />
+          <div className="absolute top-0 right-0 w-40 h-40 bg-white bg-opacity-10 rounded-full -translate-y-20 translate-x-20" />
+          <div className="relative">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-14 h-14 bg-white bg-opacity-20 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Users className="w-7 h-7" />
+              </div>
+              <div>
+                <div className="inline-flex items-center gap-1.5 bg-white bg-opacity-25 px-3 py-1 rounded-full text-xs font-bold mb-2">
+                  <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                  {t('lectureRegistration.capacityFull.badge')}
+                </div>
+                <h1 className="text-2xl md:text-3xl font-bold leading-tight">
+                  {t('lectureRegistration.capacityFull.title')}
+                </h1>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold leading-tight">
-                {t('lectureRegistration.lectureTitle')}
-              </h1>
-              <p className="text-lg opacity-90 mt-1">
-                {t('lectureRegistration.lectureSubtitle')}
-              </p>
-            </div>
-          </div>
-          <div className="flex flex-wrap gap-6 mt-6 pt-6 border-t border-white border-opacity-20">
-            <div className="flex items-center gap-2">
-              <Calendar className="w-5 h-5 opacity-80" />
-              <span className="text-sm font-medium">
-                {t('lectureRegistration.lectureDate')}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Info className="w-5 h-5 opacity-80" />
-              <span className="text-sm font-medium">
-                {t('lectureRegistration.lectureDay')}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Clock className="w-5 h-5 opacity-80" />
-              <span className="text-sm font-medium">
-                {t('lectureRegistration.lectureTime')}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Video className="w-5 h-5 opacity-80" />
-              <span className="text-sm font-medium">
-                {t('lectureRegistration.lectureMode')}
-              </span>
+            <p className="text-base opacity-95 mt-3 max-w-2xl">
+              {t('lectureRegistration.capacityFull.message')}
+            </p>
+            <div className="flex flex-wrap gap-6 mt-6 pt-6 border-t border-white border-opacity-20">
+              <div className="flex items-center gap-2">
+                <Presentation className="w-5 h-5 opacity-80" />
+                <span className="text-sm font-medium">
+                  {t('lectureRegistration.lectureTitle')}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Bell className="w-5 h-5 opacity-80" />
+                <span className="text-sm font-medium">
+                  {t('lectureRegistration.capacityFull.nextLectureLabel')}: {t('lectureRegistration.capacityFull.nextLectureDate')}
+                </span>
+              </div>
             </div>
           </div>
         </motion.div>
