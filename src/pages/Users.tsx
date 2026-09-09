@@ -275,6 +275,40 @@ const Users: React.FC = () => {
     }
   };
 
+  const exportSelectedToExcel = () => {
+    try {
+      const selectedData = users.filter(u => selectedUsers.includes(u.id));
+      if (selectedData.length === 0) return;
+
+      const exportData = selectedData.map(user => ({
+        'الاسم': user.name,
+        'البريد الإلكتروني': user.email,
+        'الدور': getRoleText(user.role),
+        'المؤسسة التعليمية': user.school || 'غير محدد',
+        'المدينة': user.city || 'غير محدد',
+        'الجنس': user.gender === 'male' ? 'ذكر' : user.gender === 'female' ? 'أنثى' : 'غير محدد',
+        'نبذة عن المستخدم': user.aboutYourself || 'غير محدد',
+        'الحالة': getStatusText(user.status),
+        'رقم الهاتف': user.phone || 'غير محدد',
+        'المرحلة الدراسية': user.grade || 'غير محدد',
+        'المادة التدريسية': user.subject || 'غير محدد',
+        'تاريخ الانضمام': formatDate(user.joinedAt),
+        'آخر نشاط': formatDate(user.lastActive)
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(exportData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'المستخدمين المحددين');
+      XLSX.writeFile(workbook, `المستخدمين_المحددين_${new Date().toISOString().split('T')[0]}.xlsx`);
+
+      setSuccessMessage(`تم تصدير ${selectedData.length} مستخدم محدد بنجاح`);
+      setTimeout(() => setSuccessMessage(null), 3000);
+    } catch (error) {
+      console.error('Error exporting selected data:', error);
+      alert('حدث خطأ أثناء تصدير البيانات المحددة');
+    }
+  };
+
   const exportToExcel = () => {
     try {
       // Prepare data for export
@@ -611,6 +645,13 @@ const Users: React.FC = () => {
               </div>
 
               <div className="flex items-center gap-2">
+                <button
+                  onClick={exportSelectedToExcel}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
+                >
+                  <FileSpreadsheet className="w-4 h-4" />
+                  تصدير المحددين
+                </button>
                 <button
                   onClick={() => handleBulkAction('activate')}
                   className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center gap-2"
