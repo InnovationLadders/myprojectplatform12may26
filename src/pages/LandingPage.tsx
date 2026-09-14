@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSchoolBranding } from '../contexts/SchoolBrandingContext';
 import { useFeaturedVideos } from '../hooks/useFeaturedVideos';
-import { Lightbulb, Users, MessageCircle, ShoppingCart, Bot, GalleryVertical, Shield, ArrowLeft, Star, Award, BookOpen, CircleCheck as CheckCircle, DollarSign, Truck, Globe, Target, Play, Calendar } from 'lucide-react';
+import { Lightbulb, Users, MessageCircle, ShoppingCart, Bot, GalleryVertical, Shield, ArrowLeft, Star, Award, BookOpen, CircleCheck as CheckCircle, DollarSign, Truck, Globe, Target, Play, Calendar, Video, ExternalLink } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -221,33 +221,47 @@ export const LandingPage: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Lecture Registration Banner */}
-      <div className="py-12 px-4 bg-gradient-to-r from-amber-500 to-orange-600">
+      {/* Live Lecture Banner */}
+      <div className="py-12 px-4 bg-gradient-to-r from-blue-600 to-teal-600">
         <div className="max-w-4xl mx-auto text-center text-white">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 bg-white bg-opacity-20 px-4 py-2 rounded-full text-sm font-medium mb-4">
-              <Calendar className="w-4 h-4" />
-              {isRTL ? 'المحاضرة القادمة قريباً' : 'Next Lecture Coming Soon'}
+            <div className="inline-flex items-center gap-2 bg-white bg-opacity-20 px-4 py-2 rounded-full text-sm font-bold mb-4">
+              <span className="w-2.5 h-2.5 bg-white rounded-full animate-pulse" />
+              {t('lectureRegistration.liveLecture.badge')}
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-3" dir={dir}>
-              {isRTL ? 'التعلّم القائم على المشاريع PBL' : 'Project-Based Learning PBL'}
+              {t('lectureRegistration.liveLecture.title')}
             </h2>
-            <p className="text-lg opacity-90 mb-2" dir={dir}>
-              {isRTL ? 'اكتمل التسجيل للمحاضرة الحالية' : 'Current lecture is fully booked'}
+            <p className="text-lg opacity-95 mb-2" dir={dir}>
+              {t('lectureRegistration.liveLecture.message')}
             </p>
-            <p className="text-base opacity-80 mb-6 max-w-2xl mx-auto" dir={dir}>
-              {isRTL ? 'انضم إلى قائمة الانتظار وكن أول من يعرف موعد المحاضرة القادمة' : 'Join the waiting list and be the first to know when the next lecture is scheduled'}
-            </p>
-            <Link
-              to="/lecture-registration"
-              className="inline-flex items-center gap-2 bg-white text-orange-600 px-8 py-3 rounded-full font-bold text-lg shadow-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105"
+            <div className="flex flex-wrap items-center justify-center gap-3 text-sm opacity-95 mb-6" dir={dir}>
+              <span className="inline-flex items-center gap-2 bg-white bg-opacity-15 px-4 py-2 rounded-xl">
+                <Calendar className="w-4 h-4" />
+                {t('lectureRegistration.liveLecture.dayValue')}
+              </span>
+              <span className="inline-flex items-center gap-2 bg-white bg-opacity-15 px-4 py-2 rounded-xl">
+                {t('lectureRegistration.liveLecture.timeValue')}
+              </span>
+              <span className="inline-flex items-center gap-2 bg-white bg-opacity-15 px-4 py-2 rounded-xl">
+                <Video className="w-4 h-4" />
+                {t('lectureRegistration.liveLecture.modeValue')}
+              </span>
+            </div>
+            <a
+              href="https://us06web.zoom.us/j/83977271037?pwd=arFRfUDdZKXX6EHZ7JstrZQGArRkjd.1"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-white text-blue-700 px-8 py-3 rounded-full font-bold text-lg shadow-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105"
             >
-              {isRTL ? 'انضم إلى قائمة الانتظار' : 'Join the Waiting List'}
-            </Link>
+              <Video className="w-5 h-5" />
+              {t('lectureRegistration.liveLecture.joinButton')}
+              <ExternalLink className="w-4 h-4 opacity-70" />
+            </a>
           </motion.div>
         </div>
       </div>
