@@ -1,88 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
-  User, Mail, Phone, Building, GraduationCap,
-  CircleCheck as CheckCircle, TriangleAlert as AlertTriangle,
-  Send, Calendar, Info, MessageSquare, Presentation,
-  Clock, Video, Users, Bell,
+  Presentation, Clock, Video, MonitorPlay, Calendar,
+  Info, ExternalLink,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { addLectureRegistration } from '../lib/firebase';
+
+const ZOOM_LINK = 'https://us06web.zoom.us/j/83977271037?pwd=arFRfUDdZKXX6EHZ7JstrZQGArRkjd.1';
 
 export const LectureRegistration: React.FC = () => {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
-
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    affiliation: '',
-    role: '',
-    notes: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
-
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
-
-  const validateForm = () => {
-    if (!formData.fullName || !formData.email || !formData.phone || !formData.affiliation || !formData.role) {
-      setError(t('lectureRegistration.errors.required'));
-      return false;
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      setError(t('lectureRegistration.errors.invalidEmail'));
-      return false;
-    }
-    const phoneRegex = /^\d{9,15}$/;
-    if (!phoneRegex.test(formData.phone.replace(/\D/g, ''))) {
-      setError(t('lectureRegistration.errors.invalidPhone'));
-      return false;
-    }
-    return true;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-
-    setIsSubmitting(true);
-    setError(null);
-
-    try {
-      await addLectureRegistration({
-        fullName: formData.fullName,
-        email: formData.email,
-        phone: formData.phone,
-        affiliation: formData.affiliation,
-        role: formData.role,
-        notes: formData.notes,
-        registrationType: 'waitlist',
-      });
-      setSuccess(true);
-      setFormData({ fullName: '', email: '', phone: '', affiliation: '', role: '', notes: '' });
-      window.scrollTo(0, 0);
-    } catch (err: any) {
-      if (err?.message === 'DUPLICATE_EMAIL') {
-        setError(t('lectureRegistration.errors.duplicateEmail'));
-      } else {
-        setError(t('lectureRegistration.errors.general'));
-      }
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleRegisterAnother = () => {
-    setSuccess(false);
-    setError(null);
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50 py-12 px-4" dir={isRTL ? 'rtl' : 'ltr'}>
@@ -98,281 +27,116 @@ export const LectureRegistration: React.FC = () => {
           </Link>
         </div>
 
-        {/* Capacity Full Banner */}
+        {/* Live Lecture Banner */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl shadow-xl p-8 text-white mb-8 relative overflow-hidden"
+          className="bg-gradient-to-r from-blue-600 to-teal-600 rounded-2xl shadow-2xl p-8 text-white relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 w-40 h-40 bg-white bg-opacity-10 rounded-full -translate-y-20 translate-x-20" />
+          <div className="absolute top-0 right-0 w-48 h-48 bg-white bg-opacity-10 rounded-full -translate-y-24 translate-x-24" />
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-white bg-opacity-10 rounded-full translate-y-16 -translate-x-16" />
+
           <div className="relative">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-14 h-14 bg-white bg-opacity-20 rounded-xl flex items-center justify-center flex-shrink-0">
-                <Users className="w-7 h-7" />
-              </div>
-              <div>
-                <div className="inline-flex items-center gap-1.5 bg-white bg-opacity-25 px-3 py-1 rounded-full text-xs font-bold mb-2">
-                  <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                  {t('lectureRegistration.capacityFull.badge')}
-                </div>
-                <h1 className="text-2xl md:text-3xl font-bold leading-tight">
-                  {t('lectureRegistration.capacityFull.title')}
-                </h1>
-              </div>
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 bg-white bg-opacity-25 px-4 py-1.5 rounded-full text-sm font-bold mb-5">
+              <span className="w-2.5 h-2.5 bg-white rounded-full animate-pulse" />
+              {t('lectureRegistration.liveLecture.badge')}
             </div>
-            <p className="text-base opacity-95 mt-3 max-w-2xl">
-              {t('lectureRegistration.capacityFull.message')}
+
+            {/* Title */}
+            <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-4">
+              {t('lectureRegistration.liveLecture.title')}
+            </h1>
+
+            {/* Message */}
+            <p className="text-base md:text-lg opacity-95 max-w-2xl leading-relaxed">
+              {t('lectureRegistration.liveLecture.message')}
             </p>
-            <div className="flex flex-wrap gap-6 mt-6 pt-6 border-t border-white border-opacity-20">
-              <div className="flex items-center gap-2">
-                <Presentation className="w-5 h-5 opacity-80" />
-                <span className="text-sm font-medium">
-                  {t('lectureRegistration.lectureTitle')}
-                </span>
+
+            {/* Info chips */}
+            <div className="flex flex-wrap gap-4 mt-7 pt-6 border-t border-white border-opacity-20">
+              <div className="flex items-center gap-2 bg-white bg-opacity-15 px-4 py-2 rounded-xl">
+                <Calendar className="w-5 h-5 opacity-90" />
+                <div className="text-sm">
+                  <span className="opacity-75 block">{t('lectureRegistration.liveLecture.dayLabel')}</span>
+                  <span className="font-semibold">{t('lectureRegistration.liveLecture.dayValue')}</span>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Bell className="w-5 h-5 opacity-80" />
-                <span className="text-sm font-medium">
-                  {t('lectureRegistration.capacityFull.nextLectureLabel')}: {t('lectureRegistration.capacityFull.nextLectureDate')}
-                </span>
+              <div className="flex items-center gap-2 bg-white bg-opacity-15 px-4 py-2 rounded-xl">
+                <Clock className="w-5 h-5 opacity-90" />
+                <div className="text-sm">
+                  <span className="opacity-75 block">{t('lectureRegistration.liveLecture.timeLabel')}</span>
+                  <span className="font-semibold">{t('lectureRegistration.liveLecture.timeValue')}</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 bg-white bg-opacity-15 px-4 py-2 rounded-xl">
+                <MonitorPlay className="w-5 h-5 opacity-90" />
+                <div className="text-sm">
+                  <span className="opacity-75 block">{t('lectureRegistration.liveLecture.modeLabel')}</span>
+                  <span className="font-semibold">{t('lectureRegistration.liveLecture.modeValue')}</span>
+                </div>
               </div>
             </div>
+
+            {/* Zoom Join Button */}
+            <motion.a
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              href={ZOOM_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-8 w-full md:w-auto inline-flex items-center justify-center gap-3 bg-white text-blue-700 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-2xl transition-all"
+            >
+              <Video className="w-6 h-6" />
+              {t('lectureRegistration.liveLecture.joinButton')}
+              <ExternalLink className="w-5 h-5 opacity-70" />
+            </motion.a>
           </div>
         </motion.div>
 
-        {/* Form Card */}
+        {/* Note Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.15 }}
-          className="bg-white rounded-2xl shadow-xl p-8"
+          className="bg-white rounded-2xl shadow-lg p-6 mt-6"
         >
-          {success ? (
-            <div className="text-center py-12">
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
-                className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6"
-              >
-                <CheckCircle className="w-10 h-10 text-green-600" />
-              </motion.div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                {t('lectureRegistration.successTitle')}
-              </h2>
-              <p className="text-gray-600 mb-8 max-w-md mx-auto">
-                {t('lectureRegistration.successMessage')}
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button
-                  onClick={handleRegisterAnother}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
-                >
-                  {t('lectureRegistration.registerAnother')}
-                </button>
-                <Link
-                  to="/"
-                  className="px-6 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
-                >
-                  {t('lectureRegistration.backHome')}
-                </Link>
-              </div>
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+              <Info className="w-5 h-5 text-blue-600" />
             </div>
-          ) : (
-            <>
-              <div className="flex items-center justify-between mb-8">
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-800">
-                    {t('lectureRegistration.formTitle')}
-                  </h2>
-                  <p className="text-gray-600 mt-1">
-                    {t('lectureRegistration.formSubtitle')}
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => i18n.changeLanguage('ar')}
-                    className={`px-3 py-1 rounded-lg text-sm ${i18n.language === 'ar' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700'}`}
-                  >
-                    العربية
-                  </button>
-                  <button
-                    onClick={() => i18n.changeLanguage('en')}
-                    className={`px-3 py-1 rounded-lg text-sm ${i18n.language === 'en' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700'}`}
-                  >
-                    English
-                  </button>
-                </div>
-              </div>
+            <div>
+              <h3 className="font-bold text-gray-800 mb-1">
+                {t('lectureRegistration.liveLecture.noteTitle')}
+              </h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                {t('lectureRegistration.liveLecture.noteMessage')}
+              </p>
+            </div>
+          </div>
+        </motion.div>
 
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-start gap-2"
-                >
-                  <AlertTriangle className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                  <div>{error}</div>
-                </motion.div>
-              )}
-
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Full Name */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t('lectureRegistration.fields.fullName')} *
-                  </label>
-                  <div className="relative">
-                    <User className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="text"
-                      value={formData.fullName}
-                      onChange={(e) => handleInputChange('fullName', e.target.value)}
-                      className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      placeholder={t('lectureRegistration.placeholders.fullName')}
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* Email */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t('lectureRegistration.fields.email')} *
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => handleInputChange('email', e.target.value)}
-                      className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      placeholder={t('lectureRegistration.placeholders.email')}
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* Phone */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t('lectureRegistration.fields.phone')} *
-                  </label>
-                  <div className="relative">
-                    <Phone className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => handleInputChange('phone', e.target.value)}
-                      className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      placeholder={t('lectureRegistration.placeholders.phone')}
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* Affiliation (School/Organization) */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t('lectureRegistration.fields.affiliation')} *
-                  </label>
-                  <div className="relative">
-                    <Building className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="text"
-                      value={formData.affiliation}
-                      onChange={(e) => handleInputChange('affiliation', e.target.value)}
-                      className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      placeholder={t('lectureRegistration.placeholders.affiliation')}
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* Role */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t('lectureRegistration.fields.role')} *
-                  </label>
-                  <div className="relative">
-                    <GraduationCap className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <select
-                      value={formData.role}
-                      onChange={(e) => handleInputChange('role', e.target.value)}
-                      className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
-                      required
-                    >
-                      <option value="">{t('lectureRegistration.placeholders.role')}</option>
-                      {t('lectureRegistration.roles', { returnObjects: true }).map((role: string) => (
-                        <option key={role} value={role}>{role}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                {/* Notes */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t('lectureRegistration.fields.notes')}
-                  </label>
-                  <div className="relative">
-                    <MessageSquare className="absolute right-3 top-3 w-5 h-5 text-gray-400" />
-                    <textarea
-                      value={formData.notes}
-                      onChange={(e) => handleInputChange('notes', e.target.value)}
-                      rows={3}
-                      className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
-                      placeholder={t('lectureRegistration.placeholders.notes')}
-                    />
-                  </div>
-                </div>
-
-                {/* Info Box */}
-                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-                  <div className="flex items-start gap-3">
-                    <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-medium text-blue-800 mb-1">
-                        {t('lectureRegistration.infoTitle')}
-                      </h4>
-                      <ul className="space-y-1 text-blue-700 text-sm">
-                        <li>{t('lectureRegistration.infoPoints.point1')}</li>
-                        <li>{t('lectureRegistration.infoPoints.point2')}</li>
-                        {t('lectureRegistration.infoPoints.point3', { defaultValue: '' }) && (
-                          <li>{t('lectureRegistration.infoPoints.point3')}</li>
-                        )}
-                        {t('lectureRegistration.infoPoints.point4', { defaultValue: '' }) && (
-                          <li>{t('lectureRegistration.infoPoints.point4')}</li>
-                        )}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Submit */}
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-gradient-to-r from-blue-600 to-teal-600 text-white py-4 rounded-xl font-semibold text-lg hover:shadow-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                      {t('lectureRegistration.submitting')}
-                    </>
-                  ) : (
-                    <>
-                      <Send className="w-5 h-5" />
-                      {t('lectureRegistration.submit')}
-                    </>
-                  )}
-                </motion.button>
-              </form>
-            </>
-          )}
+        {/* Lecture Info Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="bg-white rounded-2xl shadow-lg p-8 mt-6"
+        >
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center flex-shrink-0">
+              <Presentation className="w-6 h-6 text-teal-600" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-gray-800">
+                {t('lectureRegistration.lectureTitle')}
+              </h2>
+              <p className="text-gray-500 text-sm mt-0.5">
+                {t('lectureRegistration.lectureSubtitle')}
+              </p>
+            </div>
+          </div>
         </motion.div>
 
         {/* Footer */}

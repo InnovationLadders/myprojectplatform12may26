@@ -2486,12 +2486,19 @@
     "lectureDay": "Monday",
     "lectureTime": "9:00 - 10:00 PM",
     "lectureMode": "Remote / Online",
-    "capacityFull": {
-      "badge": "Fully Booked",
-      "title": "Current Lecture is Fully Booked",
-      "message": "Registration for the \"Project-Based Learning PBL\" lecture is now full. Join the waiting list and be the first to know when the next lecture is scheduled.",
-      "nextLectureLabel": "Next Lecture",
-      "nextLectureDate": "To be announced soon"
+    "liveLecture": {
+      "badge": "Lecture Today at 9:00 PM",
+      "title": "Project-Based Learning PBL",
+      "message": "Join us live on Zoom. The lecture starts at 9:00 PM. Click the button to enter the lecture directly.",
+      "joinButton": "Join Lecture on Zoom",
+      "timeLabel": "Time",
+      "timeValue": "9:00 PM",
+      "modeLabel": "Mode",
+      "modeValue": "Remote - Zoom",
+      "dayLabel": "Date",
+      "dayValue": "Monday, September 14, 2026",
+      "noteTitle": "Note",
+      "noteMessage": "Access will be available via the Zoom link at the scheduled time. Make sure you have the Zoom app installed or use your browser."
     },
     "formTitle": "Join the Waiting List",
     "formSubtitle": "Enter your details and we'll notify you as soon as the next lecture is scheduled",
