@@ -16,7 +16,6 @@ import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { TermsOfUse } from './pages/TermsOfUse';
 import i18n from './i18n';
 import { SummerProgramEnrollment } from './pages/SummerProgramEnrollment';
-import { LectureRegistration } from './pages/LectureRegistration';
 import { ClasseraCallback } from './pages/auth/ClasseraCallback';
 import { ClasseraLogin } from './pages/auth/ClasseraLogin';
 import { KfupmCallback } from './pages/auth/KfupmCallback';
@@ -186,10 +185,7 @@ const AppRoutes: React.FC = () => {
       {/* Summer Program Enrollment - Public Route */}
       <Route path="/summer-program-enrollment" element={<SummerProgramEnrollment />} />
 
-      {/* Lecture Registration - Public Route */}
-      <Route path="/lecture-registration" element={<LectureRegistration />} />
-
-      {/* Legal Pages - Public Routes */}
+{/* Legal Pages - Public Routes */}
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-of-use" element={<TermsOfUse />} />
 
