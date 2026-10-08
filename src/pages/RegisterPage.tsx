@@ -963,7 +963,7 @@ export const RegisterPage: React.FC = () => {
           </div>
 
           <div className="mt-6">
-            <GoogleLoginButton label={t('auth.registerWithGoogle') || 'التسجيل باستخدام Google'} />
+            <GoogleLoginButton label={t('auth.registerWithGoogle') || 'التسجيل باستخدام Google'} subdomainSchoolId={subdomainSchoolId} />
           </div>
 
           {/* Toggle Login/Register */}

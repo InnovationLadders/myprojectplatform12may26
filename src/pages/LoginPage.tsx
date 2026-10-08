@@ -205,7 +205,7 @@ export const LoginPage: React.FC = () => {
           </div>
 
           <div className="mt-6">
-            <GoogleLoginButton />
+            <GoogleLoginButton subdomainSchoolId={schoolId} />
           </div>
 
           {/* KFUPM SSO Login — only shown on the kfupm subdomain */}

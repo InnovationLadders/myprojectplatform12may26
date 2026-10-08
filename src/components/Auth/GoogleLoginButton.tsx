@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Loader as Loader2, CircleAlert as AlertCircle } from 'lucide-react';
+import { Loader as Loader2, CircleAlert as AlertCircle, Lock } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
+import { getSchoolDomainSettings } from '../../utils/domainValidation';
 
 interface GoogleLoginButtonProps {
   className?: string;
   label?: string;
+  subdomainSchoolId?: string | null;
 }
 
 const GoogleIcon: React.FC = () => (
@@ -33,11 +35,46 @@ const GoogleIcon: React.FC = () => (
 export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
   className = '',
   label,
+  subdomainSchoolId,
 }) => {
   const { loginWithGoogle } = useAuth();
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [domainRestricted, setDomainRestricted] = useState(false);
+
+  useEffect(() => {
+    const checkDomainRestriction = async () => {
+      if (!subdomainSchoolId) {
+        setDomainRestricted(false);
+        return;
+      }
+      try {
+        const settings = await getSchoolDomainSettings(subdomainSchoolId);
+        if (settings.enabled && settings.allowedDomains.length > 0) {
+          setDomainRestricted(true);
+        } else {
+          setDomainRestricted(false);
+        }
+      } catch {
+        setDomainRestricted(false);
+      }
+    };
+    checkDomainRestriction();
+  }, [subdomainSchoolId]);
+
+  if (domainRestricted) {
+    return (
+      <div className="space-y-3">
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex items-center gap-3">
+          <Lock className="w-5 h-5 text-gray-400 flex-shrink-0" />
+          <div className="text-sm text-gray-500">
+            {t('auth.googleNotAvailable') || 'التسجيل عبر Google غير متاح لهذه المؤسسة. يجب استخدام البريد الإلكتروني الرسمي للمؤسسة.'}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();

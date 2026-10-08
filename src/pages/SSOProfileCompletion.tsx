@@ -12,6 +12,9 @@ import { useAuth } from '../contexts/AuthContext';
 import { GRADES } from '../constants/grades';
 import { getSchools } from '../lib/firebase';
 import { useSchoolBranding } from '../contexts/SchoolBrandingContext';
+import { getSchoolDomainSettings, testEmailAgainstDomains, extractDomain } from '../utils/domainValidation';
+import DomainValidationInfo from '../components/Common/DomainValidationInfo';
+import { TriangleAlert as AlertTriangle } from 'lucide-react';
 
 const SPECIALIZATIONS = [
   'الذكاء الاصطناعي', 'تعلم الآلة', 'الروبوتات', 'تطوير التطبيقات',
@@ -63,6 +66,10 @@ export const SSOProfileCompletion: React.FC = () => {
   const [schools, setSchools] = useState<{ id: string; name: string }[]>([]);
   const [schoolsLoading, setSchoolsLoading] = useState(true);
   const [isSubdomainRegistration, setIsSubdomainRegistration] = useState(false);
+  const [domainError, setDomainError] = useState('');
+  const [selectedSchoolDomainSettings, setSelectedSchoolDomainSettings] = useState<{ enabled: boolean; allowedDomains: string[] }>({ enabled: false, allowedDomains: [] });
+
+  const selectedRole = isGoogleUser ? formData.role : user?.role;
 
   useEffect(() => {
     const fetchSchools = async () => {
@@ -78,7 +85,21 @@ export const SSOProfileCompletion: React.FC = () => {
           setFormData(prev => ({ ...prev, school_id: subdomainSchoolId }));
         } else {
           const fetchedSchools = await getSchools();
-          setSchools(fetchedSchools || []);
+          const userEmail = user?.email || '';
+          const userDomain = extractDomain(userEmail);
+
+          const eligibleSchools: { id: string; name: string }[] = [];
+          for (const school of (fetchedSchools || [])) {
+            const settings = await getSchoolDomainSettings(school.id);
+            if (settings.enabled && settings.allowedDomains.length > 0) {
+              if (userDomain && settings.allowedDomains.includes(userDomain)) {
+                eligibleSchools.push(school);
+              }
+            } else {
+              eligibleSchools.push(school);
+            }
+          }
+          setSchools(eligibleSchools);
         }
       } catch (err) {
         console.error('Error fetching schools:', err);
@@ -92,7 +113,36 @@ export const SSOProfileCompletion: React.FC = () => {
 
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    if (field === 'school_id') {
+      setDomainError('');
+    }
   };
+
+  useEffect(() => {
+    const loadDomainSettings = async () => {
+      if (!formData.school_id || (selectedRole !== 'student' && selectedRole !== 'teacher')) {
+        setSelectedSchoolDomainSettings({ enabled: false, allowedDomains: [] });
+        return;
+      }
+      try {
+        const settings = await getSchoolDomainSettings(formData.school_id);
+        setSelectedSchoolDomainSettings({ enabled: settings.enabled, allowedDomains: settings.allowedDomains });
+
+        if (settings.enabled && settings.allowedDomains.length > 0) {
+          const userEmail = user?.email || '';
+          const isValid = testEmailAgainstDomains(userEmail, settings.allowedDomains);
+          if (!isValid) {
+            setDomainError(`هذه المؤسسة تتطلب التسجيل باستخدام البريد الإلكتروني الرسمي الخاص بها. النطاقات المقبولة: ${settings.allowedDomains.join('، ')}`);
+          } else {
+            setDomainError('');
+          }
+        }
+      } catch {
+        setSelectedSchoolDomainSettings({ enabled: false, allowedDomains: [] });
+      }
+    };
+    loadDomainSettings();
+  }, [formData.school_id, selectedRole, user?.email]);
 
   const handleSpecializationToggle = (sp: string) => {
     setFormData(prev => ({
@@ -137,6 +187,10 @@ export const SSOProfileCompletion: React.FC = () => {
     }
     if ((selectedRole === 'student' || selectedRole === 'teacher') && !formData.school_id) {
       setError('الرجاء اختيار المؤسسة التعليمية');
+      return;
+    }
+    if ((selectedRole === 'student' || selectedRole === 'teacher') && formData.school_id && domainError) {
+      setError(domainError);
       return;
     }
     if (selectedRole === 'investor' && !acceptedInvestorPledge) {
@@ -225,8 +279,6 @@ export const SSOProfileCompletion: React.FC = () => {
       setLoading(false);
     }
   };
-
-  const selectedRole = isGoogleUser ? formData.role : user?.role;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50 flex items-center justify-center p-4">
@@ -365,6 +417,17 @@ export const SSOProfileCompletion: React.FC = () => {
                   )}
                 </div>
 
+                {domainError && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-start gap-2">
+                    <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">{domainError}</span>
+                  </div>
+                )}
+
+                {selectedSchoolDomainSettings.enabled && selectedSchoolDomainSettings.allowedDomains.length > 0 && !domainError && (
+                  <DomainValidationInfo allowedDomains={selectedSchoolDomainSettings.allowedDomains} variant="info" />
+                )}
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">المرحلة/المستوى الدراسي</label>
                   <div className="relative">
@@ -407,6 +470,17 @@ export const SSOProfileCompletion: React.FC = () => {
                     </select>
                   </div>
                 </div>
+
+                {domainError && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-start gap-2">
+                    <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">{domainError}</span>
+                  </div>
+                )}
+
+                {selectedSchoolDomainSettings.enabled && selectedSchoolDomainSettings.allowedDomains.length > 0 && !domainError && (
+                  <DomainValidationInfo allowedDomains={selectedSchoolDomainSettings.allowedDomains} variant="info" />
+                )}
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">المادة الدراسية</label>
