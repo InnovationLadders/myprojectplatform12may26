@@ -155,6 +155,7 @@
     "createAccount": "إنشاء حساب جديد",
     "loginWithGoogle": "تسجيل الدخول باستخدام Google",
     "registerWithGoogle": "التسجيل باستخدام Google",
+    "googleNotAvailable": "التسجيل عبر Google غير متاح لهذه المؤسسة. استخدم بريد المؤسسة الرسمي.",
     "loginWithApple": "تسجيل الدخول باستخدام Apple",
     "or": "أو",
     "enterEmail": "أدخل بريدك الإلكتروني",

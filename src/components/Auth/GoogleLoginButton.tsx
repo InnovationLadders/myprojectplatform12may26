@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Loader as Loader2, CircleAlert as AlertCircle, Lock } from 'lucide-react';
+import { Loader as Loader2, CircleAlert as AlertCircle } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { getSchoolDomainSettings } from '../../utils/domainValidation';
@@ -42,38 +42,30 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [domainRestricted, setDomainRestricted] = useState(false);
+  const [checkingRestriction, setCheckingRestriction] = useState(Boolean(subdomainSchoolId));
 
   useEffect(() => {
     const checkDomainRestriction = async () => {
       if (!subdomainSchoolId) {
         setDomainRestricted(false);
+        setCheckingRestriction(false);
         return;
       }
+      setCheckingRestriction(true);
       try {
         const settings = await getSchoolDomainSettings(subdomainSchoolId);
-        if (settings.enabled && settings.allowedDomains.length > 0) {
-          setDomainRestricted(true);
-        } else {
-          setDomainRestricted(false);
-        }
+        setDomainRestricted(settings.enabled && settings.allowedDomains.length > 0);
       } catch {
         setDomainRestricted(false);
+      } finally {
+        setCheckingRestriction(false);
       }
     };
     checkDomainRestriction();
   }, [subdomainSchoolId]);
 
-  if (domainRestricted) {
-    return (
-      <div className="space-y-3">
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex items-center gap-3">
-          <Lock className="w-5 h-5 text-gray-400 flex-shrink-0" />
-          <div className="text-sm text-gray-500">
-            {t('auth.googleNotAvailable') || 'التسجيل عبر Google غير متاح لهذه المؤسسة. يجب استخدام البريد الإلكتروني الرسمي للمؤسسة.'}
-          </div>
-        </div>
-      </div>
-    );
+  if (checkingRestriction || domainRestricted) {
+    return null;
   }
 
   const handleClick = async (e: React.MouseEvent) => {
@@ -108,6 +100,15 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
 
   return (
     <div className="space-y-3">
+      <div className="relative mt-6">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-gray-300" />
+        </div>
+        <div className="relative flex justify-center text-sm">
+          <span className="px-2 bg-white text-gray-500">{t('auth.or')}</span>
+        </div>
+      </div>
+
       <motion.button
         whileHover={{ scale: isLoading ? 1 : 1.02 }}
         whileTap={{ scale: isLoading ? 1 : 0.98 }}

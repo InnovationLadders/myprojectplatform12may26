@@ -156,6 +156,7 @@
     "createAccount": "Create Account",
     "loginWithGoogle": "Login with Google",
     "registerWithGoogle": "Sign up with Google",
+    "googleNotAvailable": "Google sign-in is unavailable for this institution. Use your official institutional email.",
     "loginWithApple": "Login with Apple",
     "or": "or",
     "enterEmail": "Enter your email",
