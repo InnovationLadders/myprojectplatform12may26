@@ -154,6 +154,17 @@ service cloud.firestore {
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
 
+    match /lecture_registrations/{email} {
+      // Public sign-up; the email is the document id, so a repeat sign-up becomes an update and is denied.
+      allow create: if email == request.resource.data.email &&
+        request.resource.data.keys().hasOnly(['fullName', 'email', 'phone', 'affiliation', 'role', 'notes', 'status', 'registrationType', 'createdAt', 'updatedAt']) &&
+        request.resource.data.status == 'registered' &&
+        request.resource.data.fullName is string && request.resource.data.fullName.size() > 0 && request.resource.data.fullName.size() <= 200 &&
+        request.resource.data.email.size() <= 200;
+      allow read, update, delete: if request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
     match /project_meetings/{meetingId} {
       allow create: if request.auth != null;
       allow read: if request.auth != null && (

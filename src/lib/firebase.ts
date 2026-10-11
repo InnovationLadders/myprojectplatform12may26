@@ -24,6 +24,7 @@ import {
   query,
   where,
   addDoc,
+  setDoc,
   updateDoc,
   deleteDoc,
   serverTimestamp,
@@ -63,7 +64,7 @@ console.log('🔥 Firebase Configuration:', {
 
 // Initialize Firebase services
 export const auth = getAuth(app);
-export const db = getFirestore(app, 'myprojectplatformdammam');
+export const db = getFirestore(app);
 export const storage = getStorage(app);
 export const functions = getFunctions(app, 'us-central1');
 export const increment = firestoreIncrement; // Export increment with a simpler name
@@ -2143,27 +2144,24 @@ export interface LectureRegistrationData {
 
 export const addLectureRegistration = async (data: Omit<LectureRegistrationData, 'id' | 'status' | 'createdAt' | 'updatedAt'>): Promise<string> => {
   try {
-    const registrationsRef = collection(db, 'lecture_registrations');
+    const email = data.email.trim().toLowerCase();
+    // Email is the document id so the security rules reject a second sign-up (create-only) without exposing the list publicly.
+    const registrationRef = firestoreDoc(db, 'lecture_registrations', email);
 
-    // Prevent duplicate registration by email
-    const existingQuery = query(registrationsRef, where('email', '==', data.email));
-    const existingSnapshot = await getDocs(existingQuery);
-    if (!existingSnapshot.empty) {
-      throw new Error('DUPLICATE_EMAIL');
-    }
-
-    const registrationData = {
+    await setDoc(registrationRef, {
       ...data,
+      email,
       status: 'registered',
       registrationType: data.registrationType || 'waitlist',
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
-    };
-
-    const docRef = await addDoc(registrationsRef, registrationData);
-    return docRef.id;
+    });
+    return email;
   } catch (error) {
     console.error('Error adding lecture registration:', error);
+    if ((error as { code?: string })?.code === 'permission-denied') {
+      throw new Error('DUPLICATE_EMAIL');
+    }
     throw error;
   }
 };

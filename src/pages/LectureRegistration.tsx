@@ -6,6 +6,7 @@ import {
   Info, ExternalLink,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { LectureRegistrationForm } from '../components/LectureRegistration/LectureRegistrationForm';
 
 const ZOOM_LINK = 'https://us06web.zoom.us/j/83977271037?pwd=arFRfUDdZKXX6EHZ7JstrZQGArRkjd.1';
 
@@ -138,6 +139,8 @@ export const LectureRegistration: React.FC = () => {
             </div>
           </div>
         </motion.div>
+
+        <LectureRegistrationForm />
 
         {/* Footer */}
         <div className="mt-8 text-center text-gray-500 text-sm">
